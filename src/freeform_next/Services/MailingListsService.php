@@ -438,4 +438,17 @@ class MailingListsService  extends AbstractIntegrationService implements Mailing
     {
 
     }
+
+    /**
+     * Update the access token of an integration
+     *
+     * @param AbstractMailingListIntegration $integration
+     */
+    public function updateAccessToken(AbstractMailingListIntegration $integration)
+    {
+        $model              = MailingListRepository::getInstance()->getIntegrationById($integration->getId());
+        $model->accessToken = $integration->getAccessToken();
+        $model->updateSettings($integration->getSettings());
+        $model->save();
+    }
 }
