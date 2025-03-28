@@ -30,6 +30,9 @@ abstract class MailingListOAuthConnector extends AbstractMailingListIntegration
      */
     public static function getSettingBlueprints()
     {
+        // Clean and ensure trailing slash in cp_url
+        $cpUrl = rtrim(str_replace('index.php', '', ee()->config->item('cp_url')), '/') . '/';
+
         return [
             new SettingBlueprint(
                 SettingBlueprint::TYPE_TEXT,
@@ -38,7 +41,7 @@ abstract class MailingListOAuthConnector extends AbstractMailingListIntegration
                 "You must specify this Return URI in your OAuth2 app settings to be able to authorize your credentials. DO NOT CHANGE THIS.",
                 true,
                 "readonly",
-                ee()->config->item("site_url") ."admin.php?/cp/addons/settings/freeform_next/integrations/mailing_lists/authorize"
+                $cpUrl . ee('CP/URL', 'addons/settings/freeform_next/integrations/mailing_lists/authorize'),
             ),
             new SettingBlueprint(
                 SettingBlueprint::TYPE_TEXT,
