@@ -30,8 +30,8 @@ abstract class MailingListOAuthConnector extends AbstractMailingListIntegration
      */
     public static function getSettingBlueprints()
     {
-        // Clean and ensure trailing slash in cp_url
-        $cpUrl = rtrim(str_replace('index.php', '', ee()->config->item('cp_url')), '/') . '/';
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $cpUrl = $protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
 
         return [
             new SettingBlueprint(
@@ -40,8 +40,8 @@ abstract class MailingListOAuthConnector extends AbstractMailingListIntegration
                 "OAuth 2.0 Return URI",
                 "You must specify this Return URI in your OAuth2 app settings to be able to authorize your credentials. DO NOT CHANGE THIS.",
                 true,
-                "readonly",
-                $cpUrl . ee('CP/URL', 'addons/settings/freeform_next/integrations/mailing_lists/authorize'),
+                null,
+                $cpUrl . '?/addons/settings/freeform_next/integrations/mailing_lists/authorize',
             ),
             new SettingBlueprint(
                 SettingBlueprint::TYPE_TEXT,
