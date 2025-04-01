@@ -259,6 +259,19 @@ class MailingListsController extends Controller
 
         if ($model->id) {
             $link = $this->getLink("integrations/mailing_lists/check");
+            if (empty($integration->getAccessToken())) {
+                $html = '
+                    Not authorized yet.
+                    <button style="color:var(--ee-link);padding:0;margin:0;background:transparent;border:none;cursor:pointer;text-decoration:none;line-height:1.6" type="submit" data-shortcut="s" value="Save" data-submit-text="Save" data-work-text="Saving">Click here to authorize</button>
+                ';
+            } else {
+                $html = '
+                    Not able to authorize.
+                    <a href="' . $link . '" class="">Click here to re-authorize</a>
+                    <div class="errors"></div>
+                ';
+            }
+
             $sectionData[0][] = [
                 "title"  => "Is Authorized?",
                 "desc"   => "Is the connection authorized?",
@@ -271,9 +284,7 @@ class MailingListsController extends Controller
                                     Authorized
                                 </div>
                                 <div class="not-authorized" style="display: none;">
-                                    Not able to authorize.
-                                    <a href="' . $link . '" class="">Click here to re-authorize</a>
-                                    <div class="errors"></div>
+                                    ' . $html  .'
                                 </div>
                                 <div class="pending-status-check" 
                                      data-id="' . $model->id . '" 
@@ -372,15 +383,14 @@ class MailingListsController extends Controller
 
         $integration = $model->getIntegrationObject();
         $integration->onBeforeSave($model);
-        $integration->initiateAuthentication();
 
-        if (!ExtensionHelper::call(ExtensionHelper::HOOK_MAILING_LISTS_BEFORE_SAVE, $model, $isNew)) {
-            return null;
+        ExtensionHelper::call(ExtensionHelper::HOOK_MAILING_LISTS_BEFORE_SAVE, $model, $isNew);
+
+        if (!$isNew) {
+            $integration->initiateAuthentication();
         }
 
         $model->save();
-
-        ExtensionHelper::call(ExtensionHelper::HOOK_MAILING_LISTS_AFTER_SAVE, $model, $isNew);
 
         ee("CP/Alert")
             ->makeInline("shared-form")
@@ -388,7 +398,10 @@ class MailingListsController extends Controller
             ->withTitle(lang("Success"))
             ->defer();
 
-        return null;
+        ExtensionHelper::call(ExtensionHelper::HOOK_MAILING_LISTS_AFTER_SAVE, $model, $isNew);
+
+        header("Location: " . $this->getLink("integrations/mailing_lists/" . $model->id));
+        die();
     }
 
     /**
@@ -445,17 +458,17 @@ class MailingListsController extends Controller
     {
         $code = ee()->input->get("code");
         if (empty($code)) {
-            return;
+            throw new IntegrationException("Missing OAuth2 Authorization Code.");
         }
 
         $state = ee()->input->get("state");
         if (empty($state)) {
-            return;
+            throw new IntegrationException("Missing OAuth2 Authorization State. Possible CSRF attack.");
         }
 
         $model = MailingListRepository::getInstance()->getIntegrationById($state);
         if (!$model) {
-            return;
+            throw new IntegrationException("Integration not found");
         }
 
         $this->handleAuthorization($model);

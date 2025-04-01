@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `exp_freeform_next_integrations` (
   `handle`      VARCHAR(150)                 NOT NULL,
   `type`        ENUM ('mailing_list', 'crm') NOT NULL,
   `class`       VARCHAR(150)                 NOT NULL,
-  `accessToken` VARCHAR(255)                           DEFAULT NULL,
+  `accessToken` TEXT                                   DEFAULT NULL,
   `settings`    TEXT,
   `forceUpdate` TINYINT(1) UNSIGNED          NOT NULL  DEFAULT '0',
   `lastUpdate`  DATETIME                               DEFAULT NULL,

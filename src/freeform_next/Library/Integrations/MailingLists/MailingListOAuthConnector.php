@@ -38,7 +38,7 @@ abstract class MailingListOAuthConnector extends AbstractMailingListIntegration
                 SettingBlueprint::TYPE_TEXT,
                 self::SETTING_RETURN_URI,
                 "OAuth 2.0 Return URI",
-                "You must specify this Return URI in your OAuth2 app settings to be able to authorize your credentials. DO NOT CHANGE THIS.",
+                "You must specify this Return URI in your OAuth2 app settings to be able to authorize your credentials.",
                 true,
                 null,
                 $cpUrl . '?/cp/addons/settings/freeform_next/integrations/mailing_lists/authorize',
