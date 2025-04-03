@@ -30,13 +30,18 @@ abstract class MailingListOAuthConnector extends AbstractMailingListIntegration
      */
     public static function getSettingBlueprints()
     {
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $cpUrl = $protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
+
         return [
             new SettingBlueprint(
                 SettingBlueprint::TYPE_TEXT,
                 self::SETTING_RETURN_URI,
                 "OAuth 2.0 Return URI",
-                "You must specify this as the Return URI in your app settings to be able to authorize your credentials. DO NOT CHANGE THIS.",
-                true
+                "You must specify this Return URI in your OAuth2 app settings to be able to authorize your credentials.",
+                true,
+                null,
+                $cpUrl . '?/cp/addons/settings/freeform_next/integrations/mailing_lists/authorize',
             ),
             new SettingBlueprint(
                 SettingBlueprint::TYPE_TEXT,
@@ -98,10 +103,10 @@ abstract class MailingListOAuthConnector extends AbstractMailingListIntegration
 
         try {
 			$response = $client->post($this->getAccessTokenUrl(), [
-				'headers' => [
-					'Content-Type' => 'application/x-www-form-urlencoded',
+				"headers" => [
+					"Content-Type" => "application/x-www-form-urlencoded",
 				],
-				'body'    => $body,
+				"body"    => $body,
 			]);
         } catch (BadResponseException $e) {
             throw new IntegrationException($e->getResponse()->getBody(true));

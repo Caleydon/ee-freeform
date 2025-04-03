@@ -484,6 +484,15 @@ class Freeform_next_upd extends AddonUpdater
                 ");
         }
 
+        if (version_compare($previousVersion, '3.1.3', '<=')) {
+            ee()->db
+                ->query("
+                    ALTER TABLE exp_freeform_next_integrations
+                    MODIFY COLUMN `accessToken`
+                    TEXT NULL
+                ");
+        }
+
         return true;
     }
 
