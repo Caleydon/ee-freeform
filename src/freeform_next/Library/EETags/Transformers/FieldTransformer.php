@@ -127,6 +127,7 @@ class FieldTransformer
             $prefix . 'layout'               => $this->getTableLayout($field),
             $prefix . 'use_script'           => $field instanceof TableField ? $field->isUseScript() : null,
             $prefix . 'max_rows'             => $field instanceof TableField ? $field->getMaxRows() : null,
+            $prefix . 'form'                 => $this->getForm($field),
         ];
 
         if (null !== $columnCount && null !== $columnIndex) {
@@ -182,6 +183,40 @@ class FieldTransformer
         }
 
         return $values ? implode(', ', $values) : '';
+    }
+
+    /**
+     * @param AbstractField $field
+     *
+     * @return array|null
+     */
+    private function getForm(AbstractField $field)
+    {
+        $form = $field->getForm();
+
+        return [
+            [
+                'form:id' => $form->getId(),
+                'form:name' => $form->getName(),
+                'form:handle' => $form->getHandle(),
+                'form:description' => $form->getDescription(),
+                'form:return_url' => $form->getReturnUrl(),
+                'form:return' => $form->getReturnUrl(),
+                'form:action' => $form->getCustomAttributes()->getAction(),
+                'form:method' => $form->getCustomAttributes()->getMethod(),
+                'form:class' => $form->getCustomAttributes()->getClass(),
+                'form:page_count' => count($form->getPages()),
+                'form:row_class' => $form->getCustomAttributes()->getRowClass(),
+                'form:column_class' => $form->getCustomAttributes()->getColumnClass(),
+                'form:field_id_prefix' => $form->getCustomAttributes()->getFieldIdPrefix(),
+                'form:current_page' => [
+                    [
+                        'page:index' => $form->getCurrentPage()->getIndex(),
+                        'page:label' => $form->getCurrentPage()->getLabel(),
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
