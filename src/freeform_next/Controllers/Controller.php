@@ -26,6 +26,7 @@ abstract class Controller
     protected function getPost($key, $defaultValue = null)
     {
         $value = ee()->input->post($key);
+        $value = ee()->security->xss_clean($value);
 
         if ($value === false) {
             return $defaultValue;

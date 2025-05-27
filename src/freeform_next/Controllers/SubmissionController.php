@@ -837,7 +837,10 @@ class SubmissionController extends Controller
         }
 
         $submission->title    = ee()->input->post('title', true);
+        $submission->title = ee()->security->xss_clean($submission->title);
+
         $submission->statusId = ee()->input->post('statusId', StatusRepository::getInstance()->getDefaultStatusId());
+        $submission->statusId = ee()->security->xss_clean($submission->statusId);
 
         foreach ($form->getLayout()->getFields() as $field) {
             if ($field instanceof NoStorageInterface) {
@@ -845,6 +848,7 @@ class SubmissionController extends Controller
             }
 
             $value = ee()->input->post($field->getHandle(), true);
+            $value = ee()->security->xss_clean($value);
 
 			if ($field instanceof FileUploadField) {
 				if(isset($_FILES[$field->getHandle()]))

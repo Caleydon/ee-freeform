@@ -30,6 +30,7 @@ class Plugin
     public function getPost($name, $default = null)
     {
         $value = ee()->input->post($name);
+        $value = ee()->security->xss_clean($value);
 
         if (!$value) {
             return $default;

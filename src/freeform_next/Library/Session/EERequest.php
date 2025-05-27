@@ -22,6 +22,7 @@ class EERequest implements RequestInterface
     public function getPost($key, $defaultValue = null)
     {
         $post = ee()->input->post($key);
+        $post = ee()->security->xss_clean($post);
 
         return $post !== false ? $post : $defaultValue;
     }
