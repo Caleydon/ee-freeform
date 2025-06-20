@@ -89,6 +89,14 @@ class FileUploadField extends AbstractField implements MultipleValueInterface, F
     /**
      * @return int
      */
+    public function getMaxFileSizeMB()
+    {
+        return $this->getMaxFileSizeKB() / 1024;
+    }
+
+    /**
+     * @return int
+     */
     public function getFileCount()
     {
         $fileCount = (int) $this->fileCount;
