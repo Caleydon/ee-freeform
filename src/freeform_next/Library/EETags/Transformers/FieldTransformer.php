@@ -127,6 +127,9 @@ class FieldTransformer
             $prefix . 'layout'               => $this->getTableLayout($field),
             $prefix . 'use_script'           => $field instanceof TableField ? $field->isUseScript() : null,
             $prefix . 'max_rows'             => $field instanceof TableField ? $field->getMaxRows() : null,
+            $prefix . 'max_files'            => $field instanceof FileUploadField ? $field->getFileCount() : null,
+            $prefix . 'max_filesize:kb'      => $field instanceof FileUploadField ? $field->getMaxFileSizeKB() : null,
+            $prefix . 'max_filesize:mb'      => $field instanceof FileUploadField ? $field->getMaxFileSizeMB() : null,
         ];
 
         if (null !== $columnCount && null !== $columnIndex) {

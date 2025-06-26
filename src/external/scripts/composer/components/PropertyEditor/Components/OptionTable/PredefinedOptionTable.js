@@ -43,7 +43,7 @@ export default class PredefinedOptionTable extends Component {
           <thead>
           <tr>
             <th>Label</th>
-            <th colSpan={2}>Value</th>
+            <th colSpan={3}>Value</th>
           </tr>
           </thead>
 
