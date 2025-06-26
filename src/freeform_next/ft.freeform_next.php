@@ -13,6 +13,8 @@ class Freeform_next_ft extends EE_Fieldtype
         'version' => '1.0',
     ];
 
+    public $has_array_data = TRUE;
+
     /**
      * Freeform_next_ft constructor.
      */
@@ -72,26 +74,274 @@ class Freeform_next_ft extends EE_Fieldtype
     /**
      * @inheritdoc
      */
-    public function replace_tag($data, $params = [], $tagdata = false)
+    public function replace_tag($data, $params = array(), $tagdata = FALSE)
     {
-        $formId    = (int) $data;
-        $formModel = FormRepository::getInstance()->getFormById($formId);
-
-        if (!$formModel) {
+        $form = $this->getForm($data);
+        if (!$form) {
             return '';
         }
 
-        $hash = ee()->input->post(FormValueContext::FORM_HASH_KEY, null);
-        if (null !== $hash && $hash !== false) {
-            if (!class_exists('Freeform_Next')) {
-                require_once __DIR__ . '/mod.freeform_next.php';
-            }
+        if ($tagdata) {
+            $variables = [
+                [
+                    'id' => $form->getId(),
+                    'name' => $form->getName(),
+                    'handle' => $form->getHandle(),
+                    'color' => $form->getColor(),
+                    'hash' => $form->getHash(),
+                    'submission_title_format' => $form->getSubmissionTitleFormat(),
+                    'description' => $form->getDescription(),
+                    'current_page' => $form->getCurrentPage(),
+                    'return_url' => $form->getReturnUrl(),
+                    'anchor' => $form->getAnchor(),
+                    'default_status' => $form->getDefaultStatus(),
+                    'ip_collecting_enabled' => $form->isIpCollectingEnabled(),
+                    'pages' => $form->getPages(),
+                    'layout' => $form->getLayout(),
+                    'has_errors' => $form->hasErrors(),
+                    'errors' => $form->getErrors(),
+                    'marked_as_spam' => $form->isMarkedAsSpam(),
+                    'valid' => $form->isValid(),
+                    'page_posted' => $form->isPagePosted(),
+                    'form_posted' => $form->isFormPosted(),
+                    'submission_title_format_blank' => $form->isSubmissionTitleFormatBlank(),
+                    'submitted_successfully' => $form->isSubmittedSuccessfully(),
+                    'render' => $form->render(),
+                ]
+            ];
 
-            $obj = new Freeform_Next();
-            $obj->submitForm($formModel->getForm());
+            return ee()->TMPL->parse_variables($tagdata, $variables);
         }
 
-        $form = $formModel->getForm();
+        return $form->render();
+    }
+
+    public function replace_id($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->getId();
+    }
+
+    public function replace_name($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->getName();
+    }
+
+    public function replace_handle($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->getHandle();
+    }
+
+    public function replace_color($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->getColor();
+    }
+
+    public function replace_hash($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->getHash();
+    }
+
+    public function replace_submission_title_format($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->getSubmissionTitleFormat();
+    }
+
+    public function replace_description($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->getDescription();
+    }
+
+    public function replace_current_page($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->getCurrentPage();
+    }
+
+    public function replace_return_url($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->getReturnUrl();
+    }
+
+    public function replace_anchor($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->getAnchor();
+    }
+
+    public function replace_default_status($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->getDefaultStatus();
+    }
+
+    public function replace_ip_collecting_enabled($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->isIpCollectingEnabled();
+    }
+
+    public function replace_pages($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->getPages();
+    }
+
+    public function replace_layout($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->getLayout();
+    }
+
+    public function replace_has_errors($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->hasErrors();
+    }
+
+    public function replace_errors($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->getErrors();
+    }
+
+    public function replace_marked_as_spam($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->isMarkedAsSpam();
+    }
+
+    public function replace_valid($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->isValid();
+    }
+
+    public function replace_page_posted($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->isPagePosted();
+    }
+
+    public function replace_form_posted($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->isFormPosted();
+    }
+
+    public function replace_submission_title_format_blank($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->isSubmissionTitleFormatBlank();
+    }
+
+    public function replace_submitted_successfully($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
+
+        return $form->isSubmittedSuccessfully();
+    }
+
+    public function replace_render($data, $params = array(), $tagdata = FALSE)
+    {
+        $form = $this->getForm($data);
+        if (!$form) {
+            return '';
+        }
 
         return $form->render();
     }
@@ -118,5 +368,27 @@ class Freeform_next_ft extends EE_Fieldtype
         }
 
         return parent::save($data);
+    }
+
+    private function getForm($data)
+    {
+        $formId    = (int) $data;
+        $formModel = FormRepository::getInstance()->getFormById($formId);
+
+        if (!$formModel) {
+            return '';
+        }
+
+        $hash = ee()->input->post(FormValueContext::FORM_HASH_KEY, null);
+        if (null !== $hash && $hash !== false) {
+            if (!class_exists('Freeform_Next')) {
+                require_once __DIR__ . '/mod.freeform_next.php';
+            }
+
+            $obj = new Freeform_Next();
+            $obj->submitForm($formModel->getForm());
+        }
+
+        return $formModel->getForm();
     }
 }
