@@ -202,9 +202,9 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->getName();
+        return $this->getName() ?: '';
     }
 
     /**
