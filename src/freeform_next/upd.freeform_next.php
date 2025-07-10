@@ -493,6 +493,92 @@ class Freeform_next_upd extends AddonUpdater
                 ");
         }
 
+        if (version_compare($previousVersion, '3.2.0', '<=')) {
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 5
+                    WHERE `method` = 'validateHoneypot' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 6
+                    WHERE `method` = 'validateRecaptcha' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 5
+                    WHERE `method` = 'validateRecaptchaFields' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 5
+                    WHERE `method` = 'addHoneypotInputToForm' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 6
+                    WHERE `method` = 'addRecaptchaInputToForm' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 5
+                    WHERE `method` = 'addHoneypotJavascriptToForm' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 6
+                    WHERE `method` = 'addDateTimeJavascript' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 7
+                    WHERE `method` = 'addFormDisabledJavascript' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 8
+                    WHERE `method` = 'addFormAnchorJavascript' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 9
+                    WHERE `method` = 'addTableJavascript' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 10
+                    WHERE `method` = 'addRecaptchaJavascriptToForm' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 5
+                    WHERE `method` = 'addCpCustomMenu' and `class` = 'Freeform_next_ext';
+                ");
+        }
+
         return true;
     }
 
