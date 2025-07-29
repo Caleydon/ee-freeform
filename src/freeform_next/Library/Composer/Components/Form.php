@@ -30,6 +30,7 @@ use Solspace\Addons\FreeformNext\Library\Integrations\DataObjects\FieldObject;
 use Solspace\Addons\FreeformNext\Library\Mailing\MailHandlerInterface;
 use Solspace\Addons\FreeformNext\Library\Session\FormValueContext;
 use Solspace\Addons\FreeformNext\Library\Translations\TranslatorInterface;
+use Solspace\Addons\FreeformNext\Model\SpamReasonModel;
 use Solspace\Addons\FreeformNext\Model\SubmissionModel;
 use Solspace\Addons\FreeformNext\Repositories\SubmissionRepository;
 
@@ -98,9 +99,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     /** @var bool */
     private $valid;
 
-    /** @var bool */
-    private $markedAsSpam;
-
     /** @var SubmissionHandlerInterface */
     private $submissionHandler;
 
@@ -136,6 +134,8 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
     /** @var mixed */
     private $submitResult;
+
+    private array $spamReasons = [];
 
     /**
      * Form constructor.
@@ -181,7 +181,7 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
         $this->storeData           = true;
         $this->customAttributes    = new CustomFormAttributes();
         $this->errors              = [];
-        $this->markedAsSpam        = false;
+        $this->spamReasons         = [];
         $this->submitted           = false;
 
         $this->layout = new Layout(
@@ -409,22 +409,29 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isMarkedAsSpam()
+    public function getSpamReasons(): array
     {
-        return $this->markedAsSpam;
+        return $this->spamReasons;
     }
 
-    /**
-     * @param bool $markedAsSpam
-     *
-     * @return Form
-     */
-    public function setMarkedAsSpam($markedAsSpam)
+    public function isMarkedAsSpam(): bool
     {
-        $this->markedAsSpam = $markedAsSpam;
+        return !empty($this->getSpamReasons());
+    }
+
+    public function setMarkedAsSpam(string $type, string $message, ?string $value = null): self
+    {
+        $spamReasons = $this->getSpamReasons();
+
+        foreach ($spamReasons as $spamReason) {
+            if ($spamReason['type'] === $type && $spamReason['message'] === $message && $spamReason['value'] === $value) {
+                return $this;
+            }
+        }
+
+        $spamReasons[] = ['type' => $type, 'message' => $message, 'value' => $value];
+
+        $this->spamReasons = $spamReasons;
 
         return $this;
     }
@@ -565,8 +572,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         if ($this->isMarkedAsSpam()) {
             $this->formSaved = true;
-
-            return null;
         }
 
         if ($formValueContext->shouldFormWalkToPreviousPage()) {

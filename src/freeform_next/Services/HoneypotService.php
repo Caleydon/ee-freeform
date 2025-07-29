@@ -6,6 +6,7 @@ use Solspace\Addons\FreeformNext\Library\Composer\Components\Form;
 use Solspace\Addons\FreeformNext\Library\DataObjects\FormRenderObject;
 use Solspace\Addons\FreeformNext\Library\Session\EESession;
 use Solspace\Addons\FreeformNext\Library\Session\Honeypot;
+use Solspace\Addons\FreeformNext\Model\SpamReasonModel;
 
 class HoneypotService
 {
@@ -92,7 +93,7 @@ class HoneypotService
             $form->addError(lang('Form honeypot is invalid'));
         }
 
-        $form->setMarkedAsSpam(true);
+        $form->setMarkedAsSpam(SpamReasonModel::TYPE_HONEYPOT, 'Honeypot check failed', $postValues[Honeypot::NAME_PREFIX]);
     }
 
     /**

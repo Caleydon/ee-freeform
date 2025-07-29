@@ -5,6 +5,8 @@ namespace Solspace\Addons\FreeformNext\Services;
 use GuzzleHttp\Client;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Form;
 use Solspace\Addons\FreeformNext\Library\DataObjects\FormRenderObject;
+use Solspace\Addons\FreeformNext\Library\Session\Honeypot;
+use Solspace\Addons\FreeformNext\Model\SpamReasonModel;
 use Solspace\Addons\FreeformNext\Repositories\SettingsRepository;
 
 class RecaptchaService
@@ -103,10 +105,15 @@ class RecaptchaService
             return;
         }
 
+        $score = null;
+        $spamReasonMessage = lang('Please verify that you are not a robot.');
+
         $response = ee()->input->post('g-recaptcha-response');
 
         if (!$response) {
-            $form->addError(lang('Please verify that you are not a robot.'));
+            if (!$this->getSettingsService()->getSettingsModel()->spamBlockLikeSuccessfulPost) {
+                $form->addError($spamReasonMessage);
+            }
         } else {
             $client = new Client();
 
@@ -126,14 +133,20 @@ class RecaptchaService
             $result = json_decode((string) $postResponse->getBody(), true);
 
             if (isset($result['score'])) {
+                $score = $result['score'];
+
                 $minScore = $settingsModel->getRecaptchaScoreThreshold();
 
                 $minScore = min(1, $minScore);
                 $minScore = max(0, $minScore);
 
-                if ($result['score'] < $minScore) {
-                    // $form->addError(lang('Score check failed with ['.$result['score'].']'));
-                    $form->addError(lang('Spam test failed.'));
+                if ($score < $minScore) {
+                    $spamReasonMessage = lang('Spam test failed.');
+
+                    // $form->addError(lang('Score check failed with ['.$score.']'));
+                    if (!$this->getSettingsService()->getSettingsModel()->spamBlockLikeSuccessfulPost) {
+                        $form->addError($spamReasonMessage);
+                    }
                 }
             }
 
@@ -177,7 +190,13 @@ class RecaptchaService
             return;
         }
 
-        $form->addErrors($errors);
+        if (!$this->getSettingsService()->getSettingsModel()->spamBlockLikeSuccessfulPost) {
+            $form->addErrors($errors);
+
+            $spamReasonMessage = implode(',', $errors);
+        }
+
+        $form->setMarkedAsSpam(SpamReasonModel::TYPE_CAPTCHA, 'reCaptcha - '.$spamReasonMessage, $score);
     }
 
     /**

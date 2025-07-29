@@ -493,6 +493,37 @@ class Freeform_next_upd extends AddonUpdater
                 ");
         }
 
+        if (version_compare($previousVersion, '3.2.1', '<=')) {
+            $submissionsTable = ee()->db->dbprefix('freeform_next_submissions');
+            $spamReasonsTable = ee()->db->dbprefix('freeform_next_spam_reasons');
+
+            if (ee()->db->table_exists($submissionsTable) && !ee()->db->field_exists('isSpam', $submissionsTable)) {
+                ee()->db->query("ALTER TABLE `{$submissionsTable}` ADD COLUMN `isSpam` INT(11) NOT NULL DEFAULT 0 AFTER `formId`");
+            }
+
+            if (!ee()->db->table_exists($spamReasonsTable)) {
+                ee()->db->query(
+                    "CREATE TABLE `{$spamReasonsTable}`
+                    (
+                        `id`                INT(11)         NOT NULL    AUTO_INCREMENT,
+                        `siteId`            INT(11)         NOT NULL    DEFAULT 1,
+                        `submissionId`      INT(11)         NOT NULL,
+                        `reasonType`        VARCHAR(100)    NULL        DEFAULT NULL,
+                        `reasonMessage`     TEXT            NULL        DEFAULT NULL,
+                        `reasonValue`       TEXT            NULL        DEFAULT NULL,
+                        `dateCreated`       DATETIME        NULL        DEFAULT NULL,
+                        `dateUpdated`       DATETIME        NULL        DEFAULT NULL,
+                        PRIMARY KEY (`id`),
+                        KEY `ffn_spam_reasons_submissionId` (`submissionId`),
+                        CONSTRAINT `ffn_spam_reasons_submissionId_fk`
+                            FOREIGN KEY (`submissionId`)
+                            REFERENCES `{$submissionsTable}` (`id`)
+                            ON DELETE CASCADE
+                    )"
+                );
+            }
+        }
+
         return true;
     }
 

@@ -270,7 +270,46 @@ class Freeform_next_mcp extends ControlPanelView
             throw new FreeformException(lang('Submission not found'));
         }
 
-        return $this->renderView($this->getSubmissionController()->index($form));
+        return $this->renderView($this->getSubmissionController()->submissionsIndex($form));
+    }
+
+    /**
+     * @param string   $formHandle
+     * @param int|null $submissionId
+     *
+     * @return array
+     * @throws FreeformException
+     */
+    public function spam($formHandle, $submissionId = null)
+    {
+        $formModel = FormRepository::getInstance()->getFormByIdOrHandle($formHandle);
+        $form      = $formModel->getForm();
+
+        if (null !== $submissionId) {
+            if (strtolower($submissionId) === 'delete') {
+                return $this->renderView($this->getSubmissionController()->batchDelete($form));
+            }
+
+            $submission = SubmissionRepository::getInstance()->getSubmission($form, $submissionId);
+
+            if ($submission) {
+                if (isset($_POST['title'])) {
+                    $this->getSubmissionController()->save($form, $submission);
+
+                    return $this->renderView(
+                        new RedirectView(
+                            UrlHelper::getLink('spam/' . $formHandle . '/')
+                        )
+                    );
+                }
+
+                return $this->renderView($this->getSubmissionController()->edit($form, $submission));
+            }
+
+            throw new FreeformException(lang('Submission not found'));
+        }
+
+        return $this->renderView($this->getSubmissionController()->spamIndex($form));
     }
 
     /**
