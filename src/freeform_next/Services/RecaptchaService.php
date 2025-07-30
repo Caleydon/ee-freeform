@@ -14,7 +14,7 @@ class RecaptchaService
      *
      * @param FormRenderObject $renderObject
      */
-    public function addRecaptchaJavascriptToForm(FormRenderObject $renderObject)
+    public function addRecaptchaJavascriptToForm(FormRenderObject $renderObject): void
     {
         $settingsModel = $this->getSettingsService()->getSettingsModel();
 
@@ -47,7 +47,7 @@ class RecaptchaService
      *
      * @param FormRenderObject $renderObject
      */
-    public function addRecaptchaInputToForm(FormRenderObject $renderObject)
+    public function addRecaptchaInputToForm(FormRenderObject $renderObject): void
     {
         $settingsModel = $this->getSettingsService()->getSettingsModel();
 
@@ -78,7 +78,7 @@ class RecaptchaService
     /**
      * @param Form $form
      */
-    public function validateFormRecaptcha(Form $form)
+    public function validateFormRecaptcha(Form $form): void
     {
         $settingsModel = $this->getSettingsService()->getSettingsModel();
 
@@ -183,7 +183,7 @@ class RecaptchaService
     /**
      * @return string
      */
-    public function getRecaptchaJavascript(Form $form)
+    public function getRecaptchaJavascript(Form $form): string
     {
         $output = '';
 
@@ -201,7 +201,7 @@ class RecaptchaService
     /**
      * @return string
      */
-    public function getRecaptchaInput()
+    public function getRecaptchaInput(): string
     {
         return '<textarea data-recaptcha="" id="g-recaptcha-response" name="g-recaptcha-response" style="visibility: hidden; position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px; overflow: hidden; border: none;"></textarea>';
     }
@@ -209,7 +209,7 @@ class RecaptchaService
     /**
      * @return SettingsService
      */
-    private function getSettingsService()
+    private function getSettingsService(): SettingsService
     {
         return new SettingsService();
     }
