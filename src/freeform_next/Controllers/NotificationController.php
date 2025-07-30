@@ -274,9 +274,18 @@ class NotificationController extends Controller
                                 'desc'   => 'The content of the email notification. See documentation for availability of variables.',
                                 'wide'   => true,
                                 'fields' => [
-                                    'includeAttachments' => [
+                                    'bodyHtml' => [
                                         'type'    => 'html',
                                         'content' => $this->getFieldHtml($notification, 'html_field'),
+                                    ],
+                                ],
+                            ],
+                            [
+                                'title'  => '', // no title or desc for hidden fields
+                                'fields' => [
+                                    'bodyText' => [
+                                        'type'  => 'hidden',
+                                        'value' => strip_tags($notification->bodyText) ?? '',
                                     ],
                                 ],
                             ],
