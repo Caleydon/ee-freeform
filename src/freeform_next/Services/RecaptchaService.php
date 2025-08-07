@@ -196,7 +196,11 @@ class RecaptchaService
             $spamReasonMessage = implode(',', $errors);
         }
 
-        $form->setMarkedAsSpam(SpamReasonModel::TYPE_CAPTCHA, 'reCaptcha - '.$spamReasonMessage, $score);
+        $form->setMarkedAsSpam(
+            SpamReasonModel::TYPE_CAPTCHA,
+            'reCaptcha - '.$spamReasonMessage,
+            (string) ($score ?? '')
+        );
     }
 
     /**

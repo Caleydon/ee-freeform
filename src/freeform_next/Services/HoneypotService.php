@@ -60,40 +60,44 @@ class HoneypotService
         $postValues = $_POST;
 
         if(!$this->getSettingsService()->getSettingsModel()->isFreeformHoneypotEnhanced())
-		{
-			if (array_key_exists(Honeypot::NAME_PREFIX, $postValues) && $postValues[Honeypot::NAME_PREFIX] === '') {
-				return;
-			}
-		}
-		else
-		{
-			foreach ($postValues as $key => $value) {
-				if (str_starts_with($key, Honeypot::NAME_PREFIX)) {
-					if (\in_array($key, self::$validHoneypots, true)) {
-						return;
-					}
+    {
+      if (array_key_exists(Honeypot::NAME_PREFIX, $postValues) && $postValues[Honeypot::NAME_PREFIX] === '') {
+        return;
+      }
+    }
+    else
+    {
+      foreach ($postValues as $key => $value) {
+        if (str_starts_with($key, Honeypot::NAME_PREFIX)) {
+          if (\in_array($key, self::$validHoneypots, true)) {
+            return;
+          }
 
-					$honeypotList = $this->getHoneypotList();
-					foreach ($honeypotList as $honeypot) {
-						$hasMatchingName = $key === $honeypot->getName();
-						$hasMatchingHash = $value === $honeypot->getHash();
-						if ($hasMatchingName && $hasMatchingHash) {
-							self::$validHoneypots[] = $key;
+          $honeypotList = $this->getHoneypotList();
+          foreach ($honeypotList as $honeypot) {
+            $hasMatchingName = $key === $honeypot->getName();
+            $hasMatchingHash = $value === $honeypot->getHash();
+            if ($hasMatchingName && $hasMatchingHash) {
+              self::$validHoneypots[] = $key;
 
-							$this->removeHoneypot($honeypot);
+              $this->removeHoneypot($honeypot);
 
-							return;
-						}
-					}
-				}
-			}
-		}
+              return;
+            }
+          }
+        }
+      }
+    }
 
         if (!$this->getSettingsService()->getSettingsModel()->spamBlockLikeSuccessfulPost) {
             $form->addError(lang('Form honeypot is invalid'));
         }
 
-        $form->setMarkedAsSpam(SpamReasonModel::TYPE_HONEYPOT, 'Honeypot check failed', $postValues[Honeypot::NAME_PREFIX]);
+        $form->setMarkedAsSpam(
+            SpamReasonModel::TYPE_HONEYPOT,
+            'Honeypot check failed',
+            $postValues[Honeypot::NAME_PREFIX] ?? ''
+        );
     }
 
     /**
