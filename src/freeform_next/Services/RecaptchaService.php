@@ -82,107 +82,106 @@ class RecaptchaService
      */
     public function validateFormRecaptcha(Form $form): void
     {
+        // Only validate on the last page
+        if (method_exists($form, 'isOnLastPage') && !$form->isOnLastPage()) {
+            return;
+        }
+
         $settingsModel = $this->getSettingsService()->getSettingsModel();
 
         $isRecaptchaEnabled = $settingsModel->isRecaptchaEnabled();
-        $isRecaptchaV3 = $settingsModel->getRecaptchaType() === 'v3';
-        $recaptchaKey = $settingsModel->getRecaptchaKey();
-        $recaptchaSecret = $settingsModel->getRecaptchaSecret();
+        $isRecaptchaV3      = $settingsModel->getRecaptchaType() === 'v3';
+        $recaptchaKey       = $settingsModel->getRecaptchaKey();
+        $recaptchaSecret    = $settingsModel->getRecaptchaSecret();
 
-        if (!$isRecaptchaEnabled) {
+        if (!$isRecaptchaEnabled || !$isRecaptchaV3 || !$recaptchaKey || !$recaptchaSecret) {
             return;
         }
 
-        if (!$isRecaptchaV3) {
-            return;
-        }
-
-        if (!$recaptchaKey) {
-            return;
-        }
-
-        if (!$recaptchaSecret) {
-            return;
-        }
-
-        $score = null;
+        $errors            = [];
         $spamReasonMessage = lang('Please verify that you are not a robot.');
+        $score             = null;
 
-        $response = ee()->input->post('g-recaptcha-response');
+        // Pull token safely
+        $response = (string) (ee()->input->post('g-recaptcha-response') ?? '');
 
-        if (!$response) {
-            if (!$this->getSettingsService()->getSettingsModel()->spamBlockLikeSuccessfulPost) {
-                $form->addError($spamReasonMessage);
-            }
+        // If missing token, that is an error (don’t early-return)
+        if ($response === '') {
+            $errors[]          = lang('The response parameter is missing.');
+            $spamReasonMessage = end($errors);
         } else {
-            $client = new Client();
+            try {
+                $client       = new \GuzzleHttp\Client();
+                $postResponse = $client->post(
+                    'https://www.google.com/recaptcha/api/siteverify',
+                    [
+                        'headers'     => ['Content-Type' => 'application/x-www-form-urlencoded'],
+                        'form_params' => [
+                            'secret'   => $recaptchaSecret,
+                            'response' => $response,
+                        ],
+                        // Optional: short timeout so we fail closed
+                        'timeout'    => 4.0,
+                    ]
+                );
 
-            $postResponse = $client->post(
-                'https://www.google.com/recaptcha/api/siteverify',
-                [
-                    'headers' => [
-                        'Content-Type' => 'application/x-www-form-urlencoded',
-                    ],
-                    'form_params' => [
-                        'secret' => $recaptchaSecret,
-                        'response' => $response,
-                    ],
-                ]
-            );
+                $result       = json_decode((string) $postResponse->getBody(), true) ?: [];
+                $success      = (bool) ($result['success'] ?? false);
+                $scoreValue   = $result['score'] ?? null;
+                $errorCodes   = $result['error-codes'] ?? [];
 
-            $result = json_decode((string) $postResponse->getBody(), true);
+                if ($scoreValue !== null) {
+                    $score    = (float) $scoreValue;
+                    $minScore = (float) $settingsModel->getRecaptchaScoreThreshold();
+                    $minScore = max(0.0, min(1.0, $minScore));
 
-            if (isset($result['score'])) {
-                $score = $result['score'];
-
-                $minScore = $settingsModel->getRecaptchaScoreThreshold();
-
-                $minScore = min(1, $minScore);
-                $minScore = max(0, $minScore);
-
-                if ($score < $minScore) {
-                    $spamReasonMessage = lang('Spam test failed.');
-
-                    // $form->addError(lang('Score check failed with ['.$score.']'));
-                    if (!$this->getSettingsService()->getSettingsModel()->spamBlockLikeSuccessfulPost) {
-                        $form->addError($spamReasonMessage);
+                    if ($score < $minScore) {
+                        $errors[]          = lang('Spam test failed.');
+                        $spamReasonMessage = lang('Score check failed.');
                     }
                 }
-            }
 
-            if ($result['success']) {
-                return;
-            }
+                // Only return success if API says success *and* we have no errors so far
+                if ($success && empty($errors)) {
+                    return; // Valid captcha ⇒ do nothing
+                }
 
-            $errors = [];
-            $errorCodes = $result['error-codes'];
-
-            if (\in_array('missing-input-secret', $errorCodes, true)) {
-                $errors[] = lang('The secret parameter is missing.');
-            }
-
-            if (\in_array('invalid-keys', $errorCodes, true)) {
-                $errors[] = lang('The key parameter is invalid or malformed.');
-            }
-
-            if (\in_array('invalid-input-secret', $errorCodes, true)) {
-                $errors[] = lang('The secret parameter is invalid or malformed.');
-            }
-
-            if (\in_array('missing-input-response', $errorCodes, true)) {
-                $errors[] = lang('The response parameter is missing.');
-            }
-
-            if (\in_array('invalid-input-response', $errorCodes, true)) {
-                $errors[] = lang('The response parameter is invalid or malformed.');
-            }
-
-            if (\in_array('bad-request', $errorCodes, true)) {
-                $errors[] = lang('The request is invalid or malformed.');
-            }
-
-            if (\in_array('timeout-or-duplicate', $errorCodes, true)) {
-                $errors[] = lang('The response is no longer valid: either is too old or has been used previously.');
+                // Map error codes (if any)
+                if (!empty($errorCodes)) {
+                    if (\in_array('missing-input-secret', $errorCodes, true)) {
+                        $errors[] = lang('The secret parameter is missing.');
+                    }
+                    if (\in_array('invalid-keys', $errorCodes, true)) {
+                        $errors[] = lang('The key parameter is invalid or malformed.');
+                    }
+                    if (\in_array('invalid-input-secret', $errorCodes, true)) {
+                        $errors[] = lang('The secret parameter is invalid or malformed.');
+                    }
+                    if (\in_array('missing-input-response', $errorCodes, true)) {
+                        $errors[] = lang('The response parameter is missing.');
+                    }
+                    if (\in_array('invalid-input-response', $errorCodes, true)) {
+                        $errors[] = lang('The response parameter is invalid or malformed.');
+                    }
+                    if (\in_array('bad-request', $errorCodes, true)) {
+                        $errors[] = lang('The request is invalid or malformed.');
+                    }
+                    if (\in_array('timeout-or-duplicate', $errorCodes, true)) {
+                        $errors[] = lang('The response is no longer valid: either is too old or has been used previously.');
+                    }
+                    // Keep the first error as the summary message
+                    if (!empty($errors)) {
+                        $spamReasonMessage = $errors[0];
+                    }
+                } elseif (!$success) {
+                    // No codes but not successful ⇒ generic failure
+                    $errors[]          = lang('Spam test failed.');
+                    $spamReasonMessage = end($errors);
+                }
+            } catch (\Throwable $e) {
+                // Network/JSON failure ⇒ fail closed and mark as spam
+                $errors[]          = lang('Captcha verification failed.');
+                $spamReasonMessage = end($errors);
             }
         }
 
@@ -192,13 +191,11 @@ class RecaptchaService
 
         if (!$this->getSettingsService()->getSettingsModel()->spamBlockLikeSuccessfulPost) {
             $form->addErrors($errors);
-
-            $spamReasonMessage = implode(',', $errors);
         }
 
         $form->setMarkedAsSpam(
             SpamReasonModel::TYPE_CAPTCHA,
-            'reCaptcha - '.$spamReasonMessage,
+            'reCaptcha - ' . $spamReasonMessage,
             (string) ($score ?? '')
         );
     }

@@ -489,6 +489,14 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
     /**
      * @return bool
      */
+    public function isOnLastPage(): bool
+    {
+        return $this->isLastPage();
+    }
+
+    /**
+     * @return bool
+     */
     public function hasErrors(): bool
     {
         return ($this->isPagePosted() && !$this->isValid()) || count($this->getErrors()) != 0;
