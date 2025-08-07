@@ -11,13 +11,14 @@
 
 namespace Solspace\Addons\FreeformNext\Library\Session;
 
+use JsonSerializable;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\AbstractField;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Attributes\DynamicNotificationAttributes;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\CheckboxField;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\SubmitField;
 use Solspace\Addons\FreeformNext\Library\Helpers\HashHelper;
 
-class FormValueContext implements \JsonSerializable
+class FormValueContext implements JsonSerializable
 {
     const FORM_HASH_DELIMITER = '_';
     const FORM_HASH_KEY       = 'formHash';
@@ -32,11 +33,9 @@ class FormValueContext implements \JsonSerializable
     const DATA_DYNAMIC_TEMPLATE_KEY   = 'dynamicTemplate';
     const DATA_SUBMISSION_TOKEN       = 'submissionToken';
 
-    /** @var int */
-    private $formId;
+    private readonly int $formId;
 
-    /** @var int */
-    private $currentPageIndex;
+    private int $currentPageIndex;
 
     /** @var array */
     private $storedValues;
@@ -44,14 +43,7 @@ class FormValueContext implements \JsonSerializable
     /** @var array */
     private $customFormData;
 
-    /** @var SessionInterface */
-    private $session;
-
-    /** @var RequestInterface */
-    private $request;
-
-    /** @var string */
-    private $lastHash;
+    private string $lastHash;
 
     /**
      * @param string $hash
@@ -60,7 +52,7 @@ class FormValueContext implements \JsonSerializable
      */
     public static function getFormIdFromHash($hash)
     {
-        list($formIdHash) = self::getHashParts($hash);
+        [$formIdHash] = self::getHashParts($hash);
 
         return $formIdHash ? HashHelper::decode($formIdHash) : null;
     }
@@ -70,9 +62,9 @@ class FormValueContext implements \JsonSerializable
      *
      * @return int|null
      */
-    public static function getPageIndexFromHash($hash)
+    public static function getPageIndexFromHash($hash): mixed
     {
-        list($_, $pageIndexHash) = self::getHashParts($hash);
+        [$_, $pageIndexHash] = self::getHashParts($hash);
 
         return HashHelper::decode($pageIndexHash);
     }
@@ -84,7 +76,7 @@ class FormValueContext implements \JsonSerializable
      *
      * @return array
      */
-    private static function getHashParts($hash)
+    private static function getHashParts($hash): array
     {
         if ($hash && preg_match(self::HASH_PATTERN, $hash, $matches)) {
             return [$matches['formId'], $matches['pageIndex'], $matches['payload']];
@@ -102,11 +94,9 @@ class FormValueContext implements \JsonSerializable
      */
     public function __construct(
         $formId,
-        SessionInterface $session,
-        RequestInterface $request
+        private readonly SessionInterface $session,
+        private readonly RequestInterface $request
     ) {
-        $this->session          = $session;
-        $this->request          = $request;
         $this->formId           = (int) $formId;
         $this->currentPageIndex = 0;
         $this->storedValues     = [];
@@ -119,7 +109,7 @@ class FormValueContext implements \JsonSerializable
     /**
      * @return string
      */
-    public function getHash()
+    public function getHash(): string
     {
         $this->lastHash = $this->regenerateHash();
 
@@ -129,7 +119,7 @@ class FormValueContext implements \JsonSerializable
     /**
      * @return string
      */
-    public function getLastHash()
+    public function getLastHash(): string
     {
         return $this->lastHash;
     }
@@ -137,7 +127,7 @@ class FormValueContext implements \JsonSerializable
     /**
      * @return int
      */
-    public function getCurrentPageIndex()
+    public function getCurrentPageIndex(): int
     {
         return $this->currentPageIndex;
     }
@@ -147,7 +137,7 @@ class FormValueContext implements \JsonSerializable
      *
      * @return $this
      */
-    public function setCurrentPageIndex($currentPageIndex)
+    public function setCurrentPageIndex(int $currentPageIndex): static
     {
         $this->currentPageIndex = $currentPageIndex;
         $this->regenerateHash();
@@ -208,7 +198,7 @@ class FormValueContext implements \JsonSerializable
      *
      * @return $this
      */
-    public function setCustomFormData(array $data = null)
+    public function setCustomFormData(?array $data = null): static
     {
         $this->customFormData = $data;
 
@@ -218,7 +208,7 @@ class FormValueContext implements \JsonSerializable
     /**
      * @return DynamicNotificationAttributes|null
      */
-    public function getDynamicNotificationData()
+    public function getDynamicNotificationData(): ?DynamicNotificationAttributes
     {
         if (
             isset(
@@ -245,11 +235,7 @@ class FormValueContext implements \JsonSerializable
      */
     public function getSubmissionIdentificator()
     {
-        if (isset($this->customFormData[self::DATA_SUBMISSION_TOKEN])) {
-            return $this->customFormData[self::DATA_SUBMISSION_TOKEN];
-        }
-
-        return null;
+        return $this->customFormData[self::DATA_SUBMISSION_TOKEN] ?? null;
     }
 
     /**
@@ -257,7 +243,7 @@ class FormValueContext implements \JsonSerializable
      *
      * @return FormValueContext
      */
-    public function appendStoredValues($storedValues)
+    public function appendStoredValues($storedValues): static
     {
         $this->storedValues = array_merge($this->storedValues, $storedValues);
 
@@ -267,7 +253,7 @@ class FormValueContext implements \JsonSerializable
     /**
      * Advances the page index by 1
      */
-    public function advanceToNextPage()
+    public function advanceToNextPage(): void
     {
         $this->currentPageIndex++;
         $this->regenerateHash();
@@ -276,7 +262,7 @@ class FormValueContext implements \JsonSerializable
     /**
      * Walks back a single page
      */
-    public function retreatToPreviousPage()
+    public function retreatToPreviousPage(): void
     {
         $this->currentPageIndex--;
         $this->regenerateHash();
@@ -285,7 +271,7 @@ class FormValueContext implements \JsonSerializable
     /**
      * Save current state in session
      */
-    public function saveState()
+    public function saveState(): void
     {
         $encodedData    = json_encode($this, JSON_OBJECT_AS_ARRAY);
         $sessionHashKey = $this->getSessionHash($this->getHash());
@@ -297,7 +283,7 @@ class FormValueContext implements \JsonSerializable
     /**
      * Removes the current key from active session list
      */
-    public function cleanOutCurrentSession()
+    public function cleanOutCurrentSession(): void
     {
         $sessionHashKey = $this->getSessionHash($this->getHash());
         $this->session->remove($sessionHashKey);
@@ -306,13 +292,13 @@ class FormValueContext implements \JsonSerializable
     /**
      * Attempts to regenerate existing state
      */
-    public function regenerateState()
+    public function regenerateState(): void
     {
         $sessionHash  = $this->getSessionHash();
         $sessionState = $this->session->get($sessionHash);
 
         if ($sessionHash && $sessionState) {
-            $sessionState = json_decode($sessionState, true);
+            $sessionState = json_decode((string) $sessionState, true);
 
             $this->currentPageIndex = $sessionState['currentPageIndex'];
             $this->storedValues     = $sessionState['storedValues'];
@@ -337,8 +323,8 @@ class FormValueContext implements \JsonSerializable
             return false;
         }
 
-        list($_, $_, $postedPayload) = self::getHashParts($postedHash);
-        list($_, $_, $currentPayload) = self::getHashParts($this->getHash());
+        [,, $postedPayload] = self::getHashParts($postedHash);
+        [,, $currentPayload] = self::getHashParts($this->getHash());
 
         return $postedPayload === $currentPayload;
     }
@@ -356,8 +342,8 @@ class FormValueContext implements \JsonSerializable
             return false;
         }
 
-        list($_, $postedPageIndex, $postedPayload) = self::getHashParts($postedHash);
-        list($_, $currentPageIndex, $currentPayload) = self::getHashParts($this->getHash());
+        [, $postedPageIndex, $postedPayload] = self::getHashParts($postedHash);
+        [, $currentPageIndex, $currentPayload] = self::getHashParts($this->getHash());
 
         return $postedPageIndex === $currentPageIndex && $postedPayload === $currentPayload;
     }
@@ -375,13 +361,13 @@ class FormValueContext implements \JsonSerializable
      *
      * @return string|null
      */
-    private function getSessionHash($hash = null)
+    private function getSessionHash($hash = null): ?string
     {
         if (null === $hash) {
             $hash = $this->getPostedHash();
         }
 
-        list($formIdHash, $_, $payload) = self::getHashParts($hash);
+        [$formIdHash, $_, $payload] = self::getHashParts($hash);
 
         if ($formIdHash === $this->hashFormId()) {
             return sprintf(
@@ -400,10 +386,10 @@ class FormValueContext implements \JsonSerializable
      *
      * @return string
      */
-    private function regenerateHash()
+    private function regenerateHash(): string
     {
         // Attempt to fetch hashes from POST data
-        list($formIdHash, $_, $payload) = self::getHashParts($this->getPostedHash());
+        [$formIdHash, $_, $payload] = self::getHashParts($this->getPostedHash());
 
         $formId           = self::getFormIdFromHash($this->getPostedHash());
         $isFormIdMatching = (int) $formId === (int) $this->formId;
@@ -438,7 +424,7 @@ class FormValueContext implements \JsonSerializable
     /**
      * @return string
      */
-    private function hashFormId()
+    private function hashFormId(): string
     {
         return HashHelper::hash($this->formId);
     }
@@ -446,7 +432,7 @@ class FormValueContext implements \JsonSerializable
     /**
      * @return string
      */
-    private function hashPageIndex()
+    private function hashPageIndex(): string
     {
         return HashHelper::sha1($this->currentPageIndex, 4, 10);
     }
@@ -454,7 +440,7 @@ class FormValueContext implements \JsonSerializable
     /**
      * Cleans up all old session instances
      */
-    private function cleanUpOldSessions()
+    private function cleanUpOldSessions(): void
     {
         $instances = $this->getActiveSessionList();
 
@@ -474,10 +460,10 @@ class FormValueContext implements \JsonSerializable
      *
      * @return array
      */
-    private function getActiveSessionList()
+    private function getActiveSessionList(): array
     {
         $activeSessionList = json_decode(
-            $this->session->get(self::ACTIVE_SESSIONS_KEY, '[]'),
+            (string) $this->session->get(self::ACTIVE_SESSIONS_KEY, '[]'),
             true
         );
 
@@ -493,7 +479,7 @@ class FormValueContext implements \JsonSerializable
      *
      * @param string $sessionHash
      */
-    private function appendKeyToActiveSessions($sessionHash)
+    private function appendKeyToActiveSessions(?string $sessionHash): void
     {
         $instances = $this->getActiveSessionList();
 

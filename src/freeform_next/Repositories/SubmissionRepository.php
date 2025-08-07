@@ -2,6 +2,8 @@
 
 namespace Solspace\Addons\FreeformNext\Repositories;
 
+use Override;
+use Exception;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Form;
 use Solspace\Addons\FreeformNext\Library\DataObjects\SubmissionAttributes;
 use Solspace\Addons\FreeformNext\Model\SpamReasonModel;
@@ -13,6 +15,7 @@ class SubmissionRepository extends Repository
     /**
      * @return SubmissionRepository
      */
+    #[Override]
     public static function getInstance()
     {
         return parent::getInstance();
@@ -55,7 +58,7 @@ class SubmissionRepository extends Repository
      *
      * @return SubmissionModel[]
      */
-    public function getSubmissionsByIdList(array $ids)
+    public function getSubmissionsByIdList(array $ids): array
     {
         if (empty($ids)) {
             return [];
@@ -122,9 +125,9 @@ class SubmissionRepository extends Repository
      * @param SubmissionAttributes $attributes
      *
      * @return SubmissionModel[]
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getAllSubmissionsFor(SubmissionAttributes $attributes)
+    public function getAllSubmissionsFor(SubmissionAttributes $attributes): array
     {
         $submissionTable    = SubmissionModel::TABLE;
         $statusTable        = StatusModel::TABLE;
@@ -201,9 +204,9 @@ class SubmissionRepository extends Repository
             $query->_reset_select();
             ee()->db->_reset_select();
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if (preg_match("/Column not found: 1054.*in 'order clause'/", $e->getMessage())) {
-                throw new \Exception(sprintf('Cannot order by %s', $attributes->getOrderBy()));
+                throw new Exception(sprintf('Cannot order by %s', $attributes->getOrderBy()));
             }
 
             return [];
@@ -287,7 +290,7 @@ class SubmissionRepository extends Repository
     /**
      * @return array
      */
-    public function getSubmissionTotalsPerForm()
+    public function getSubmissionTotalsPerForm(): array
     {
         $result = ee()->db
             ->select('COUNT(id) as total, formId')
@@ -326,7 +329,7 @@ class SubmissionRepository extends Repository
         return $totals;
     }
 
-    private function groupLike($values)
+    private function groupLike($values): string|self
     {
 
         $where = '';
@@ -377,14 +380,14 @@ class SubmissionRepository extends Repository
      *
      * @return string
      */
-    private function addWhereToSql($sql, $where, $hasOrderBy = true)
+    private function addWhereToSql($sql, string $where, bool $hasOrderBy = true): string|array
     {
         $pattern = '/WHERE (.*?)\s(?=(ORDER BY|LIMIT))/s';
 
         preg_match($pattern, $sql, $matches);
 
         if ($matches) {
-            list ($_, $existingRules) = $matches;
+            [$_, $existingRules] = $matches;
 
             $sql = str_replace(
                 'WHERE ' . $existingRules,
@@ -397,7 +400,7 @@ class SubmissionRepository extends Repository
             preg_match($pattern, $sql, $matches);
 
             if ($matches) {
-                list ($_, $existingRules) = $matches;
+                [$_, $existingRules] = $matches;
 
                 $sql = str_replace(
                     'WHERE ' . $existingRules,

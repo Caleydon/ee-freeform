@@ -21,11 +21,11 @@ use Solspace\Addons\FreeformNext\Utilities\AddonUpdater\PluginExtension;
 class Freeform_next_upd extends AddonUpdater
 {
     /**
-     * @param string|null $previousVersion
+     * @param ?string $previousVersion
      *
      * @return bool
      */
-    public function runMigrations($previousVersion = null)
+    public function runMigrations(?string $previousVersion = null): bool
     {
         if (version_compare($previousVersion, '1.0.3', '<=')) {
             ee()->db
@@ -248,7 +248,7 @@ class Freeform_next_upd extends AddonUpdater
                         ee()->db->query("ALTER TABLE exp_$table DROP INDEX $old, ADD INDEX $index");
                     }
                 }
-            } catch (\Exception $exception) {
+            } catch (Exception) {
             }
         }
 
@@ -493,6 +493,92 @@ class Freeform_next_upd extends AddonUpdater
                 ");
         }
 
+        if (version_compare($previousVersion, '3.2.0', '<=')) {
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 5
+                    WHERE `method` = 'validateHoneypot' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 6
+                    WHERE `method` = 'validateRecaptcha' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 5
+                    WHERE `method` = 'validateRecaptchaFields' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 5
+                    WHERE `method` = 'addHoneypotInputToForm' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 6
+                    WHERE `method` = 'addRecaptchaInputToForm' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 5
+                    WHERE `method` = 'addHoneypotJavascriptToForm' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 6
+                    WHERE `method` = 'addDateTimeJavascript' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 7
+                    WHERE `method` = 'addFormDisabledJavascript' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 8
+                    WHERE `method` = 'addFormAnchorJavascript' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 9
+                    WHERE `method` = 'addTableJavascript' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 10
+                    WHERE `method` = 'addRecaptchaJavascriptToForm' and `class` = 'Freeform_next_ext';
+                ");
+
+            ee()->db
+                ->query("
+                    UPDATE exp_extensions 
+                    SET `priority` = 5
+                    WHERE `method` = 'addCpCustomMenu' and `class` = 'Freeform_next_ext';
+                ");
+        }
+
         if (version_compare($previousVersion, '3.2.1', '<=')) {
             $submissionsTable = ee()->db->dbprefix('freeform_next_submissions');
             $spamReasonsTable = ee()->db->dbprefix('freeform_next_spam_reasons');
@@ -530,7 +616,7 @@ class Freeform_next_upd extends AddonUpdater
     /**
      * @return array
      */
-    protected function getInstallableActions()
+    protected function getInstallableActions(): array
     {
         return [
             new PluginAction('submitForm', 'Freeform_next', true),
@@ -540,7 +626,7 @@ class Freeform_next_upd extends AddonUpdater
     /**
      * @return array|PluginExtension[]
      */
-    protected function getInstallableExtensions()
+    protected function getInstallableExtensions(): array
     {
         return [
             new PluginExtension('validateRecaptcha', ExtensionHelper::HOOK_FORM_VALIDATE, [], 5),
