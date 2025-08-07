@@ -493,7 +493,7 @@ class Freeform_next_upd extends AddonUpdater
                 ");
         }
 
-        if (version_compare($previousVersion, '3.2.0', '<=')) {
+        if (version_compare($previousVersion, '3.2.1', '<=')) {
             ee()->db
                 ->query("
                     UPDATE exp_extensions 
@@ -579,7 +579,7 @@ class Freeform_next_upd extends AddonUpdater
                 ");
         }
 
-        if (version_compare($previousVersion, '3.2.1', '<=')) {
+        if (version_compare($previousVersion, '3.2.2', '<=')) {
             $submissionsTable = ee()->db->dbprefix('freeform_next_submissions');
             $spamReasonsTable = ee()->db->dbprefix('freeform_next_spam_reasons');
 

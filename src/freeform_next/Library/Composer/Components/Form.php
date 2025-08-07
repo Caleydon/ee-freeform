@@ -100,33 +100,6 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
 
     private readonly CustomFormAttributes $customAttributes;
 
-    /** @var SubmissionHandlerInterface */
-    private $submissionHandler;
-
-    /** @var FormHandlerInterface */
-    private $formHandler;
-
-    /** @var MailHandlerInterface */
-    private $mailHandler;
-
-    /** @var FileUploadHandlerInterface */
-    private $fileUploadHandler;
-
-    /** @var FieldHandlerInterface */
-    private $fieldHandler;
-
-    /** @var MailingListHandlerInterface */
-    private $mailingListHandler;
-
-    /** @var CRMHandlerInterface */
-    private $crmHandler;
-
-    /** @var TranslatorInterface */
-    private $translator;
-
-    /** @var CustomFormAttributes */
-    private $customAttributes;
-
     /** @var int */
     private $cachedPageIndex;
 
@@ -405,7 +378,7 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
         return $this->spamReasons;
     }
 
-    public function isMarkedAsSpam(): bool: bool
+    public function isMarkedAsSpam(): bool
     {
         return !empty($this->getSpamReasons());
     }
