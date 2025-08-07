@@ -256,7 +256,7 @@ class FieldProperties extends AbstractProperties
         }
 
         $values = $this->values;
-        array_walk($values, function (&$value) {
+        array_walk($values, function (&$value): void {
             $value = (string) $value;
         });
 
@@ -266,7 +266,7 @@ class FieldProperties extends AbstractProperties
     /**
      * @return Option[]
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         $return = [];
         if (is_array($this->options)) {
@@ -288,7 +288,7 @@ class FieldProperties extends AbstractProperties
     /**
      * @return boolean
      */
-    public function isChecked()
+    public function isChecked(): bool
     {
         return (bool) $this->checked;
     }
@@ -344,7 +344,7 @@ class FieldProperties extends AbstractProperties
     /**
      * @return int
      */
-    public function getIntegrationId()
+    public function getIntegrationId(): int
     {
         return (int) $this->integrationId;
     }
@@ -352,7 +352,7 @@ class FieldProperties extends AbstractProperties
     /**
      * @return string
      */
-    public function getResourceId()
+    public function getResourceId(): string
     {
         return (string) $this->resourceId;
     }
@@ -360,7 +360,7 @@ class FieldProperties extends AbstractProperties
     /**
      * @return string
      */
-    public function getEmailFieldHash()
+    public function getEmailFieldHash(): string
     {
         return (string) $this->emailFieldHash;
     }
@@ -716,7 +716,7 @@ class FieldProperties extends AbstractProperties
      *
      * @return array
      */
-    protected function getPropertyManifest()
+    protected function getPropertyManifest(): array
     {
         return [
             'hash'                => self::TYPE_STRING,
