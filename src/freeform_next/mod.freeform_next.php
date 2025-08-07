@@ -205,8 +205,12 @@ class Freeform_Next extends Plugin
         $honeypot = $honeypotService->getHoneypot($form);
 
         if ($form->isValid()) {
-            /** @var SubmissionModel $submissionModel */
+            /** @var SubmissionModel|false|null $submissionModel */
             $submissionModel = $form->submit();
+
+            if (!($submissionModel instanceof SubmissionModel)) {
+                $submissionModel = null;
+            }
 
             if ($form->isFormSaved()) {
                 $postedReturnUrl = $this->getPost(Form::RETURN_URI_KEY);
@@ -220,7 +224,8 @@ class Freeform_Next extends Plugin
                 }
 
                 $returnUrl = TemplateHelper::renderStringWithForm($returnUrl, $form, $submissionModel);
-                if ($submissionModel) {
+
+                if ($submissionModel instanceof SubmissionModel) {
                     $returnUrl = str_replace(
                         ['SUBMISSION_ID', 'SUBMISSION_TOKEN'],
                         [$submissionModel->id, $submissionModel->token],
@@ -228,7 +233,9 @@ class Freeform_Next extends Plugin
                     );
                 }
 
-                $this->persistSpamReasons($form, $submissionModel);
+                if ($submissionModel instanceof SubmissionModel) {
+                    $this->persistSpamReasons($form, $submissionModel);
+                }
 
                 if ($isAjaxRequest) {
                     $this->returnJson(
@@ -236,7 +243,7 @@ class Freeform_Next extends Plugin
                             'success'      => true,
                             'finished'     => true,
                             'returnUrl'    => $returnUrl,
-                            'submissionId' => $submissionModel ? $submissionModel->id : null,
+                            'submissionId' => $submissionModel instanceof SubmissionModel ? $submissionModel->id : null,
                             'honeypot'     => [
                                 'name' => $honeypot->getName(),
                                 'hash' => $honeypot->getHash(),
