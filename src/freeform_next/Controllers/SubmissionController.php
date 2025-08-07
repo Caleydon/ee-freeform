@@ -11,8 +11,9 @@
 
 namespace Solspace\Addons\FreeformNext\Controllers;
 
-use EllisLab\ExpressionEngine\Library\CP\Table;
-use EllisLab\ExpressionEngine\Model\File\File;
+use Solspace\Addons\FreeformNext\Services\ExportService;
+use ExpressionEngine\Library\CP\Table;
+use ExpressionEngine\Model\File\File;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\AbstractField;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\CheckboxField;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\CheckboxGroupField;
@@ -51,7 +52,7 @@ class SubmissionController extends Controller
      *
      * @return CpView
      */
-    public function index(Form $form)
+    public function index(Form $form): RedirectView|CpView
     {
         $canAccessSubmissions = $this->getPermissionsService()->canAccessSubmissions(ee()->session->userdata('group_id'));
 
@@ -106,7 +107,7 @@ class SubmissionController extends Controller
                         $type   = Table::COL_TEXT;
                         $encode = false;
                     }
-                } catch (FreeformException $e) {
+                } catch (FreeformException) {
                     continue;
                 }
             }
@@ -181,7 +182,7 @@ class SubmissionController extends Controller
 
         foreach ($search_vars as $searchVarible) {
             $searchValue                = ee()->input->get_post($searchVarible, true);
-            $searchVars[$searchVarible] = trim($searchValue);
+            $searchVars[$searchVarible] = trim((string) $searchValue);
         }
 
         $searchOnField  = $searchVars['search_on_field'];
@@ -334,14 +335,14 @@ class SubmissionController extends Controller
                         'content' => '<span class="color-indicator" style="background: ' . $submission->statusColor . ';"></span>' . $submission->statusName,
                     ];
                 } else if ($setting->getId() === 'dateCreated') {
-                    $data[] = ee()->localize->format_date($dateFormat, strtotime($submission->dateCreated));
+                    $data[] = ee()->localize->format_date($dateFormat, strtotime((string) $submission->dateCreated));
                 } else if (is_numeric($setting->getId())) {
                     try {
                         $field = $form->getLayout()->getFieldById((int) $setting->getId());
 
                         try {
                             $value = $submission->getFieldValueAsString($field->getHandle());
-                        } catch (FreeformException $e) {
+                        } catch (FreeformException) {
                             $value = '';
                         }
 
@@ -380,10 +381,10 @@ class SubmissionController extends Controller
                                     $content .= '        </style>';
 
                                     if ($asset->isImage()) {
-                                        $modal_vars = array(
+                                        $modal_vars = [
                                             'name' => 'asset_' . $assetId . '_modal',
                                             'contents' => '<img src="' . $asset->getAbsoluteURL() . '" />'
-                                        );
+                                        ];
 
                                         $modal_html = ee('View')->make('ee:_shared/modal')->render($modal_vars);
 
@@ -410,7 +411,7 @@ class SubmissionController extends Controller
                         } else {
                             $data[] = $value;
                         }
-                    } catch (FreeformException $e) {
+                    } catch (FreeformException) {
                         continue;
                     }
                 }
@@ -436,7 +437,7 @@ class SubmissionController extends Controller
                     'name'  => 'id_list[]',
                     'value' => $submission->id,
                     'data'  => [
-                        'confirm' => lang('Submission') . ': <b>' . htmlentities($submission->title, ENT_QUOTES) . '</b>',
+                        'confirm' => lang('Submission') . ': <b>' . htmlentities((string) $submission->title, ENT_QUOTES) . '</b>',
                     ],
                 ];
             }
@@ -463,7 +464,7 @@ class SubmissionController extends Controller
             ],
         ];
 
-        if (class_exists('Solspace\Addons\FreeformNext\Controllers\ExportController')) {
+        if (class_exists(ExportController::class)) {
             array_unshift($formRightLinks, [
                 'title' => lang('Quick Export'),
                 'link'  => '#',
@@ -501,7 +502,7 @@ class SubmissionController extends Controller
 			'form_url' => ee('CP/URL')->getCurrentUrl(),
 			'form_attributes' => [
 				'id' => 'entry-filters',
-				'data-action' => isset($entries_filter_uri) ? $entries_filter_uri : ""
+				'data-action' => $entries_filter_uri ?? ""
 			],
 			'currentSearchOnField'  => $currentSearchOnField,
 			'currentKeyword'        => $currentKeyword,
@@ -523,7 +524,7 @@ class SubmissionController extends Controller
 
         $view = new CpView('submissions/listing', $template);
 
-        $exportServiceClassName = 'Solspace\Addons\FreeformNext\Services\ExportService';
+        $exportServiceClassName = ExportService::class;
         if (class_exists($exportServiceClassName)) {
             $exportService = new $exportServiceClassName();
             $view->addTemplateVariables($exportService->getExportDialogueTemplateVariables($form->getId()));
@@ -547,7 +548,7 @@ class SubmissionController extends Controller
      *
      * @return CpView
      */
-    public function edit(Form $form, SubmissionModel $submission)
+    public function edit(Form $form, SubmissionModel $submission): RedirectView|CpView
     {
         $canManageSubmissions = $this->getPermissionsService()->canManageSubmissions(ee()->session->userdata('group_id'));
 
@@ -721,10 +722,10 @@ class SubmissionController extends Controller
                                     $content .= '        }';
                                     $content .= '        </style>';
 
-                                    $modal_vars = array(
+                                    $modal_vars = [
                                         'name' => 'asset_' . $assetId . '_modal',
                                         'contents' => '<img src="' . $asset->getAbsoluteURL() . '" />'
-                                    );
+                                    ];
 
                                     $modal_html = ee('View')->make('ee:_shared/modal')->render($modal_vars);
 
@@ -828,7 +829,7 @@ class SubmissionController extends Controller
      *
      * @return bool
      */
-    public function save(Form $form, SubmissionModel $submission)
+    public function save(Form $form, SubmissionModel $submission): bool
     {
         $canManageSubmissions = $this->getPermissionsService()->canManageSubmissions(ee()->session->userdata('group_id'));
 
@@ -897,7 +898,7 @@ class SubmissionController extends Controller
      *
      * @return RedirectView
      */
-    public function batchDelete(Form $form)
+    public function batchDelete(Form $form): RedirectView
     {
         $canManageSubmissions = $this->getPermissionsService()->canManageSubmissions(ee()->session->userdata('group_id'));
 
@@ -928,7 +929,7 @@ class SubmissionController extends Controller
         return new RedirectView($this->getLink('submissions/' . $form->getHandle()));
     }
 
-    private function getFilterableFieldTypes()
+    private function getFilterableFieldTypes(): array
     {
         return [
             AbstractField::TYPE_EMAIL,
