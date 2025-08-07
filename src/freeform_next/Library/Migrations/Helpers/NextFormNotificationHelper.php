@@ -90,7 +90,7 @@ class NextFormNotificationHelper
         return $formattedHtml;
     }
 
-    private function htmlFormattingMap()
+    private function htmlFormattingMap(): array
     {
         /* Old Element => New Element */
 

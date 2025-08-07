@@ -8,7 +8,7 @@
         $category = $line['category'];
         $message  = $line['message'];
 
-        echo '<div class="level-' . strtolower($level) . '">';
+        echo '<div class="level-' . strtolower((string) $level) . '">';
 
         echo sprintf(
             '<div class="date" title="%s">%s</div>',
