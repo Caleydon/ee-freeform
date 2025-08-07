@@ -11,7 +11,9 @@
 
 namespace Solspace\Addons\FreeformNext\Controllers;
 
-use EllisLab\ExpressionEngine\Library\CP\Table;
+use Exception;
+use stdClass;
+use ExpressionEngine\Library\CP\Table;
 use Solspace\Addons\FreeformNext\Library\Composer\Attributes\FormAttributes;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\Interfaces\ExternalOptionsInterface;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Form;
@@ -52,7 +54,7 @@ class FormController extends Controller
     /**
      * @return CpView
      */
-    public function index()
+    public function index(): CpView
     {
         $canManageForms = $this->getPermissionsService()->canManageForms(ee()->session->userdata('group_id'));
         $canAccessSubmissions = $this->getPermissionsService()->canAccessSubmissions(ee()->session->userdata('group_id'));
@@ -124,7 +126,7 @@ class FormController extends Controller
                 ],
                 $form->handle,
                 [
-                    'content' => isset($submissionTotals[$form->id]) ? $submissionTotals[$form->id] : 0,
+                    'content' => $submissionTotals[$form->id] ?? 0,
                     'href'    => ($canAccessSubmissions ? $this->getLink('submissions/' . $form->handle) : null ),
                 ],
                 $form->spamBlockCount,
@@ -137,7 +139,7 @@ class FormController extends Controller
                     'value' => $form->id,
                     'data'  => [
                         'confirm' => lang('Form') . ': <b>' . htmlentities(
-                                $form->getForm()->getName(),
+                                (string) $form->getForm()->getName(),
                                 ENT_QUOTES
                             ) . '</b>',
                     ],
@@ -158,10 +160,10 @@ class FormController extends Controller
             $template['form_right_links'] = FreeformHelper::get('right_links', $this);
         }
 
-		$template['footer'] = array(
+		$template['footer'] = [
 			'submit_lang' => lang('submit'),
 			'type'        => 'bulk_action_form',
-		);
+		];
 
         $view = new CpView('form/listing', $template);
 
@@ -178,7 +180,7 @@ class FormController extends Controller
      *
      * @return CpView
      */
-    public function edit(FormModel $form)
+    public function edit(FormModel $form): RedirectView|CpView
     {
         if (!($this->getPermissionsService()->canManageForms(ee()->session->userdata('role_id')))) {
             return new RedirectView($this->getLink('denied'));
@@ -228,7 +230,7 @@ class FormController extends Controller
 
     /**
      * @return AjaxView
-     * @throws \Exception
+     * @throws Exception
      */
     public function save()
     {
@@ -257,8 +259,8 @@ class FormController extends Controller
         if ($this->getPost('duplicate', false)) {
             $oldHandle = $composerState['composer']['properties']['form']['handle'];
 
-            if (preg_match('/^([a-zA-Z0-9]*[a-zA-Z]+)(\d+)$/', $oldHandle, $matches)) {
-                list($string, $mainPart, $iterator) = $matches;
+            if (preg_match('/^([a-zA-Z0-9]*[a-zA-Z]+)(\d+)$/', (string) $oldHandle, $matches)) {
+                [$string, $mainPart, $iterator] = $matches;
 
                 $newHandle = $mainPart . ((int) $iterator + 1);
             } else {
@@ -274,19 +276,21 @@ class FormController extends Controller
             $sessionImplementation = (new SettingsService())->getSessionStorageImplementation();
 
             $formAttributes = new FormAttributes($formId, $sessionImplementation, new EERequest());
-            $composer       = new Composer(
-                $composerState,
-                $formAttributes,
-                $formsService,
-                new FieldsService(),
-                new SubmissionsService(),
-                new MailerService(),
-                new FilesService(),
-                new MailingListsService(),
-                new CrmService(),
-                new StatusesService(),
-                new EETranslator()
+            $composer = new Composer(
+                new FormsService(),              // implements FormHandlerInterface
+                new FieldsService(),             // implements FieldHandlerInterface
+                new SubmissionsService(),        // implements SubmissionHandlerInterface
+                new MailerService(),             // implements MailHandlerInterface
+                new FilesService(),              // implements FileUploadHandlerInterface
+                new MailingListsService(),       // implements MailingListHandlerInterface
+                new CrmService(),                // implements CRMHandlerInterface
+                new StatusesService(),           // implements StatusHandlerInterface
+                new EETranslator(),              // implements TranslatorInterface
+                $composerState,                  // ?array $composerState
+                $formAttributes,                 // ?FormAttributes $formAttributes
+                null          // ?ComposerState $customComposerState
             );
+
         } catch (ComposerException $exception) {
             $view->addError($exception->getMessage());
 
@@ -314,7 +318,7 @@ class FormController extends Controller
 
                 $view->addVariable('id', $form->id);
                 $view->addVariable('handle', $form->handle);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $view->addError($e->getMessage());
             }
         }
@@ -325,7 +329,7 @@ class FormController extends Controller
     /**
      * @return RedirectView
      */
-    public function batchDelete()
+    public function batchDelete(): RedirectView
     {
         if (!($this->getPermissionsService()->canManageForms(ee()->session->userdata('group_id')))) {
             return new RedirectView($this->getLink('denied'));
@@ -357,7 +361,7 @@ class FormController extends Controller
     /**
      * @param Form $form
      *
-     * @return array|\stdClass
+     * @return array|stdClass
      */
     private function getGeneratedOptionsList(Form $form)
     {
@@ -375,7 +379,7 @@ class FormController extends Controller
         }
 
         if (empty($options)) {
-            return new \stdClass();
+            return new stdClass();
         }
 
         return $options;
@@ -384,7 +388,7 @@ class FormController extends Controller
     /**
      * @return array
      */
-    private function getSourceTargetsList()
+    private function getSourceTargetsList(): array
     {
         $channels = ee('Model')
             ->get('Channel')
@@ -437,7 +441,7 @@ class FormController extends Controller
     /**
      * @return array
      */
-    private function getChannelFields()
+    private function getChannelFields(): array
     {
         $fieldList = [
             ['key' => 'entry_id', 'value' => 'ID'],
@@ -461,7 +465,7 @@ class FormController extends Controller
     /**
      * @return array
      */
-    private function getCategoryFields()
+    private function getCategoryFields(): array
     {
         $fieldList = [
             ['key' => 'cat_id', 'value' => 'ID'],
@@ -485,7 +489,7 @@ class FormController extends Controller
     /**
      * @return array
      */
-    private function getMemberFields()
+    private function getMemberFields(): array
     {
         $fieldList = [
             ['key' => 'member_id', 'value' => 'ID'],

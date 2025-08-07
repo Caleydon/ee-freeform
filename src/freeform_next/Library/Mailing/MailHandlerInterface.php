@@ -33,7 +33,7 @@ interface MailHandlerInterface
         array $recipients,
         $notificationId,
         array $fields,
-        SubmissionModel $submission = null
+        ?SubmissionModel $submission = null
     );
 
     /**

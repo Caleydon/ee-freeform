@@ -40,7 +40,7 @@ class AdminNotificationProperties extends AbstractProperties
      *
      * @return array
      */
-    public function getRecipientArray()
+    public function getRecipientArray(): array
     {
         $recipients = $this->getRecipients();
 
@@ -64,7 +64,7 @@ class AdminNotificationProperties extends AbstractProperties
      *
      * @return array
      */
-    protected function getPropertyManifest()
+    protected function getPropertyManifest(): array
     {
         return [
             'notificationId' => self::TYPE_STRING,
