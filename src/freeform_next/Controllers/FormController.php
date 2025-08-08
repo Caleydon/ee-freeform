@@ -67,7 +67,7 @@ class FormController extends Controller
             'Form'               => ['type' => Table::COL_TEXT],
             'Handle'             => ['type' => Table::COL_TEXT],
             'Submissions'        => ['type' => Table::COL_TEXT],
-            'blocked_spam_count' => ['type' => Table::COL_TEXT],
+            'Spam'               => ['type' => Table::COL_TEXT],
             'manage'             => ['type' => Table::COL_TOOLBAR],
         ];
 
@@ -79,6 +79,7 @@ class FormController extends Controller
 
         $forms            = FormRepository::getInstance()->getAllForms();
         $submissionTotals = SubmissionRepository::getInstance()->getSubmissionTotalsPerForm();
+        $spamTotals = SubmissionRepository::getInstance()->getSpamTotalsPerForm();
 
         $tableData = [];
         foreach ($forms as $form) {
@@ -90,18 +91,6 @@ class FormController extends Controller
                     'edit' => [
                         'href'  => $this->getLink('forms/' . $form->id),
                         'title' => lang('edit'),
-                    ],
-                    'sync' => [
-                        'href'                 => 'javascript:;',
-                        'class'                => 'reset-spam-count',
-                        'title'                => lang('Reset Spam Count'),
-                        'data-csrf'            => CSRF_TOKEN,
-                        'data-url'             => $this->getLink('api/reset_spam'),
-                        'data-form-id'         => $form->id,
-                        'data-confirm-message' => sprintf(
-                            lang('Are you sure you want to reset the spam count for %s to 0?'),
-                            $form->name
-                        ),
                     ],
                     'copy' => [
                         'href'                 => 'javascript:;',
@@ -129,7 +118,10 @@ class FormController extends Controller
                     'content' => $submissionTotals[$form->id] ?? 0,
                     'href'    => ($canAccessSubmissions ? $this->getLink('submissions/' . $form->handle) : null ),
                 ],
-                $form->spamBlockCount,
+                [
+                    'content' => isset($spamTotals[$form->id]) ? $spamTotals[$form->id] : 0,
+                    'href'    => ($canAccessSubmissions ? $this->getLink('spam/' . $form->handle) : null ),
+                ],
                 $toolbar,
             ];
 
