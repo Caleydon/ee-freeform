@@ -18,6 +18,7 @@ use Solspace\Addons\FreeformNext\Library\EETags\Transformers\FormTransformer;
 use Solspace\Addons\FreeformNext\Library\Exceptions\FreeformException;
 use Solspace\Addons\FreeformNext\Library\Helpers\TemplateHelper;
 use Solspace\Addons\FreeformNext\Library\Session\FormValueContext;
+use Solspace\Addons\FreeformNext\Model\SpamReasonModel;
 use Solspace\Addons\FreeformNext\Model\SubmissionModel;
 use Solspace\Addons\FreeformNext\Repositories\FormRepository;
 use Solspace\Addons\FreeformNext\Repositories\SubmissionRepository;
@@ -225,13 +226,15 @@ class Freeform_Next extends Plugin
                     );
                 }
 
+                $this->persistSpamReasons($form, $submissionModel);
+
                 if ($isAjaxRequest) {
                     $this->returnJson(
                         [
                             'success'      => true,
                             'finished'     => true,
                             'returnUrl'    => $returnUrl,
-                            'submissionId' => $submissionModel ? $submissionModel->id : null,
+                            'submissionId' => $submissionModel?->id,
                             'honeypot'     => [
                                 'name' => $honeypot->getName(),
                                 'hash' => $honeypot->getHash(),
@@ -276,6 +279,19 @@ class Freeform_Next extends Plugin
                     ]
                 );
             }
+        }
+    }
+
+    public function persistSpamReasons(Form $form, SubmissionModel $submissionModel): void
+    {
+        if (!$submissionModel->isSpam || !$form->isMarkedAsSpam()) {
+            return;
+        }
+
+        $spamReasons = $form->getSpamReasons();
+        foreach ($spamReasons as $reason) {
+            $model = SpamReasonModel::create($submissionModel->id, $reason['type'], $reason['message'], $reason['value']);
+            $model->save();
         }
     }
 

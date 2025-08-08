@@ -6,6 +6,7 @@ use Solspace\Addons\FreeformNext\Library\Composer\Components\Form;
 use Solspace\Addons\FreeformNext\Library\DataObjects\FormRenderObject;
 use Solspace\Addons\FreeformNext\Library\Session\EESession;
 use Solspace\Addons\FreeformNext\Library\Session\Honeypot;
+use Solspace\Addons\FreeformNext\Model\SpamReasonModel;
 
 class HoneypotService
 {
@@ -55,44 +56,45 @@ class HoneypotService
             return;
         }
 
-        /** @var array $postValues */
         $postValues = $_POST;
 
-        if(!$this->getSettingsService()->getSettingsModel()->isFreeformHoneypotEnhanced())
-		{
-			if (array_key_exists(Honeypot::NAME_PREFIX, $postValues) && $postValues[Honeypot::NAME_PREFIX] === '') {
-				return;
-			}
-		}
-		else
-		{
-			foreach ($postValues as $key => $value) {
-				if (str_starts_with($key, Honeypot::NAME_PREFIX)) {
-					if (\in_array($key, self::$validHoneypots, true)) {
-						return;
-					}
+        if(!$this->getSettingsService()->getSettingsModel()->isFreeformHoneypotEnhanced()) {
+            if (array_key_exists(Honeypot::NAME_PREFIX, $postValues) && $postValues[Honeypot::NAME_PREFIX] === '') {
+                return;
+            }
+        } else {
+            foreach ($postValues as $key => $value) {
+                if (str_starts_with($key, Honeypot::NAME_PREFIX)) {
+                    if (\in_array($key, self::$validHoneypots, true)) {
+                        return;
+                    }
 
-					$honeypotList = $this->getHoneypotList();
-					foreach ($honeypotList as $honeypot) {
-						$hasMatchingName = $key === $honeypot->getName();
-						$hasMatchingHash = $value === $honeypot->getHash();
-						if ($hasMatchingName && $hasMatchingHash) {
-							self::$validHoneypots[] = $key;
+                    $honeypotList = $this->getHoneypotList();
 
-							$this->removeHoneypot($honeypot);
+                    foreach ($honeypotList as $honeypot) {
+                        $hasMatchingName = $key === $honeypot->getName();
+                        $hasMatchingHash = $value === $honeypot->getHash();
+                        if ($hasMatchingName && $hasMatchingHash) {
+                            self::$validHoneypots[] = $key;
 
-							return;
-						}
-					}
-				}
-			}
-		}
+                              $this->removeHoneypot($honeypot);
+
+                              return;
+                        }
+                    }
+                }
+            }
+        }
 
         if (!$this->getSettingsService()->getSettingsModel()->spamBlockLikeSuccessfulPost) {
             $form->addError(lang('Form honeypot is invalid'));
         }
 
-        $form->setMarkedAsSpam(true);
+        $form->setMarkedAsSpam(
+            SpamReasonModel::TYPE_HONEYPOT,
+            'Honeypot check failed',
+            $postValues[Honeypot::NAME_PREFIX] ?? ''
+        );
     }
 
     /**
