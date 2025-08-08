@@ -625,9 +625,11 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
             $this->formSaved = true;
         }
         $this->getSubmissionHandler()->markFormAsSubmitted($this);
-        $this->sendOutEmailNotifications($submission);
-        $this->pushToMailingLists();
-        $this->pushToCRM();
+        if (!$this->isMarkedAsSpam()) {
+            $this->sendOutEmailNotifications($submission);
+            $this->pushToMailingLists();
+            $this->pushToCRM();
+        }
 
         $formValueContext->cleanOutCurrentSession();
 
