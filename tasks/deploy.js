@@ -13,6 +13,7 @@ module.exports = {
     "build:fonts",
     "build:themes",
     "build:crypt",
+    "build:datepicker",
     // "composer",
     "clean:deploy",
   ],
