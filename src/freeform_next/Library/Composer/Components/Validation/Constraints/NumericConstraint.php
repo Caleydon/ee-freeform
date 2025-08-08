@@ -119,8 +119,12 @@ class NumericConstraint implements ConstraintInterface
             }
         }
 
-        $numericValue = str_replace($this->thousandsSeparator, '', $value);
-        $numericValue = preg_replace("/[^0-9\-{$this->decimalSeparator}]/", '', $numericValue);
+        // Normalize null → '' to avoid PHP 8.3+ deprecation
+        $thousandsSeparatorValue = $this->thousandsSeparator ?? '';
+        $decimalSeparatorValue   = $this->decimalSeparator ?? '';
+
+        $numericValue = str_replace($thousandsSeparatorValue, '', $value);
+        $numericValue = preg_replace("/[^0-9\-{$decimalSeparatorValue}]/", '', $numericValue);
 
         if (!$this->allowNegativeNumbers && $numericValue < 0) {
             $violationList->addError($this->messageNegative);

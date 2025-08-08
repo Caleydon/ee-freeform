@@ -33,6 +33,10 @@ use Solspace\Addons\FreeformNext\Repositories\SubmissionRepository;
  * @property string $statusColor
  * @property int    $formId
  * @property string $title
+ * @property int    $isSpam
+ * @property string $spamReasonType
+ * @property string $spamReasonMessage
+ * @property string $spamReasonValue
  */
 class SubmissionModel extends Model
 {
@@ -61,6 +65,10 @@ class SubmissionModel extends Model
     protected $statusColor;
     protected $formId;
     protected $title;
+    protected $isSpam;
+    protected $spamReasonType;
+    protected $spamReasonMessage;
+    protected $spamReasonValue;
 
     /** @var array */
     private $fieldValues = [];
@@ -101,6 +109,7 @@ class SubmissionModel extends Model
                 [
                     'siteId'   => ee()->config->item('site_id'),
                     'formId'   => $form->getId(),
+                    'isSpam'   => $form->isMarkedAsSpam(),
                     'statusId' => $form->getDefaultStatus(),
                     'token'    => CryptoHelper::getUniqueToken(100),
                 ]
@@ -137,17 +146,21 @@ class SubmissionModel extends Model
         $submission = ee('Model')->make(
             self::MODEL,
             [
-                'id'           => $fetchedValues['id'],
-                'siteId'       => $fetchedValues['siteId'],
-                'token'        => $fetchedValues['token'],
-                'formId'       => $fetchedValues['formId'],
-                'statusId'     => $fetchedValues['statusId'],
-                'title'        => $fetchedValues['title'],
-                'dateCreated'  => $fetchedValues['dateCreated'],
-                'dateUpdated'  => $fetchedValues['dateUpdated'],
-                'statusName'   => $fetchedValues['statusName'],
-                'statusHandle' => $fetchedValues['statusHandle'],
-                'statusColor'  => $fetchedValues['statusColor'],
+                'id'                => $fetchedValues['id'],
+                'siteId'            => $fetchedValues['siteId'],
+                'token'             => $fetchedValues['token'],
+                'formId'            => $fetchedValues['formId'],
+                'isSpam'            => $fetchedValues['isSpam'],
+                'statusId'          => $fetchedValues['statusId'],
+                'title'             => $fetchedValues['title'],
+                'dateCreated'       => $fetchedValues['dateCreated'],
+                'dateUpdated'       => $fetchedValues['dateUpdated'],
+                'statusName'        => $fetchedValues['statusName'],
+                'statusHandle'      => $fetchedValues['statusHandle'],
+                'statusColor'       => $fetchedValues['statusColor'],
+                'spamReasonType'    => $fetchedValues['spamReasonType'] ?? null,
+                'spamReasonMessage' => $fetchedValues['spamReasonMessage'] ?? null,
+                'spamReasonValue'   => $fetchedValues['spamReasonValue'] ?? null,
             ]
         );
 
@@ -292,6 +305,7 @@ class SubmissionModel extends Model
         $insertData = [
             'siteId'      => $this->siteId,
             'formId'      => $this->formId,
+            'isSpam'      => $this->isSpam,
             'statusId'    => $this->statusId,
             'title'       => $this->title,
             'token'       => $this->token,
