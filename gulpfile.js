@@ -17,6 +17,7 @@ gulp.task(
     "build:themes",
     "build:crypt",
     "composer",
+    "build:datepicker",
   ],
 );
 

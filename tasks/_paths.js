@@ -6,7 +6,11 @@ const paths = {
   scripts: {
     src: [src + "external/scripts/cp/**/*.js"],
     dest: src + "freeform_next/javascript/",
-    deleteList: [src + "freeform_next/javascript/**/*.js"],
+    deleteList: [
+      src + "freeform_next/javascript/**/*.js",
+      "!" + src + "freeform_next/javascript/fields/datepicker.js",  // exclude datepicker files
+      "!" + src + "freeform_next/javascript/fields/flatpickr.js",   // exclude flatpickr files
+    ],
   },
   react: {
     src: [src + "external/scripts/composer/**/*.js"],
@@ -55,6 +59,10 @@ const paths = {
     themes: {
       src: src + "themes/**/*",
       dist: buildPath + "themes/",
+    },
+    projectThemes: {
+      src: "themes/freeform_next/**/*",
+      dist: buildPath + "themes/freeform_next/",
     },
   },
   vendors: {

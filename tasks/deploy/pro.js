@@ -13,28 +13,33 @@ module.exports = {
 
     gulp
       .src(paths.deploy.addon.src)
-      .pipe(replace(/('name'\s+=>\s+')Freeform Lite',/g, "$1Freeform Pro',"))
+      .pipe(replace(/('name'\s+=>\s+')Freeform Lite',/g, "$1Freeform',"))
       .pipe(gulp.dest(paths.deploy.addon.dist))
       .on("end", () => {
         gulp
           .src(paths.deploy.themes.src)
           .pipe(gulp.dest(paths.deploy.themes.dist))
           .on("end", () => {
-            del(paths.vendors.deleteList).then(() => {
-              zipFolder(
-                paths.deploy.buildPath,
-                "dist/EE-Freeform-Pro_" + version + ".zip",
-                (err) => {
-                  if (err) {
-                    callback(err);
-                  } else {
-                    del(paths.deploy.buildPath).then(() => {
-                      callback();
-                    })
-                  }
-                },
-              );
-            });
+            gulp
+              .src(paths.deploy.projectThemes.src)
+              .pipe(gulp.dest(paths.deploy.projectThemes.dist))
+              .on("end", () => {
+                del(paths.vendors.deleteList).then(() => {
+                  zipFolder(
+                    paths.deploy.buildPath,
+                    "dist/EE-Freeform_" + version + ".zip",
+                    (err) => {
+                      if (err) {
+                        callback(err);
+                      } else {
+                        del(paths.deploy.buildPath).then(() => {
+                          callback();
+                        })
+                      }
+                    },
+                  );
+                });
+              });
           })
           .on("error", (err) => {
             callback(err);
