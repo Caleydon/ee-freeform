@@ -159,14 +159,15 @@ class Freeform_next_ext
             static $datepickerLoaded;
 
             if (null === $datepickerLoaded) {
-                $flatpickrCss = file_get_contents(PATH_THIRD_THEMES . 'freeform_next/css/fields/datepicker.css');
-                $renderObject->appendCssToOutput($flatpickrCss);
+                // Construct URL to your Freeform theme assets
+                $themeUrl = rtrim(URL_THIRD_THEMES, '/') . '/freeform_next';
 
-                $flatpickrJs = file_get_contents(__DIR__ . '/javascript/fields/flatpickr.js');
-                $datepickerJs = file_get_contents(__DIR__ . '/javascript/fields/datepicker.js');
-
-                $renderObject->appendJsToOutput($flatpickrJs);
-                $renderObject->appendJsToOutput($datepickerJs);
+                // Inject external <link> and <script> tags directly into the form HTML
+                $renderObject->appendToOutput('
+                    <link rel="stylesheet" href="' . $themeUrl . '/css/fields/datepicker.css">
+                    <script src="' . $themeUrl . '/javascript/fields/flatpickr.js"></script>
+                    <script src="' . $themeUrl . '/javascript/fields/datepicker.js"></script>
+                ');
 
                 $datepickerLoaded = true;
             }
