@@ -13,7 +13,7 @@ module.exports = {
 
     gulp
       .src(paths.deploy.addon.src)
-      .pipe(replace(/('name'\s+=>\s+')Freeform Lite',/g, "$1Freeform Pro',"))
+      .pipe(replace(/('name'\s+=>\s+')Freeform Lite',/g, "$1Freeform',"))
       .pipe(gulp.dest(paths.deploy.addon.dist))
       .on("end", () => {
         gulp
@@ -27,7 +27,7 @@ module.exports = {
                 del(paths.vendors.deleteList).then(() => {
                   zipFolder(
                     paths.deploy.buildPath,
-                    "dist/EE-Freeform-Pro_" + version + ".zip",
+                    "dist/EE-Freeform_" + version + ".zip",
                     (err) => {
                       if (err) {
                         callback(err);
