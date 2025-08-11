@@ -118,10 +118,11 @@ class ApiController extends Controller
 
                     $templatePath = $templateDirectory . '/' . $templateName . $extension;
                     if (file_exists($templatePath)) {
-                        $errors[] = new EETranslator()->translate(
+                        $errors[] = (new EETranslator())->translate(
                             "Template '{name}' already exists",
                             ['name' => $templateName . $extension]
                         );
+
                     } else {
                         try {
                             file_put_contents($templatePath, $settings->getEmailTemplateContent());
