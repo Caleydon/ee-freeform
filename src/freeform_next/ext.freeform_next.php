@@ -7,6 +7,7 @@ use Solspace\Addons\FreeformNext\Library\Composer\Components\Form;
 use Solspace\Addons\FreeformNext\Library\DataObjects\FormRenderObject;
 use Solspace\Addons\FreeformNext\Library\Helpers\FreeformHelper;
 use Solspace\Addons\FreeformNext\Library\Pro\Fields\RecaptchaField;
+use Solspace\Addons\FreeformNext\Repositories\FormRepository;
 use Solspace\Addons\FreeformNext\Repositories\SettingsRepository;
 use Solspace\Addons\FreeformNext\Services\HoneypotService;
 use Solspace\Addons\FreeformNext\Services\PermissionsService;
@@ -238,7 +239,14 @@ class Freeform_next_ext
 
 		$sub = $menu->addSubmenu(FreeformHelper::get('name'));
 
-		if($permissionsService->canManageForms(ee()->session->userdata('group_id')))
+        $canManageForms = $permissionsService->canManageForms(ee()->session->userdata('group_id'));
+        $canAccessSubmissions = $permissionsService->canAccessSubmissions(ee()->session->userdata('group_id'));
+        $canAccessFields = $permissionsService->canAccessFields(ee()->session->userdata('group_id'));
+        $canAccessNotifications = $permissionsService->canAccessNotifications(ee()->session->userdata('group_id'));
+        $canAccessExports = $permissionsService->canAccessExport(ee()->session->userdata('group_id'));
+        $canAccessSettings = $permissionsService->canAccessSettings(ee()->session->userdata('group_id'));
+
+		if($canManageForms)
 		{
 			$sub->addItem(
 				lang('Forms'),
@@ -246,7 +254,24 @@ class Freeform_next_ext
 			);
 		}
 
-		if($permissionsService->canAccessFields(ee()->session->userdata('group_id')))
+        if($canManageForms && $canAccessSubmissions)
+        {
+            $formModels = FormRepository::getInstance()->getAllForms();
+            $formModel = reset($formModels);
+            if ($formModel) {
+                $sub->addItem(
+                    lang('Submissions'),
+                    ee('CP/URL', "addons/settings/freeform_next/submissions/{$formModel->handle}")
+                );
+
+                $sub->addItem(
+                    lang('Spam Submissions'),
+                    ee('CP/URL', "addons/settings/freeform_next/spam/{$formModel->handle}")
+                );
+            }
+        }
+
+        if($canAccessFields)
 		{
 			$sub->addItem(
 				lang('Fields'),
@@ -254,7 +279,7 @@ class Freeform_next_ext
 			);
 		}
 
-		if($permissionsService->canAccessNotifications(ee()->session->userdata('group_id')))
+		if($canAccessNotifications)
 		{
 			$sub->addItem(
 				lang('Notifications'),
@@ -262,7 +287,7 @@ class Freeform_next_ext
 			);
 		}
 
-		if($permissionsService->canAccessExport(ee()->session->userdata('group_id')) && FreeformHelper::get('version') === 'pro')
+		if($canManageForms && $canAccessExports && FreeformHelper::get('version') === 'pro')
 		{
 			$sub->addItem(
 				lang('Export'),
@@ -270,7 +295,7 @@ class Freeform_next_ext
 			);
 		}
 
-		if($permissionsService->canAccessSettings(ee()->session->userdata('group_id')))
+		if($canAccessSettings)
 		{
 			$sub->addItem(
 				lang('Settings'),
