@@ -29,6 +29,7 @@ class MailerService implements MailHandlerInterface
      * @param array                $recipients
      * @param int                  $notificationId
      * @param array                $fields
+     * @param string               $format
      * @param SubmissionModel|null $submission
      *
      * @return int
@@ -39,6 +40,7 @@ class MailerService implements MailHandlerInterface
         array $recipients,
         $notificationId,
         array $fields,
+        string $format,
         ?SubmissionModel $submission = null
     ): int {
         $sentMailCount = 0;
@@ -56,7 +58,6 @@ class MailerService implements MailHandlerInterface
         $subject   = TemplateHelper::renderStringWithForm($notification->subject, $form, $submission);
         $bodyHtml  = TemplateHelper::renderStringWithForm($notification->bodyHtml, $form, $submission, true);
 
-        $format = $form->getLayout()->getProperties()->getAdminNotificationProperties()->getFormat();
         if ($format === 'text') {
             // Convert HTML entities
             $plain = html_entity_decode($bodyHtml, ENT_QUOTES | ENT_HTML5, 'UTF-8');

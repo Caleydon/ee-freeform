@@ -24,6 +24,7 @@ interface MailHandlerInterface
      * @param array            $recipients
      * @param int              $notificationId
      * @param FieldInterface[] $fields
+     * @param string $format
      * @param SubmissionModel  $submission
      *
      * @return bool
@@ -33,6 +34,7 @@ interface MailHandlerInterface
         array $recipients,
         $notificationId,
         array $fields,
+        string $format,
         ?SubmissionModel $submission = null
     );
 

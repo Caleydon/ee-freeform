@@ -74,7 +74,7 @@ class AdminNotificationProperties extends AbstractProperties
     protected function getPropertyManifest(): array
     {
         return [
-            'format' => self::TYPE_STRING,
+            'format'         => self::TYPE_STRING,
             'notificationId' => self::TYPE_STRING,
             'recipients'     => self::TYPE_STRING,
         ];

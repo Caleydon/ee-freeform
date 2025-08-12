@@ -846,6 +846,7 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
     {
         $template        = $this->customAttributes->getDynamicNotificationTemplate();
         $recipients      = $this->customAttributes->getDynamicNotificationRecipients();
+        $format          = $this->customAttributes->getDynamicNotificationFormat();
         $submissionToken = $this->customAttributes->getSubmissionToken();
 
         if (!empty($recipients) || !empty($template) || !empty($submissionToken)) {
@@ -853,6 +854,7 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
                 ->getFormValueContext()
                 ->setCustomFormData(
                     [
+                        FormValueContext::DATA_DYNAMIC_FORMAT_KEY     => $format,
                         FormValueContext::DATA_DYNAMIC_TEMPLATE_KEY   => $template,
                         FormValueContext::DATA_DYNAMIC_RECIPIENTS_KEY => $recipients,
                         FormValueContext::DATA_SUBMISSION_TOKEN       => $submissionToken,
@@ -940,6 +942,7 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
                 $adminNotifications->getRecipientArray(),
                 $adminNotifications->getNotificationId(),
                 $this->layout->getFields(),
+                $adminNotifications->getFormat(),
                 $submission
             );
         }
@@ -952,6 +955,7 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
                 $field->getRecipients(),
                 $field->getNotificationId(),
                 $this->layout->getFields(),
+                $field->getFormat(),
                 $submission
             );
         }
@@ -963,6 +967,7 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
                 $dynamicRecipients->getRecipients(),
                 $dynamicRecipients->getTemplate(),
                 $this->layout->getFields(),
+                $dynamicRecipients->getFormat(),
                 $submission
             );
         }

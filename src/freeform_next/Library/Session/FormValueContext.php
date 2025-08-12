@@ -31,6 +31,7 @@ class FormValueContext implements JsonSerializable
 
     const DATA_DYNAMIC_RECIPIENTS_KEY = 'dynamicRecipients';
     const DATA_DYNAMIC_TEMPLATE_KEY   = 'dynamicTemplate';
+    const DATA_DYNAMIC_FORMAT_KEY     = 'dynamicFormat';
     const DATA_SUBMISSION_TOKEN       = 'submissionToken';
 
     private readonly int $formId;
@@ -212,15 +213,18 @@ class FormValueContext implements JsonSerializable
     {
         if (
             isset(
+                $this->customFormData[self::DATA_DYNAMIC_FORMAT_KEY],
                 $this->customFormData[self::DATA_DYNAMIC_TEMPLATE_KEY],
                 $this->customFormData[self::DATA_DYNAMIC_RECIPIENTS_KEY]
             )
         ) {
+            $format     = $this->customFormData[self::DATA_DYNAMIC_FORMAT_KEY];
             $template   = $this->customFormData[self::DATA_DYNAMIC_TEMPLATE_KEY];
             $recipients = $this->customFormData[self::DATA_DYNAMIC_RECIPIENTS_KEY];
 
             return new DynamicNotificationAttributes(
                 [
+                    'format'     => $format,
                     'template'   => $template,
                     'recipients' => $recipients,
                 ]
