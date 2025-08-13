@@ -10,14 +10,11 @@
 
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { DragDropContext } from "react-dnd";
-import HTML5Backend from "react-dnd-html5-backend";
 import SaveButton from "../components/SaveButton";
 import Composer from "../containers/Composer";
 import FieldList from "../containers/FieldList";
 import PropertyEditor from "../containers/PropertyEditor";
 
-@DragDropContext(HTML5Backend)
 export default class ComposerApp extends Component {
   static propTypes = {
     saveUrl: PropTypes.string.isRequired,
