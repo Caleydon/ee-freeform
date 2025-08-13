@@ -8,9 +8,10 @@
  * @license       https://docs.solspace.com/license-agreement/
  */
 
-import "babel-polyfill";
 import React from "react";
 import ReactDOM from "react-dom";
+import { DragDropContextProvider } from "react-dnd";
+import HTML5Backend from "react-dnd-html5-backend";
 import { Provider } from "react-redux";
 import { applyMiddleware, compose, createStore } from "redux";
 import thunkMiddleware from "redux-thunk";
@@ -119,29 +120,35 @@ export const urlBuilder = (url) => {
   return baseUrl.substring(0, index) + "/" + url + baseUrl.substring(index, baseUrl.length);
 };
 
-ReactDOM.render(
-  <Provider store={store}>
-    <ComposerApp
-      saveUrl={saveUrl}
-      formUrl={formUrl}
-      createFieldUrl={createFieldUrl}
-      createNotificationUrl={createNotificationUrl}
-      createTemplateUrl={createTemplateUrl}
-      finishTutorialUrl={finishTutorialUrl}
-      showTutorial={showTutorial}
-      defaultTemplates={defaultTemplates}
-      notificator={notificator}
-      canManageFields={canManageFields}
-      canManageNotifications={canManageNotifications}
-      canManageSettings={canManageSettings}
-      isDbEmailTemplateStorage={isDbEmailTemplateStorage}
-      isWidgetsInstalled={isWidgetsInstalled}
-      formPropCleanup={formPropCleanup}
-      csrf={{
-        name: "csrf_token",
-        token: csrfToken,
-      }}
-    />
-  </Provider>,
-  rootElement
-);
+if (!window.__FF_COMPOSER_MOUNTED__) {
+    window.__FF_COMPOSER_MOUNTED__ = true;
+
+    ReactDOM.render(
+      <Provider store={store}>
+        <DragDropContextProvider backend={HTML5Backend}>
+            <ComposerApp
+              saveUrl={saveUrl}
+              formUrl={formUrl}
+              createFieldUrl={createFieldUrl}
+              createNotificationUrl={createNotificationUrl}
+              createTemplateUrl={createTemplateUrl}
+              finishTutorialUrl={finishTutorialUrl}
+              showTutorial={showTutorial}
+              defaultTemplates={defaultTemplates}
+              notificator={notificator}
+              canManageFields={canManageFields}
+              canManageNotifications={canManageNotifications}
+              canManageSettings={canManageSettings}
+              isDbEmailTemplateStorage={isDbEmailTemplateStorage}
+              isWidgetsInstalled={isWidgetsInstalled}
+              formPropCleanup={formPropCleanup}
+              csrf={{
+                name: "csrf_token",
+                token: csrfToken,
+              }}
+            />
+        </DragDropContextProvider>
+      </Provider>,
+      rootElement
+    );
+}

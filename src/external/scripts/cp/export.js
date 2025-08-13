@@ -1,37 +1,26 @@
-(function () {
-  const context = $("#export-csv-modal");
+(function ($) {
+    var context = $('#export-csv-modal');
+    if (context.data('initiated')) return;
+    context.data('initiated', true);
 
-  if (!context.data('initiated')) {
-    context.data('initated', true);
-
-    $(".checkbox-select", context).each(function () {
-      if (!$(this).data('dragger')) {
-        $(this).data('dragger', true);
-
-        // SORT
-      }
+    $('.checkbox-select', context).each(function () {
+        if (!$(this).data('dragger')) $(this).data('dragger', true);
+        // if you need sorting here, ensure jQuery UI sortable is loaded and call .sortable()
     });
 
-    const modal = $("#export-modal-wrapper");
-    $(".btn.submit", modal).on({
-      click: () => {
-        modal.data('modal').hide();
-      }
+    var modal = $('#export-modal-wrapper');
+    $('.btn.submit', modal).on('click', function () {
+        modal.data('modal') && modal.data('modal').hide();
     });
-    $(".btn.cancel", modal).on({
-      click: () => {
-        modal.data('modal').hide();
-      }
+    $('.btn.cancel', modal).on('click', function () {
+        modal.data('modal') && modal.data('modal').hide();
     });
 
-    const formSelector = $("select[name=form_id]", context);
-    formSelector.on({
-      change: function () {
-        const val = $(this).val();
+    var formSelector = $('select[name=form_id]', context);
+    formSelector.on('change', function () {
+        var val = $(this).val();
+        $('.form-field-list').addClass('hidden');
+        $('.form-field-list[data-id="' + val + '"]').removeClass('hidden');
+    });
+})(jQuery);
 
-        $(".form-field-list").addClass('hidden');
-        $(".form-field-list[data-id=" + val + "]").removeClass('hidden');
-      }
-    })
-  }
-})();

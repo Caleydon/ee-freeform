@@ -4,7 +4,10 @@ const buildPath = dist + "build/";
 
 const paths = {
   scripts: {
-    src: [src + "external/scripts/cp/**/*.js"],
+    src: [
+        src + "external/scripts/cp/**/*.js",
+        "!" + src + "external/scripts/cp/**"
+    ],
     dest: src + "freeform_next/javascript/",
     deleteList: [
       src + "freeform_next/javascript/**/*.js",

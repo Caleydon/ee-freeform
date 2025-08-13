@@ -18,6 +18,7 @@ gulp.task(
     "build:crypt",
     "composer",
     "build:datepicker",
+    "build:cp",
   ],
 );
 

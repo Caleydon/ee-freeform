@@ -7,6 +7,7 @@ const replace = require("gulp-replace");
 
 module.exports = {
   deps: [
+    "clean:deploy",
     "build:scripts",
     "build:styles",
     "build:react",
@@ -14,8 +15,7 @@ module.exports = {
     "build:themes",
     "build:crypt",
     "build:datepicker",
-    // "composer",
-    "clean:deploy",
+    "build:cp",
   ],
   fn: (gulp, callback) => {
     if (!helpers.isProd()) {
