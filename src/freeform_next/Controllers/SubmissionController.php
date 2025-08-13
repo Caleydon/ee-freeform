@@ -556,12 +556,14 @@ class SubmissionController extends Controller
 
         $view
             ->setHeading(lang('Submissions'))
+            ->addJavascript('lib/featherlight.min.js')
             ->addJavascript('submissions')
             ->addJavascript('export')
-            ->addJavascript('lib/featherlight.min.js')
             ->addBreadcrumb(new NavigationLink('Submissions', 'submissions/' . $form->getHandle()))
             ->addBreadcrumb(new NavigationLink($form->getName(), 'forms/'. $form->getId()))
             ->addModal($modal);
+
+        ee()->cp->add_js_script(['ui' => ['sortable']]);
 
         return $view;
     }
@@ -1075,12 +1077,14 @@ class SubmissionController extends Controller
 
         $view
             ->setHeading(lang('Spam'))
+            ->addJavascript('lib/featherlight.min.js')
             ->addJavascript('submissions')
             ->addJavascript('export')
-            ->addJavascript('lib/featherlight.min.js')
             ->addBreadcrumb(new NavigationLink('Spam', 'spam/' . $form->getHandle()))
             ->addBreadcrumb(new NavigationLink($form->getName(), 'forms/'. $form->getId()))
             ->addModal($modal);
+
+        ee()->cp->add_js_script(['ui' => ['sortable']]);
 
         return $view;
     }
