@@ -95,7 +95,13 @@ class Navigation
             }
 
             if (str_starts_with($this->getCurrentUrl(), 'addons/settings/freeform_next/submissions')) {
-                if ($item->getMethod() && str_starts_with($item->getMethod(), 'form')) {
+                if ($item->getMethod() && str_starts_with($item->getMethod(), 'submissions')) {
+                    $header->isActive();
+                }
+            }
+
+            if (str_starts_with($this->getCurrentUrl(), 'addons/settings/freeform_next/spam')) {
+                if ($item->getMethod() && str_starts_with($item->getMethod(), 'spam')) {
                     $header->isActive();
                 }
             }

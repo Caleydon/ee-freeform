@@ -235,18 +235,29 @@ class Freeform_next_mcp extends ControlPanelView
     }
 
     /**
-     * @param string            $formHandle
+     * @param null|string       $formHandle
      * @param null|int|string   $submissionId
      *
      * @return array
      * @throws FreeformException
      */
-    public function submissions(string $formHandle, null|int|string $submissionId = null): array
+    public function submissions(null|string $formHandle = null, null|int|string $submissionId = null): array
     {
-        $formModel = FormRepository::getInstance()->getFormByIdOrHandle($formHandle);
-        $form      = $formModel->getForm();
+        $form = NULL;
+        if ($formHandle) {
+            $formModel = FormRepository::getInstance()->getFormByIdOrHandle($formHandle);
+            if ($formModel) {
+                $form = $formModel->getForm();
+            }
+        } else {
+            $formModels = FormRepository::getInstance()->getAllForms();
+            $formModel = reset($formModels);
+            if ($formModel) {
+                $form = $formModel->getForm();
+            }
+        }
 
-        if (null !== $submissionId) {
+        if ($form && null !== $submissionId) {
             if (strtolower($submissionId) === 'delete') {
                 return $this->renderView($this->getSubmissionController()->batchDelete($form));
             }
@@ -274,18 +285,29 @@ class Freeform_next_mcp extends ControlPanelView
     }
 
     /**
-     * @param string   $formHandle
-     * @param int|null $submissionId
+     * @param null|string       $formHandle
+     * @param null|int|string   $submissionId
      *
      * @return array
      * @throws FreeformException
      */
-    public function spam($formHandle, $submissionId = null)
+    public function spam(null|string $formHandle = null, null|int|string $submissionId = null)
     {
-        $formModel = FormRepository::getInstance()->getFormByIdOrHandle($formHandle);
-        $form      = $formModel->getForm();
+        $form = FALSE;
+        if ($formHandle) {
+            $formModel = FormRepository::getInstance()->getFormByIdOrHandle($formHandle);
+            if ($formModel) {
+                $form = $formModel->getForm();
+            }
+        } else {
+            $formModels = FormRepository::getInstance()->getAllForms();
+            $formModel = reset($formModels);
+            if ($formModel) {
+                $form = $formModel->getForm();
+            }
+        }
 
-        if (null !== $submissionId) {
+        if ($form && null !== $submissionId) {
             if (strtolower($submissionId) === 'delete') {
                 return $this->renderView($this->getSubmissionController()->batchDelete($form));
             }
@@ -483,14 +505,41 @@ class Freeform_next_mcp extends ControlPanelView
     #[Override]
     protected function buildNavigation(): Navigation
     {
-        $forms = new NavigationLink('Forms', 'forms');
-        FreeformHelper::get('navigation', $forms);
+        $allForms = FormRepository::getInstance()->getAllForms();
 
-        $notifications = new NavigationLink('Notifications', 'notifications');
-        $notifications->setButtonLink(new NavigationLink('New', 'notifications/new'));
+        $canManageForms = $this->getPermissionsService()->canManageForms(ee()->session->userdata('group_id'));
+        $canAccessSubmissions = $this->getPermissionsService()->canAccessSubmissions(ee()->session->userdata('group_id'));
+        $canAccessFields = $this->getPermissionsService()->canAccessFields(ee()->session->userdata('group_id'));
+        $canAccessNotifications = $this->getPermissionsService()->canAccessNotifications(ee()->session->userdata('group_id'));
+        $canAccessExports = $this->getPermissionsService()->canAccessExport(ee()->session->userdata('group_id'));
+        $canAccessSettings = $this->getPermissionsService()->canAccessSettings(ee()->session->userdata('group_id'));
 
-        $fields = new NavigationLink('Fields', 'fields');
-        FreeformHelper::get('navigation', $fields);
+        if ($canManageForms) {
+            $forms = new NavigationLink('Forms', 'forms');
+            FreeformHelper::get('navigation', $forms);
+        }
+
+        $submissions = null;
+        $spamSubmissions = null;
+        if ($canAccessSubmissions && count($allForms) > 0) {
+            $firstForm = reset($allForms);
+
+            $submissions = new NavigationLink('Submissions', "submissions/{$firstForm->handle}");
+
+            $spamSubmissions = new NavigationLink('Spam', "spam/{$firstForm->handle}");
+        }
+
+        $notifications = null;
+        if ($canAccessNotifications) {
+            $notifications = new NavigationLink('Notifications', 'notifications');
+            $notifications->setButtonLink(new NavigationLink('New', 'notifications/new'));
+        }
+
+        $fields = null;
+        if ($canAccessFields) {
+            $fields = new NavigationLink('Fields', 'fields');
+            FreeformHelper::get('navigation', $fields);
+        }
 
         $integrations = new NavigationLink('Integrations');
         $integrations
@@ -507,22 +556,26 @@ class Freeform_next_mcp extends ControlPanelView
                 ->addSubNavItem(new NavigationLink('Migrate Freeform Classic', 'migrations/ff_classic'));
         }
 
-
         $exportProfiles = null;
-        if (class_exists(ExportProfilesController::class)) {
-            $exportProfiles = new NavigationLink('Export', 'export_profiles');
+        if ($canAccessExports && count($allForms) > 0) {
+            if (class_exists(ExportProfilesController::class)) {
+                $exportProfiles = new NavigationLink('Export', 'export_profiles');
+            }
         }
 
-        $settings = new NavigationLink('Settings');
-        $settings
-            ->addSubNavItem(new NavigationLink('General', 'settings/general'))
-            ->addSubNavItem(new NavigationLink('Spam Protection', 'settings/spam_protection'))
-            ->addSubNavItem(new NavigationLink('reCAPTCHA', 'settings/recaptcha'))
-            ->addSubNavItem(new NavigationLink('Formatting Templates', 'settings/formatting_templates'))
-            ->addSubNavItem(new NavigationLink('Email Templates', 'settings/email_templates'))
-            ->addSubNavItem(new NavigationLink('Statuses', 'settings/statuses'))
-            ->addSubNavItem(new NavigationLink('Permissions', 'settings/permissions'))
-            ->addSubNavItem(new NavigationLink('Demo Templates', 'settings/demo_templates'));
+        $settings = null;
+        if ($canAccessSettings) {
+            $settings = new NavigationLink('Settings');
+            $settings
+                ->addSubNavItem(new NavigationLink('General', 'settings/general'))
+                ->addSubNavItem(new NavigationLink('Spam Protection', 'settings/spam_protection'))
+                ->addSubNavItem(new NavigationLink('reCAPTCHA', 'settings/recaptcha'))
+                ->addSubNavItem(new NavigationLink('Formatting Templates', 'settings/formatting_templates'))
+                ->addSubNavItem(new NavigationLink('Email Templates', 'settings/email_templates'))
+                ->addSubNavItem(new NavigationLink('Statuses', 'settings/statuses'))
+                ->addSubNavItem(new NavigationLink('Permissions', 'settings/permissions'))
+                ->addSubNavItem(new NavigationLink('Demo Templates', 'settings/demo_templates'));
+        }
 
         $logs   = null;
         $logdir = __DIR__ . '/logs/';
@@ -562,13 +615,24 @@ class Freeform_next_mcp extends ControlPanelView
         }
 
         $nav = new Navigation();
-        $nav
-            ->addLink($forms)
-            ->addLink($fields)
-            ->addLink($notifications)
-            ->addLink($exportProfiles)
-            ->addLink($settings)
-            ->addLink($integrations);
+        if ($canManageForms) {
+            $nav->addLink($forms);
+        }
+
+        if (count($allForms) > 0) {
+          $nav->addLink($submissions);
+          $nav->addLink($spamSubmissions);
+        }
+
+        $nav->addLink($fields);
+        $nav->addLink($notifications);
+
+        if (count($allForms) > 0) {
+          $nav->addLink($exportProfiles);
+        }
+
+        $nav->addLink($settings);
+        $nav->addLink($integrations);
 
         if ($isMigrationAvailable) {
             $nav->addLink($migrations);
