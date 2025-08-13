@@ -64,6 +64,7 @@ class NextFormNotificationHelper
         $validValues['fromName'] = $this->formatHtml($classicNotification['from_name']);
         $validValues['replyToEmail'] = $classicNotification['reply_to_email'];
         $validValues['bodyHtml'] = $this->formatHtml($classicNotification['template_data']);
+        $validValues['bodyText'] = strip_tags($this->formatHtml($classicNotification['template_data']));
         $validValues['legacyId'] = $classicNotification['notification_id'];
 
         $notification->set($validValues);

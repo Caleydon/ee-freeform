@@ -57,6 +57,8 @@ class FieldProperties extends AbstractProperties
     /** @var int */
     protected $notificationId;
 
+    protected string $format = 'html';
+
     /** @var int */
     protected $assetSourceId;
 
@@ -331,6 +333,11 @@ class FieldProperties extends AbstractProperties
     public function getNotificationId()
     {
         return $this->notificationId;
+    }
+
+    public function getFormat(): string
+    {
+        return $this->format;
     }
 
     /**
@@ -733,6 +740,7 @@ class FieldProperties extends AbstractProperties
             'showAsRadio'         => self::TYPE_BOOLEAN,
             'showAsCheckboxes'    => self::TYPE_BOOLEAN,
             'notificationId'      => self::TYPE_STRING,
+            'format'              => self::TYPE_STRING,
             'assetSourceId'       => self::TYPE_INTEGER,
             'integrationId'       => self::TYPE_INTEGER,
             'resourceId'          => self::TYPE_STRING,
