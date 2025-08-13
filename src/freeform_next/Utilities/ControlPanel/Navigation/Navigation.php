@@ -94,8 +94,14 @@ class Navigation
                 $header->isActive();
             }
 
-            if (strpos($this->getCurrentUrl(), 'addons/settings/freeform_next/submissions') === 0) {
-                if ($item->getMethod() && strpos($item->getMethod(), 'form') === 0) {
+            if (str_starts_with($this->getCurrentUrl(), 'addons/settings/freeform_next/submissions')) {
+                if ($item->getMethod() && str_starts_with($item->getMethod(), 'submissions')) {
+                    $header->isActive();
+                }
+            }
+
+            if (str_starts_with($this->getCurrentUrl(), 'addons/settings/freeform_next/spam')) {
+                if ($item->getMethod() && str_starts_with($item->getMethod(), 'spam')) {
                     $header->isActive();
                 }
             }

@@ -7,6 +7,7 @@ use Solspace\Addons\FreeformNext\Library\Composer\Components\Form;
 use Solspace\Addons\FreeformNext\Library\DataObjects\FormRenderObject;
 use Solspace\Addons\FreeformNext\Library\Helpers\FreeformHelper;
 use Solspace\Addons\FreeformNext\Library\Pro\Fields\RecaptchaField;
+use Solspace\Addons\FreeformNext\Repositories\FormRepository;
 use Solspace\Addons\FreeformNext\Repositories\SettingsRepository;
 use Solspace\Addons\FreeformNext\Services\HoneypotService;
 use Solspace\Addons\FreeformNext\Services\PermissionsService;
@@ -238,46 +239,70 @@ class Freeform_next_ext
 
 		$sub = $menu->addSubmenu(FreeformHelper::get('name'));
 
-		if($permissionsService->canManageForms(ee()->session->userdata('group_id')))
-		{
-			$sub->addItem(
-				lang('Forms'),
-				ee('CP/URL', 'addons/settings/freeform_next/forms')
-			);
-		}
+        $canManageForms = $permissionsService->canManageForms(ee()->session->userdata('group_id'));
+        $canAccessSubmissions = $permissionsService->canAccessSubmissions(ee()->session->userdata('group_id'));
+        $canAccessFields = $permissionsService->canAccessFields(ee()->session->userdata('group_id'));
+        $canAccessNotifications = $permissionsService->canAccessNotifications(ee()->session->userdata('group_id'));
+        $canAccessExports = $permissionsService->canAccessExport(ee()->session->userdata('group_id'));
+        $canAccessSettings = $permissionsService->canAccessSettings(ee()->session->userdata('group_id'));
 
-		if($permissionsService->canAccessFields(ee()->session->userdata('group_id')))
-		{
-			$sub->addItem(
-				lang('Fields'),
-				ee('CP/URL', 'addons/settings/freeform_next/fields')
-			);
-		}
+        if($canManageForms)
+        {
+          $sub->addItem(
+            lang('Forms'),
+            ee('CP/URL', 'addons/settings/freeform_next/forms')
+          );
+        }
 
-		if($permissionsService->canAccessNotifications(ee()->session->userdata('group_id')))
-		{
-			$sub->addItem(
-				lang('Notifications'),
-				ee('CP/URL', 'addons/settings/freeform_next/notifications')
-			);
-		}
+        if($canAccessSubmissions)
+        {
+            $formModels = FormRepository::getInstance()->getAllForms();
+            $formModel = reset($formModels);
+            if ($formModel) {
+                $sub->addItem(
+                    lang('Submissions'),
+                    ee('CP/URL', "addons/settings/freeform_next/submissions/{$formModel->handle}")
+                );
 
-		if($permissionsService->canAccessExport(ee()->session->userdata('group_id')) && FreeformHelper::get('version') === 'pro')
-		{
-			$sub->addItem(
-				lang('Export'),
-				ee('CP/URL', 'addons/settings/freeform_next/export_profiles')
-			);
-		}
+                $sub->addItem(
+                    lang('Spam'),
+                    ee('CP/URL', "addons/settings/freeform_next/spam/{$formModel->handle}")
+                );
+            }
+        }
 
-		if($permissionsService->canAccessSettings(ee()->session->userdata('group_id')))
-		{
-			$sub->addItem(
-				lang('Settings'),
-				ee('CP/URL', 'addons/settings/freeform_next/settings/general')
-			);
-		}
-	}
+        if($canAccessFields)
+        {
+          $sub->addItem(
+            lang('Fields'),
+            ee('CP/URL', 'addons/settings/freeform_next/fields')
+          );
+        }
+
+        if($canAccessNotifications)
+        {
+          $sub->addItem(
+            lang('Notifications'),
+            ee('CP/URL', 'addons/settings/freeform_next/notifications')
+          );
+        }
+
+        if($canAccessExports && FreeformHelper::get('version') === 'pro')
+        {
+          $sub->addItem(
+            lang('Export'),
+            ee('CP/URL', 'addons/settings/freeform_next/export_profiles')
+          );
+        }
+
+        if($canAccessSettings)
+        {
+          $sub->addItem(
+            lang('Settings'),
+            ee('CP/URL', 'addons/settings/freeform_next/settings/general')
+          );
+        }
+      }
 
     /**
      * @return RecaptchaService

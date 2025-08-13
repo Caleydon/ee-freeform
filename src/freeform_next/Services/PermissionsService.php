@@ -205,6 +205,7 @@ class PermissionsService
     private function getRestrictedNavigationSections()
     {
         return [
+            self::PERMISSION__ACCESS_SUBMISSIONS,
             self::PERMISSION__ACCESS_FIELDS,
             self::PERMISSION__ACCESS_EXPORT,
             self::PERMISSION__ACCESS_NOTIFICATIONS,

@@ -11,8 +11,10 @@
 
 namespace Solspace\Addons\FreeformNext\Controllers;
 
-use EllisLab\ExpressionEngine\Library\CP\Table;
-use EllisLab\ExpressionEngine\Model\File\File;
+use Solspace\Addons\FreeformNext\Repositories\FormRepository;
+use Solspace\Addons\FreeformNext\Services\ExportService;
+use ExpressionEngine\Library\CP\Table;
+use ExpressionEngine\Model\File\File;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\AbstractField;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\CheckboxField;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\CheckboxGroupField;
@@ -162,6 +164,18 @@ class SubmissionController extends Controller
         $currentDateRangeEnd   = '';
         $currentDateRange      = '';
         $currentSearchOnField  = '';
+
+        $formSwitches = [];
+        $allFormModels = FormRepository::getInstance()->getAllForms();
+
+        foreach ($allFormModels as $formModel) {
+            $switchForm = $formModel->getForm();
+
+            $formSwitches[$switchForm->getHandle()] = [
+                'label' => $switchForm->getName(),
+                'url'   => ee('CP/URL')->make('addons/settings/freeform_next/submissions/' . $switchForm->getHandle())->compile(),
+            ];
+        }
 
         $statuses     = StatusRepository::getInstance()->getAllStatuses();
         $formStatuses = [];
@@ -500,6 +514,7 @@ class SubmissionController extends Controller
 			'form_right_links' => $formRightLinks,
 			'pagination'       => $pagination,
 			'exportLink'       => $this->getLink('export'),
+            'formSwitches'     => $formSwitches,
 			'formStatuses'     => $formStatuses,
 			'formDateRanges'   => $formDateRanges,
 			'mainUrl'          => $this->getLink('submissions/' . $form->getHandle()),
@@ -517,6 +532,9 @@ class SubmissionController extends Controller
 			'currentDateRangeStart' => $currentDateRangeStart,
 			'currentDateRangeEnd'   => $currentDateRangeEnd,
 			'currentDateRange'      => $currentDateRange,
+            'currentFormId'         => $form->getId(),
+            'currentFormLabel'      => $form->getName(),
+            'currentFormHandle'     => $form->getHandle(),
 
 			'baseUrl' => $baseUrl,
 			'filters' => $filters,
@@ -541,8 +559,8 @@ class SubmissionController extends Controller
             ->addJavascript('submissions')
             ->addJavascript('export')
             ->addJavascript('lib/featherlight.min.js')
-            ->addBreadcrumb(new NavigationLink('Forms', 'forms'))
-            ->addBreadcrumb(new NavigationLink($form->getName(), 'forms/' . $form->getId()))
+            ->addBreadcrumb(new NavigationLink('Submissions', 'submissions/' . $form->getHandle()))
+            ->addBreadcrumb(new NavigationLink($form->getName(), 'forms/'. $form->getId()))
             ->addModal($modal);
 
         return $view;
@@ -663,6 +681,18 @@ class SubmissionController extends Controller
         $currentDateRangeEnd   = '';
         $currentDateRange      = '';
         $currentSearchOnField  = '';
+
+        $formSwitches = [];
+        $allFormModels = FormRepository::getInstance()->getAllForms();
+
+        foreach ($allFormModels as $formModel) {
+            $switchForm = $formModel->getForm();
+
+            $formSwitches[$switchForm->getHandle()] = [
+                'label' => $switchForm->getName(),
+                'url'   => ee('CP/URL')->make('addons/settings/freeform_next/spam/' . $switchForm->getHandle())->compile(),
+            ];
+        }
 
         $statuses     = StatusRepository::getInstance()->getAllStatuses();
         $formStatuses = [];
@@ -997,12 +1027,13 @@ class SubmissionController extends Controller
 
         $template = [
             'table'            => $table->viewData($this->getLink('spam/' . $form->getHandle())),
-            'cp_page_title'    => 'Spam Submissions for ' . $form->getName(),
+            'cp_page_title'    => 'Spam for ' . $form->getName(),
             'layout'           => $layout,
             'form'             => $form,
             'form_right_links' => $formRightLinks,
             'pagination'       => $pagination,
             'exportLink'       => $this->getLink('export'),
+            'formSwitches'     => $formSwitches,
             'formStatuses'     => $formStatuses,
             'formDateRanges'   => $formDateRanges,
             'mainUrl'          => $this->getLink('spam/' . $form->getHandle()),
@@ -1020,6 +1051,9 @@ class SubmissionController extends Controller
             'currentDateRangeStart' => $currentDateRangeStart,
             'currentDateRangeEnd'   => $currentDateRangeEnd,
             'currentDateRange'      => $currentDateRange,
+            'currentFormId'         => $form->getId(),
+            'currentFormLabel'      => $form->getName(),
+            'currentFormHandle'     => $form->getHandle(),
 
             'baseUrl' => $baseUrl,
             'filters' => $filters,
@@ -1040,12 +1074,12 @@ class SubmissionController extends Controller
         }
 
         $view
-            ->setHeading(lang('Spam Submissions'))
+            ->setHeading(lang('Spam'))
             ->addJavascript('submissions')
             ->addJavascript('export')
             ->addJavascript('lib/featherlight.min.js')
-            ->addBreadcrumb(new NavigationLink('Forms', 'forms'))
-            ->addBreadcrumb(new NavigationLink($form->getName(), 'forms/' . $form->getId()))
+            ->addBreadcrumb(new NavigationLink('Spam', 'spam/' . $form->getHandle()))
+            ->addBreadcrumb(new NavigationLink($form->getName(), 'forms/'. $form->getId()))
             ->addModal($modal);
 
         return $view;
