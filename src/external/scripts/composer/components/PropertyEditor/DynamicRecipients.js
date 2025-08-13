@@ -51,6 +51,7 @@ export default class DynamicRecipients extends BasePropertyEditor {
       ]),
       showAsRadio: PropTypes.bool,
       showAsCheckboxes: PropTypes.bool,
+      format: PropTypes.string.isRequired,
     }).isRequired,
     canManageNotifications: PropTypes.bool.isRequired,
   };
@@ -63,7 +64,7 @@ export default class DynamicRecipients extends BasePropertyEditor {
     const { properties } = this.context;
     const {
       required, label, handle, values, options,
-      showAsRadio, showAsCheckboxes, notificationId, instructions
+      showAsRadio, showAsCheckboxes, notificationId, instructions, format
     } = properties;
 
     const { canManageNotifications } = this.context;
@@ -75,6 +76,14 @@ export default class DynamicRecipients extends BasePropertyEditor {
     } else if (showAsCheckboxes) {
       renderAsValue = DynamicRecipients.RENDER_AS_CHECKBOXES;
     }
+
+    const formatList = [{
+      key: 'html',
+      value: 'HTML',
+    }, {
+      key: 'text',
+      value: 'Plain Text',
+    }];
 
     return (
       <div>
@@ -109,6 +118,20 @@ export default class DynamicRecipients extends BasePropertyEditor {
         >
           {canManageNotifications && <AddNewNotification />}
         </SelectProperty>
+
+        {notificationId ? (
+          <SelectProperty
+            label="Format"
+            instructions="Choose the format in which the email notification will be sent."
+            name="format"
+            value={format}
+            onChangeHandler={this.update}
+            isNumeric={false}
+            emptyOption="Select a format..."
+            options={formatList}
+          />
+        ) : ""
+        }
 
         <TextProperty
           label="Label"

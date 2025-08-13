@@ -140,6 +140,11 @@ class Layout implements JsonSerializable, Iterator
         return $this->fields;
     }
 
+    public function getProperties(): ?Properties
+    {
+        return $this->properties;
+    }
+
     /**
      * @return AbstractField[]
      */

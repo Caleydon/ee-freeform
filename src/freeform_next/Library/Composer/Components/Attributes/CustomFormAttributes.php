@@ -64,6 +64,8 @@ class CustomFormAttributes extends AbstractAttributes
     /** @var string */
     protected $dynamicNotificationTemplate;
 
+    protected string $dynamicNotificationFormat = 'html';
+
     /** @var array */
     protected $overrideValues;
 
@@ -219,6 +221,11 @@ class CustomFormAttributes extends AbstractAttributes
     public function getDynamicNotificationTemplate()
     {
         return $this->dynamicNotificationTemplate;
+    }
+
+    public function getDynamicNotificationFormat(): string
+    {
+        return $this->dynamicNotificationFormat;
     }
 
     /**
