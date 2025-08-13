@@ -1027,7 +1027,7 @@ class SubmissionController extends Controller
 
         $template = [
             'table'            => $table->viewData($this->getLink('spam/' . $form->getHandle())),
-            'cp_page_title'    => 'Spam Submissions for ' . $form->getName(),
+            'cp_page_title'    => 'Spam for ' . $form->getName(),
             'layout'           => $layout,
             'form'             => $form,
             'form_right_links' => $formRightLinks,
@@ -1074,11 +1074,11 @@ class SubmissionController extends Controller
         }
 
         $view
-            ->setHeading(lang('Spam Submissions'))
+            ->setHeading(lang('Spam'))
             ->addJavascript('submissions')
             ->addJavascript('export')
             ->addJavascript('lib/featherlight.min.js')
-            ->addBreadcrumb(new NavigationLink('Spam Submissions', 'spam/' . $form->getHandle()))
+            ->addBreadcrumb(new NavigationLink('Spam', 'spam/' . $form->getHandle()))
             ->addBreadcrumb(new NavigationLink($form->getName(), 'forms/'. $form->getId()))
             ->addModal($modal);
 

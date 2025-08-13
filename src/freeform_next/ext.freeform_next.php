@@ -246,15 +246,15 @@ class Freeform_next_ext
         $canAccessExports = $permissionsService->canAccessExport(ee()->session->userdata('group_id'));
         $canAccessSettings = $permissionsService->canAccessSettings(ee()->session->userdata('group_id'));
 
-		if($canManageForms)
-		{
-			$sub->addItem(
-				lang('Forms'),
-				ee('CP/URL', 'addons/settings/freeform_next/forms')
-			);
-		}
+        if($canManageForms)
+        {
+          $sub->addItem(
+            lang('Forms'),
+            ee('CP/URL', 'addons/settings/freeform_next/forms')
+          );
+        }
 
-        if($canManageForms && $canAccessSubmissions)
+        if($canAccessSubmissions)
         {
             $formModels = FormRepository::getInstance()->getAllForms();
             $formModel = reset($formModels);
@@ -265,44 +265,44 @@ class Freeform_next_ext
                 );
 
                 $sub->addItem(
-                    lang('Spam Submissions'),
+                    lang('Spam'),
                     ee('CP/URL', "addons/settings/freeform_next/spam/{$formModel->handle}")
                 );
             }
         }
 
         if($canAccessFields)
-		{
-			$sub->addItem(
-				lang('Fields'),
-				ee('CP/URL', 'addons/settings/freeform_next/fields')
-			);
-		}
+        {
+          $sub->addItem(
+            lang('Fields'),
+            ee('CP/URL', 'addons/settings/freeform_next/fields')
+          );
+        }
 
-		if($canAccessNotifications)
-		{
-			$sub->addItem(
-				lang('Notifications'),
-				ee('CP/URL', 'addons/settings/freeform_next/notifications')
-			);
-		}
+        if($canAccessNotifications)
+        {
+          $sub->addItem(
+            lang('Notifications'),
+            ee('CP/URL', 'addons/settings/freeform_next/notifications')
+          );
+        }
 
-		if($canManageForms && $canAccessExports && FreeformHelper::get('version') === 'pro')
-		{
-			$sub->addItem(
-				lang('Export'),
-				ee('CP/URL', 'addons/settings/freeform_next/export_profiles')
-			);
-		}
+        if($canAccessExports && FreeformHelper::get('version') === 'pro')
+        {
+          $sub->addItem(
+            lang('Export'),
+            ee('CP/URL', 'addons/settings/freeform_next/export_profiles')
+          );
+        }
 
-		if($canAccessSettings)
-		{
-			$sub->addItem(
-				lang('Settings'),
-				ee('CP/URL', 'addons/settings/freeform_next/settings/general')
-			);
-		}
-	}
+        if($canAccessSettings)
+        {
+          $sub->addItem(
+            lang('Settings'),
+            ee('CP/URL', 'addons/settings/freeform_next/settings/general')
+          );
+        }
+      }
 
     /**
      * @return RecaptchaService

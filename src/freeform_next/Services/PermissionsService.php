@@ -102,10 +102,6 @@ class PermissionsService
      */
     public function canAccessSubmissions($groupId)
     {
-        if (!$this->canManageForms($groupId)) {
-            return false;
-        }
-
         return $this->canUserAccessSection(self::PERMISSION__ACCESS_SUBMISSIONS, $groupId);
     }
 
@@ -140,10 +136,6 @@ class PermissionsService
      */
     public function canAccessExport($groupId)
     {
-        if (!$this->canManageForms($groupId)) {
-            return false;
-        }
-
         return $this->canUserAccessSection(self::PERMISSION__ACCESS_EXPORT, $groupId);
     }
 

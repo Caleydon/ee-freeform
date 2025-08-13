@@ -505,9 +505,6 @@ class Freeform_next_mcp extends ControlPanelView
     #[Override]
     protected function buildNavigation(): Navigation
     {
-        $forms = new NavigationLink('Forms', 'forms');
-        FreeformHelper::get('navigation', $forms);
-
         $allForms = FormRepository::getInstance()->getAllForms();
 
         $canManageForms = $this->getPermissionsService()->canManageForms(ee()->session->userdata('group_id'));
@@ -517,14 +514,19 @@ class Freeform_next_mcp extends ControlPanelView
         $canAccessExports = $this->getPermissionsService()->canAccessExport(ee()->session->userdata('group_id'));
         $canAccessSettings = $this->getPermissionsService()->canAccessSettings(ee()->session->userdata('group_id'));
 
+        if ($canManageForms) {
+            $forms = new NavigationLink('Forms', 'forms');
+            FreeformHelper::get('navigation', $forms);
+        }
+
         $submissions = null;
         $spamSubmissions = null;
-        if ($canManageForms && $canAccessSubmissions && count($allForms) > 0) {
+        if ($canAccessSubmissions && count($allForms) > 0) {
             $firstForm = reset($allForms);
 
             $submissions = new NavigationLink('Submissions', "submissions/{$firstForm->handle}");
 
-            $spamSubmissions = new NavigationLink('Spam Submissions', "spam/{$firstForm->handle}");
+            $spamSubmissions = new NavigationLink('Spam', "spam/{$firstForm->handle}");
         }
 
         $notifications = null;
@@ -555,7 +557,7 @@ class Freeform_next_mcp extends ControlPanelView
         }
 
         $exportProfiles = null;
-        if ($canManageForms && $canAccessExports && count($allForms) > 0) {
+        if ($canAccessExports && count($allForms) > 0) {
             if (class_exists(ExportProfilesController::class)) {
                 $exportProfiles = new NavigationLink('Export', 'export_profiles');
             }
@@ -613,7 +615,9 @@ class Freeform_next_mcp extends ControlPanelView
         }
 
         $nav = new Navigation();
-        $nav->addLink($forms);
+        if ($canManageForms) {
+            $nav->addLink($forms);
+        }
 
         if (count($allForms) > 0) {
           $nav->addLink($submissions);
