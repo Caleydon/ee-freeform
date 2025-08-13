@@ -48,15 +48,24 @@ export default class Email extends BasePropertyEditor {
         PropTypes.string,
         PropTypes.number,
       ]),
+      format: PropTypes.string.isRequired,
     }).isRequired,
     canManageNotifications: PropTypes.bool.isRequired,
   };
 
   render() {
-    const { properties: { label, handle, placeholder, required, notificationId, instructions } } = this.context;
+    const { properties: { label, handle, placeholder, required, notificationId, instructions, format } } = this.context;
 
     const { canManageNotifications } = this.context;
     const { notifications } = this.props;
+
+    const formatList = [{
+      key: 'html',
+      value: 'HTML',
+    }, {
+      key: 'text',
+      value: 'Plain Text',
+    }];
 
     return (
       <div>
@@ -91,6 +100,20 @@ export default class Email extends BasePropertyEditor {
         >
           {canManageNotifications && <AddNewNotification />}
         </SelectProperty>
+
+        {notificationId ? (
+          <SelectProperty
+            label="Format"
+            instructions="Choose the format in which the email notification will be sent."
+            name="format"
+            value={format}
+            onChangeHandler={this.update}
+            isNumeric={false}
+            emptyOption="Select a format..."
+            options={formatList}
+          />
+        ) : ""
+        }
 
         <TextProperty
           label="Label"

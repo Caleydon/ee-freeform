@@ -94,7 +94,7 @@ EOT;
                 'fromEmail' => ee()->config->item('webmaster_email'),
                 'subject'   => 'New submission from your {form:name} form',
                 'bodyHtml'  => $body,
-                'bodyText'  => $body,
+                'bodyText'  => strip_tags($body),
             ]
         );
 
@@ -122,7 +122,7 @@ EOT;
                 'subject'            => $template->getSubject(),
                 'replyToEmail'       => $template->getReplyToEmail(),
                 'bodyHtml'           => $template->getBody(),
-                'bodyText'           => $template->getBody(),
+                'bodyText'           => strip_tags($template->getBody()),
                 'includeAttachments' => $template->isIncludeAttachments(),
             ]
         );

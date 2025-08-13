@@ -22,6 +22,7 @@ const validProperties = [
   "options",
   "showAsRadio",
   "showAsCheckboxes",
+  "format",
   "notificationId",
   "assetSourceId",
   "integrationId",

@@ -21,6 +21,8 @@ class DynamicNotificationAttributes extends AbstractAttributes implements JsonSe
     /** @var string */
     protected $template;
 
+    protected string $format = 'html';
+
     /**
      * @return array
      */
@@ -47,6 +49,11 @@ class DynamicNotificationAttributes extends AbstractAttributes implements JsonSe
         return $this->template;
     }
 
+    public function getFormat(): string
+    {
+        return $this->format;
+    }
+
     /**
      * @inheritDoc
      */
@@ -55,6 +62,7 @@ class DynamicNotificationAttributes extends AbstractAttributes implements JsonSe
         return [
             'recipients' => $this->getRecipients(),
             'template'   => $this->getTemplate(),
+            'format'     => $this->getFormat(),
         ];
     }
 }

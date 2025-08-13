@@ -36,6 +36,7 @@ export default class AdminNotifications extends BasePropertyEditor {
   static contextTypes = {
     ...BasePropertyEditor.contextTypes,
     properties: PropTypes.shape({
+      format: PropTypes.string.isRequired,
       type: PropTypes.string.isRequired,
       notificationId: PropTypes.oneOfType([
         PropTypes.string,
@@ -47,11 +48,19 @@ export default class AdminNotifications extends BasePropertyEditor {
   };
 
   render() {
-    const { properties: { notificationId, recipients } } = this.context;
+    const { properties: { format, notificationId, recipients } } = this.context;
 
     const { canManageNotifications } = this.context;
 
     const { notifications } = this.props;
+
+    const formatList = [{
+      key: 'html',
+      value: 'HTML',
+    }, {
+      key: 'text',
+      value: 'Plain Text',
+    }];
 
     return (
       <div>
@@ -76,6 +85,20 @@ export default class AdminNotifications extends BasePropertyEditor {
             rows={10}
             value={recipients}
             onChangeHandler={this.update}
+          />
+        ) : ""
+        }
+
+        {notificationId ? (
+          <SelectProperty
+            label="Format"
+            instructions="Choose the format in which the email notification will be sent."
+            name="format"
+            value={format}
+            onChangeHandler={this.update}
+            isNumeric={false}
+            emptyOption="Select a format..."
+            options={formatList}
           />
         ) : ""
         }

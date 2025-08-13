@@ -122,6 +122,7 @@ class ApiController extends Controller
                             "Template '{name}' already exists",
                             ['name' => $templateName . $extension]
                         );
+
                     } else {
                         try {
                             file_put_contents($templatePath, $settings->getEmailTemplateContent());

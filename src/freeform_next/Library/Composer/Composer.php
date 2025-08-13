@@ -219,6 +219,7 @@ class Composer
                     'mapping'       => new stdClass(),
                 ],
                 Properties::ADMIN_NOTIFICATIONS_HASH => [
+                    'format'         => 'html',
                     'type'           => Properties::ADMIN_NOTIFICATIONS_HASH,
                     'notificationId' => 0,
                     'recipients'     => '',
@@ -271,6 +272,7 @@ class Composer
                 'mapping'       => new stdClass(),
             ],
             Properties::ADMIN_NOTIFICATIONS_HASH => [
+                'format'         => 'html',
                 'type'           => Properties::ADMIN_NOTIFICATIONS_HASH,
                 'notificationId' => $this->customComposerState->notificationId,
                 'recipients'     => $this->customComposerState->notificationEmails,
