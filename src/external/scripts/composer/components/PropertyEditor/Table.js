@@ -11,12 +11,12 @@
 import PropTypes from "prop-types";
 import React from "react";
 import BasePropertyEditor from "./BasePropertyEditor";
-import CheckboxProperty from "./PropertyItems/CheckboxProperty";
 import CustomProperty from "./PropertyItems/CustomProperty";
 import MatrixEditorProperty from "./PropertyItems/MatrixEditorProperty";
 import { TYPE_SELECT, TYPE_STRING } from "./PropertyItems/Table/Column.js"
 import TextareaProperty from "./PropertyItems/TextareaProperty";
 import TextProperty from "./PropertyItems/TextProperty";
+import LightSwitchProperty from "./PropertyItems/LightSwitchProperty";
 
 export default class Table extends BasePropertyEditor {
   static contextTypes = {
@@ -49,9 +49,10 @@ export default class Table extends BasePropertyEditor {
 
         <hr />
 
-        <CheckboxProperty
+        <LightSwitchProperty
           label="This field is required?"
           name="required"
+          bold={true}
           checked={required}
           onChangeHandler={this.update}
         />
@@ -76,10 +77,11 @@ export default class Table extends BasePropertyEditor {
 
         <hr />
 
-        <CheckboxProperty
+        <LightSwitchProperty
           label="Use built in script?"
           instructions="Check this to enable built in javascript for handling adding new rows."
           name="useScript"
+          bold={true}
           checked={!!useScript}
           onChangeHandler={this.update}
         />

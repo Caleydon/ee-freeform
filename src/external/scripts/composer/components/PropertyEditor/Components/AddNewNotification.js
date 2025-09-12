@@ -31,8 +31,8 @@ export default class AddNewNotification extends Component {
     return (
       <div className={className}>
         {!showForm &&
-        <button className="button button--default button--small" data-icon="add" onClick={this.toggleForm}>
-          Add new template
+        <button className="button button--default button--small" onClick={this.toggleForm}>
+          Add New Template
         </button>
         }
 

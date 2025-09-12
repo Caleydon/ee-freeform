@@ -11,9 +11,9 @@
 import PropTypes from "prop-types";
 import React from "react";
 import BasePropertyEditor from "./BasePropertyEditor";
-import CheckboxProperty from "./PropertyItems/CheckboxProperty";
 import TextareaProperty from "./PropertyItems/TextareaProperty";
 import TextProperty from "./PropertyItems/TextProperty";
+import LightSwitchProperty from "./PropertyItems/LightSwitchProperty";
 
 export default class Text extends BasePropertyEditor {
   static contextTypes = {
@@ -45,9 +45,10 @@ export default class Text extends BasePropertyEditor {
 
         <hr />
 
-        <CheckboxProperty
+        <LightSwitchProperty
           label="This field is required?"
           name="required"
+          bold={true}
           checked={required}
           onChangeHandler={this.update}
         />

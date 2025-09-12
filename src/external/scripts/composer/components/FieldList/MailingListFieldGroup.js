@@ -41,6 +41,7 @@ export default class MailingListFieldGroup extends Component {
     return (
       <div className="composer-mailing-list-fields">
         <h3>Mailing Lists</h3>
+        <hr style={{ marginTop: 0, marginBottom: 15 }} />
         <ul>
           {fields.map((field, index) =>
             <Field

@@ -15,11 +15,11 @@ import { fetchMailingListsIfNeeded, invalidateMailingLists } from "../../actions
 import * as FieldTypes from "../../constants/FieldTypes";
 import BasePropertyEditor from "./BasePropertyEditor";
 import IntegrationMappingTable from "./Components/IntegrationMappingTable/IntegrationMappingTable";
-import CheckboxProperty from "./PropertyItems/CheckboxProperty";
 import CustomProperty from "./PropertyItems/CustomProperty";
 import SelectProperty from "./PropertyItems/SelectProperty";
 import TextareaProperty from "./PropertyItems/TextareaProperty";
 import TextProperty from "./PropertyItems/TextProperty";
+import LightSwitchProperty from "./PropertyItems/LightSwitchProperty";
 
 @connect(
   (state) => ({
@@ -188,18 +188,20 @@ export default class MailingList extends BasePropertyEditor {
           onChangeHandler={this.update}
         />
 
-        <CheckboxProperty
+        <LightSwitchProperty
           label="Hide field"
           instructions="Hide the mailing list checkbox from the form and make it always trigger a subscription"
           name="hidden"
+          bold={true}
           checked={hidden}
           onChangeHandler={this.update}
         />
 
         {!hidden &&
-        <CheckboxProperty
+        <LightSwitchProperty
           label="Checked by default"
           name="value"
+          bold={true}
           checked={value}
           onChangeHandler={this.update}
         />
@@ -213,7 +215,7 @@ export default class MailingList extends BasePropertyEditor {
           name="resourceId"
           onChangeHandler={this.updateIntegration}
           value={resourceId}
-          emptyOption="Select a list..."
+          emptyOption="--"
           options={lists}
         />
 
@@ -231,7 +233,7 @@ export default class MailingList extends BasePropertyEditor {
           name="emailFieldHash"
           onChangeHandler={this.update}
           value={emailFieldHash}
-          emptyOption="Select a field..."
+          emptyOption="--"
           options={emailFields}
         />
 

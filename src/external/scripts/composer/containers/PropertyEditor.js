@@ -175,7 +175,7 @@ export default class PropertyEditor extends Component {
           }
         >
           <h3>
-            <span>{title}</span>
+            {title}
 
             {showReset &&
             <button
@@ -187,9 +187,11 @@ export default class PropertyEditor extends Component {
             </button>
             }
           </h3>
-          <h4 dangerouslySetInnerHTML={{ __html: props.label }} />
+          {props.label &&
+            <h4 dangerouslySetInnerHTML={{ __html: props.label }} />
+          }
 
-          <hr style={{ marginBottom: 10 }} />
+          <hr style={{ marginTop: 0, marginBottom: 15 }} />
 
           {form ? form : <p>Please select an element</p>}
 

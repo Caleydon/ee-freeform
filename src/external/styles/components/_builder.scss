@@ -14,6 +14,7 @@ $minRowHeight: 60px;
   position: relative;
   background: $color-cp-bg-white;
   flex: $builderFlex;
+  padding: 10px !important;
 
   overflow: hidden;
 
@@ -22,7 +23,7 @@ $minRowHeight: 60px;
   }
 
   .layout {
-    padding: 7px 0 0;
+    padding: 20px 0 0;
   }
 
   .composer-row-placeholder {
@@ -78,13 +79,17 @@ $minRowHeight: 60px;
       .composer-column {
         position: relative;
         flex: 0 1 100%;
-        padding: 7px 8px;
+        padding: 8px 8px 0 8px;
 
         border: 2px dashed transparent;
 
         &.composer-column-active {
           background: rgba($color-placeholder, 0.4);
           border-color: rgba($color-placeholder-border, 0.2);
+
+          .composer-submit-position-wrapper {
+            padding-bottom: 8px;
+          }
         }
 
         &:hover {
@@ -127,26 +132,80 @@ $minRowHeight: 60px;
           background: $color-droppable;
         }
 
-        input, textarea, select, button {
+        input[type="color"],
+        input[type="file"],
+        input[type="month"],
+        input[type="number"],
+        input[type="password"],
+        input[type="time"],
+        input[type="week"],
+        input[type="url"],
+        input[type="image"],
+        input[type="datetime-local"],
+        input[type="date"],
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="search"],
+        button {
           pointer-events: none;
+          background-image: none;
+          display: block;
+          width: 100%;
+          padding: 8px 15px;
+          font-size: 1rem;
+          line-height: 1.6;
+          color: var(--ee-input-color);
+          background-color: var(--ee-input-bg);
+          transition: border-color 200ms ease, box-shadow 200ms ease;
+          -webkit-appearance: none;
+          border: 1px solid var(--ee-input-border);
+          border-radius: 5px;
+          box-shadow: 0 1px 2px 0 var(--ee-shadow-input);
+        }
+
+        select {
+          margin: 0;
+          width: 100%;
+          font-size: 1rem;
+          line-height: 1.6;
+          padding: 8px 15px;
+          color: var(--ee-input-color);
+          background-color: var(--ee-input-bg);
+          border: 1px solid var(--ee-input-border);
+          border-radius: 5px;
+          box-shadow: 0 1px 2px 0 var(--ee-shadow-input);
+          transition: border-color 200ms ease, box-shadow 200ms ease;
         }
 
         textarea {
+          margin: 0;
+          -webkit-appearance: none;
+          color: var(--ee-input-color);
+          background-color: var(--ee-input-bg);
+          transition: border-color 200ms ease, box-shadow 200ms ease;
+          border: 1px solid var(--ee-input-border);
+          border-radius: 5px;
+          box-shadow: 0 1px 2px 0 var(--ee-shadow-input);
+          font-size: 1rem;
+          line-height: 1.6;
+          width: 100%;
+          padding: 8px 15px;
           max-height: unset;
           min-height: unset;
           resize: unset;
-          background-image: unset;
+          background-image: none;
         }
 
         label.composer-field-required {
           > span.required {
             position: relative;
-            top: -6px;
-            left: 0;
+            top: -4px;
+            left: 4px;
             height: $spacing;
 
             color: $color-error;
-            font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid';
+            font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid', sans-serif;
             font-size: 7px;
             font-weight: bold;
             line-height: $spacing;
@@ -165,17 +224,25 @@ $minRowHeight: 60px;
 
         .composer-column-instructions {
           position: relative;
-          top: -5px;
-
-          color: $color-column-instructions;
-          font-family: HelveticaNeue;
-          font-size: 11px;
+          margin: 0 !important;
+         // margin-top: -5px;
+          line-height: 1.4;
+          color: var(--ee-text-secondary);
+          display: block;
+          font-size: 0.8rem;
+          font-style: normal;
+          //margin-bottom: 10px;
         }
 
         label {
-          display: block;
-          margin-bottom: 8px;
-          color: $color-column-label;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          margin: 0;
+          //margin-bottom: 10px;
+          //font-size: 0.8rem;
+          font-weight: 500;
+          color: var(--ee-text-normal);
 
           > input[type=checkbox], > input[type=radio] {
             margin-right: $spacing-short;
@@ -189,12 +256,43 @@ $minRowHeight: 60px;
           }
 
           &.composer-field-label {
-            font-weight: 700;
+            font-weight: 500;
           }
         }
 
         &:hover .composer-actions {
           display: inline-flex;
+        }
+
+        .composer-ft-regex-wrapper,
+        .composer-ft-table-wrapper,
+        .composer-ft-file-wrapper,
+        .composer-ft-checkbox-field-wrapper,
+        .composer-ft-checkbox-group-wrapper,
+        .composer-ft-dynamic-recipients-wrapper,
+        .composer-ft-multiple-select-wrapper,
+        .composer-ft-confirmation-wrapper,
+        .composer-ft-password-wrapper,
+        .composer-ft-textarea-wrapper,
+        .composer-ft-text-wrapper,
+        .composer-ft-select-wrapper,
+        .composer-ft-datetime-wrapper,
+        .composer-ft-website-wrapper,
+        .composer-ft-confirmation-wrapper,
+        .composer-ft-email-wrapper,
+        .composer-ft-regex-wrapper,
+        .composer-ft-number-wrapper,
+        .composer-ft-phone-wrapper,
+        .composer-ft-radio-group-wrapper,
+        .composer-ft-rating-wrapper {
+          gap: 5px;
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 10px;
+
+          .input-wrapper {
+            margin-top: 5px;
+          }
         }
 
         .composer-ft-datetime-wrapper,
@@ -325,16 +423,118 @@ $minRowHeight: 60px;
 }
 
 .icon-solspace-multiple_select:before {
-  font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid';
+  font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid', sans-serif;
   content: "\f0c9";
 }
 
 .icon-solspace-password:before {
-  font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid';
+  font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid', sans-serif;
   content: "\f023";
 }
 
 .icon-solspace-recaptcha:before {
-  font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid';
+  font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid', sans-serif;
   content: "\f05e";
+}
+
+.composer-property-item-lightswitch {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+  row-gap: 6px;
+  align-items: start;
+}
+
+.composer-property-item-lightswitch .composer-property-heading {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+}
+
+.composer-property-item-lightswitch .composer-property-heading > label {
+  margin: 0;
+}
+
+.composer-property-item-lightswitch .composer-property-input {
+  grid-column: 1;
+  grid-row: 2;
+  margin: 0;
+  width: auto;
+  justify-self: start;
+}
+
+.composer-property-item-lightswitch .composer-property-lightswitch {
+  --lightswitch-width: 48px;
+  --lightswitch-height: 26px;
+  --lightswitch-pad: 2px;
+  --lightswitch-on: var(--ee-input-toggle-active-bg);
+  --lightswitch-off: var(--ee-input-toggle-bg);
+  --lightswitch-knob: #ffffff;
+  --lightswitch-border-on: var(--ee-input-toggle-active-bg);
+  --lightswitch-border-off: var(--ee-input-toggle-bg);
+  --travel: calc(var(--lightswitch-width) - var(--lightswitch-height));
+
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  position: relative;
+  width: var(--lightswitch-width);
+  height: var(--lightswitch-height);
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+
+  &.is-readonly {
+    pointer-events: none;
+    opacity: .7;
+  }
+}
+
+.composer-property-item-lightswitch .lightswitch-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.composer-property-item-lightswitch .lightswitch-visual {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--lightswitch-off);
+  border-radius: 13px;
+  transition: all 100ms ease;
+  position: relative;
+}
+
+.composer-property-item-lightswitch .lightswitch-visual::after {
+  content: "";
+  position: absolute;
+  top: var(--lightswitch-pad);
+  left: var(--lightswitch-pad);
+  width: calc(var(--lightswitch-height) - var(--lightswitch-pad)*2);
+  height: calc(var(--lightswitch-height) - var(--lightswitch-pad)*2);
+  background: var(--lightswitch-knob);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--lightswitch-border-off) inset;
+  transition: all 200ms ease;
+}
+
+.composer-property-item-lightswitch .lightswitch-input:checked + .lightswitch-visual {
+  background: var(--lightswitch-on);
+}
+
+.composer-property-item-lightswitch .lightswitch-input:checked + .lightswitch-visual::after {
+  transform: translateX(var(--travel));
+  box-shadow: 0 0 0 2px var(--lightswitch-border-on) inset;
+}
+
+.composer-property-item-lightswitch .lightswitch-input:focus-visible + .lightswitch-visual {
+  outline: 2px solid #94a3b8;
+  outline-offset: 2px;
+}
+
+.composer-property-item-lightswitch .lightswitch-input:disabled + å.lightswitch-visual {
+  opacity: .5;
+  cursor: not-allowed;
 }

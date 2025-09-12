@@ -11,11 +11,11 @@
 import PropTypes from "prop-types";
 import React from "react";
 import BasePropertyEditor from "./BasePropertyEditor";
-import CheckboxProperty from "./PropertyItems/CheckboxProperty";
 import ColorProperty from "./PropertyItems/ColorProperty";
 import SelectProperty from "./PropertyItems/SelectProperty";
 import TextareaProperty from "./PropertyItems/TextareaProperty";
 import TextProperty from "./PropertyItems/TextProperty";
+import LightSwitchProperty from "./PropertyItems/LightSwitchProperty";
 
 export default class Rating extends BasePropertyEditor {
   static contextTypes = {
@@ -67,9 +67,10 @@ export default class Rating extends BasePropertyEditor {
 
         <hr />
 
-        <CheckboxProperty
+        <LightSwitchProperty
           label="This field is required?"
           name="required"
+          bold={true}
           checked={required}
           onChangeHandler={this.update}
         />
@@ -101,7 +102,7 @@ export default class Rating extends BasePropertyEditor {
           value={value ? value : 0}
           onChangeHandler={this.update}
           options={defaultValueOptions}
-          emptyOption="None"
+          emptyOption="--"
           isNumeric={true}
         />
 
