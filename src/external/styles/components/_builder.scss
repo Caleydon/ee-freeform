@@ -148,7 +148,6 @@ $minRowHeight: 60px;
         input[type="tel"],
         input[type="search"],
         button {
-          pointer-events: none;
           background-image: none;
           display: block;
           width: 100%;
@@ -205,7 +204,7 @@ $minRowHeight: 60px;
             height: $spacing;
 
             color: $color-error;
-            font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid', sans-serif;
+            font-family: 'Solspace Font Awesome 6 Pro Regular', 'Solspace Font Awesome 6 Pro Solid', sans-serif;
             font-size: 7px;
             font-weight: bold;
             line-height: $spacing;
@@ -390,7 +389,7 @@ $minRowHeight: 60px;
 
       margin-right: $spacing-short;
 
-      font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid', sans-serif;
+      font-family: 'Solspace Font Awesome 6 Pro Regular', 'Solspace Font Awesome 6 Pro Solid', sans-serif;
     }
   }
 
@@ -407,7 +406,7 @@ $minRowHeight: 60px;
     color: $color-column-label;
 
     &:before {
-      font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid', sans-serif;
+      font-family: 'Solspace Font Awesome 6 Pro Regular', 'Solspace Font Awesome 6 Pro Solid', sans-serif;
       content: "\f070";
     }
   }
@@ -416,26 +415,13 @@ $minRowHeight: 60px;
     color: $color-column-label;
 
     &:before {
-      font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid', sans-serif;
+      font-family: 'Solspace Font Awesome 6 Pro Regular', 'Solspace Font Awesome 6 Pro Solid', sans-serif;
       content: "\f121";
     }
   }
 }
 
-.icon-solspace-multiple_select:before {
-  font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid', sans-serif;
-  content: "\f0c9";
-}
 
-.icon-solspace-password:before {
-  font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid', sans-serif;
-  content: "\f023";
-}
-
-.icon-solspace-recaptcha:before {
-  font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid', sans-serif;
-  content: "\f05e";
-}
 
 .composer-property-item-lightswitch {
   display: grid;

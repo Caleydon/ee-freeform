@@ -45,7 +45,7 @@ $sidebarMinWidth: 18%;
       position: relative;
       top: 1px;
 
-      font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid', sans-serif;
+      font-family: 'Solspace Font Awesome 6 Pro Regular', 'Solspace Font Awesome 6 Pro Solid', sans-serif;
       padding-right: 2px;
     }
 
@@ -91,7 +91,7 @@ $sidebarMinWidth: 18%;
     font-size: $font-size;
 
     &:after {
-      font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid', sans-serif;
+      font-family: 'Solspace Font Awesome 6 Pro Regular', 'Solspace Font Awesome 6 Pro Solid', sans-serif;
       color: $color-action-button;
     }
 
@@ -681,7 +681,6 @@ $sidebarMinWidth: 18%;
     input[type="tel"],
     input[type="search"] {
       width: 100%;
-      pointer-events: none;
       display: block;
       padding: 8px 15px;
       margin: 0;
@@ -774,7 +773,7 @@ $sidebarMinWidth: 18%;
 
   &.success, &.issue {
     &:before {
-      font-family: 'Solspace Font Awesome 5 Regular', 'Solspace Font Awesome 5 Solid', sans-serif;
+      font-family: 'Solspace Font Awesome 6 Pro Regular', 'Solspace Font Awesome 6 Pro Solid', sans-serif;
       padding-right: 5px;
     }
   }

@@ -97,7 +97,6 @@ export default class AdminNotifications extends BasePropertyEditor {
             value={format}
             onChangeHandler={this.update}
             isNumeric={false}
-            emptyOption="--"
             options={formatList}
           />
         ) : ""
