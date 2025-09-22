@@ -12,10 +12,10 @@ import PropTypes from "prop-types";
 import React from "react";
 import * as FieldTypes from "../../constants/FieldTypes";
 import BasePropertyEditor from "./BasePropertyEditor";
-import CheckboxProperty from "./PropertyItems/CheckboxProperty";
 import SelectProperty from "./PropertyItems/SelectProperty";
 import TextareaProperty from "./PropertyItems/TextareaProperty";
 import TextProperty from "./PropertyItems/TextProperty";
+import LightSwitchProperty from "./PropertyItems/LightSwitchProperty";
 
 export default class Datetime extends BasePropertyEditor {
   static contextTypes = {
@@ -64,9 +64,10 @@ export default class Datetime extends BasePropertyEditor {
 
         <hr />
 
-        <CheckboxProperty
+        <LightSwitchProperty
           label="This field is required?"
           name="required"
+          bold={true}
           checked={required}
           onChangeHandler={this.update}
         />
@@ -112,16 +113,18 @@ export default class Datetime extends BasePropertyEditor {
           onChangeHandler={this.update}
         />
 
-        <CheckboxProperty
+        <LightSwitchProperty
           label="Use the Freeform datepicker for this field?"
           name="useDatepicker"
+          bold={true}
           checked={useDatepicker}
           onChangeHandler={this.update}
         />
 
-        <CheckboxProperty
+        <LightSwitchProperty
           label="Generate placeholder from your date format settings?"
           name="generatePlaceholder"
+          bold={true}
           checked={generatePlaceholder}
           onChangeHandler={this.update}
         />
@@ -151,17 +154,19 @@ export default class Datetime extends BasePropertyEditor {
               ]}
             />
 
-            <CheckboxProperty
+            <LightSwitchProperty
               label="Four digit year?"
               name="date4DigitYear"
+              bold={true}
               checked={date4DigitYear}
               onChangeHandler={this.update}
             />
 
-            <CheckboxProperty
+            <LightSwitchProperty
               label="Date leading zero"
               instructions="If enabled, a leading zero will be used for days and months."
               name="dateLeadingZero"
+              bold={true}
               checked={dateLeadingZero}
               onChangeHandler={this.update}
             />
@@ -172,7 +177,7 @@ export default class Datetime extends BasePropertyEditor {
               name="dateSeparator"
               value={dateSeparator}
               onChangeHandler={this.update}
-              emptyOption="None"
+              emptyOption="--"
               options={[
                 { key: " ", value: "Space" },
                 { key: "/", value: "/" },
@@ -185,9 +190,10 @@ export default class Datetime extends BasePropertyEditor {
 
         {showTime && (
           <div>
-            <CheckboxProperty
+            <LightSwitchProperty
               label="24h Clock?"
               name="clock24h"
+              bold={true}
               checked={clock24h}
               onChangeHandler={this.update}
             />
@@ -198,7 +204,7 @@ export default class Datetime extends BasePropertyEditor {
               name="clockSeparator"
               value={clockSeparator}
               onChangeHandler={this.update}
-              emptyOption="None"
+              emptyOption="--"
               options={[
                 { key: " ", value: "Space" },
                 { key: ":", value: ":" },
@@ -208,18 +214,20 @@ export default class Datetime extends BasePropertyEditor {
             />
 
             {!clock24h &&
-            <CheckboxProperty
+            <LightSwitchProperty
               label="Lowercase AM/PM?"
               name="lowercaseAMPM"
+              bold={true}
               checked={lowercaseAMPM}
               onChangeHandler={this.update}
             />
             }
 
             {!clock24h &&
-            <CheckboxProperty
+            <LightSwitchProperty
               label="Separate AM/PM with a space?"
               name="clockAMPMSeparate"
+              bold={true}
               checked={!!clockAMPMSeparate}
               onChangeHandler={this.update}
             />

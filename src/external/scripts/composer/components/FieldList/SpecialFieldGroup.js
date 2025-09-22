@@ -49,6 +49,7 @@ export default class SpecialFieldGroup extends Component {
     return (
       <div className="composer-special-fields">
         <h3>Special Fields</h3>
+        <hr style={{ marginTop: 0, marginBottom: 15 }} />
         <ul>
           {fields.map((field, index) =>
             <Field

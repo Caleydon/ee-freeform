@@ -13,10 +13,10 @@ import { connect } from "react-redux";
 import PropertyHelper from "../../helpers/PropertyHelper";
 import BasePropertyEditor from "./BasePropertyEditor";
 import AddNewNotification from "./Components/AddNewNotification";
-import CheckboxProperty from "./PropertyItems/CheckboxProperty";
 import SelectProperty from "./PropertyItems/SelectProperty";
 import TextareaProperty from "./PropertyItems/TextareaProperty";
 import TextProperty from "./PropertyItems/TextProperty";
+import LightSwitchProperty from "./PropertyItems/LightSwitchProperty";
 
 @connect(
   (state) => ({
@@ -79,9 +79,10 @@ export default class Email extends BasePropertyEditor {
 
         <hr />
 
-        <CheckboxProperty
+        <LightSwitchProperty
           label="This field is required?"
           name="required"
+          bold={true}
           checked={required}
           onChangeHandler={this.update}
         />
@@ -95,7 +96,7 @@ export default class Email extends BasePropertyEditor {
           value={notificationId}
           couldBeNumeric={true}
           onChangeHandler={this.update}
-          emptyOption="Select a template..."
+          emptyOption="--"
           optionGroups={PropertyHelper.getNotificationList(notifications)}
         >
           {canManageNotifications && <AddNewNotification />}
@@ -109,7 +110,6 @@ export default class Email extends BasePropertyEditor {
             value={format}
             onChangeHandler={this.update}
             isNumeric={false}
-            emptyOption="Select a format..."
             options={formatList}
           />
         ) : ""

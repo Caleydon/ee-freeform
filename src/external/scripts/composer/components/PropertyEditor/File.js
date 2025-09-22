@@ -13,10 +13,10 @@ import React from "react";
 import { connect } from "react-redux";
 import BasePropertyEditor from "./BasePropertyEditor";
 import CheckboxListProperty from "./PropertyItems/CheckboxListProperty";
-import CheckboxProperty from "./PropertyItems/CheckboxProperty";
 import SelectProperty from "./PropertyItems/SelectProperty";
 import TextareaProperty from "./PropertyItems/TextareaProperty";
 import TextProperty from "./PropertyItems/TextProperty";
+import LightSwitchProperty from "./PropertyItems/LightSwitchProperty";
 
 @connect(
   (state) => ({
@@ -83,9 +83,10 @@ export default class File extends BasePropertyEditor {
 
         <hr />
 
-        <CheckboxProperty
+        <LightSwitchProperty
           label="This field is required?"
           name="required"
+          bold={true}
           checked={required}
           onChangeHandler={this.update}
         />
@@ -115,7 +116,7 @@ export default class File extends BasePropertyEditor {
           value={assetSourceId}
           onChangeHandler={this.update}
           isNumeric={true}
-          emptyOption="Select an Upload Directory..."
+          emptyOption="--"
           options={assetSourceList}
         />
 

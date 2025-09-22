@@ -11,11 +11,11 @@
 import PropTypes from "prop-types";
 import React from "react";
 import BasePropertyEditor from "./BasePropertyEditor";
-import CheckboxProperty from "./PropertyItems/CheckboxProperty";
 import CustomProperty from "./PropertyItems/CustomProperty";
 import SelectProperty from "./PropertyItems/SelectProperty";
 import TextareaProperty from "./PropertyItems/TextareaProperty";
 import TextProperty from "./PropertyItems/TextProperty";
+import LightSwitchProperty from "./PropertyItems/LightSwitchProperty";
 
 export default class Number extends BasePropertyEditor {
   static contextTypes = {
@@ -73,9 +73,10 @@ export default class Number extends BasePropertyEditor {
 
         <hr />
 
-        <CheckboxProperty
+        <LightSwitchProperty
           label="This field is required?"
           name="required"
+          bold={true}
           checked={required}
           onChangeHandler={this.update}
         />
@@ -118,9 +119,10 @@ export default class Number extends BasePropertyEditor {
 
         <hr />
 
-        <CheckboxProperty
+        <LightSwitchProperty
           label="Allow negative numbers?"
           name="allowNegative"
+          bold={true}
           checked={allowNegative}
           onChangeHandler={this.update}
         />
@@ -186,7 +188,7 @@ export default class Number extends BasePropertyEditor {
           name="thousandsSeparator"
           value={thousandsSeparator}
           onChangeHandler={this.update}
-          emptyOption="None"
+          emptyOption="--"
           options={[
             { key: " ", value: "Space" },
             { key: ",", value: "," },

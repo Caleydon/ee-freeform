@@ -118,7 +118,7 @@ export default class Integrations extends BasePropertyEditor {
           ref="integration"
           value={integrationId ? integrationId : 0}
           isNumeric={true}
-          emptyOption="Choose an integration..."
+          emptyOption="--"
           options={integrationOptions}
           onChangeHandler={this.updateIntegration}
         />
