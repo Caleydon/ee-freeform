@@ -13,7 +13,7 @@ import React from "react";
 import { connect } from "react-redux";
 import BasePropertyEditor from "./BasePropertyEditor";
 import AddNewTemplate from "./Components/AddNewTemplate";
-import CheckboxProperty from "./PropertyItems/CheckboxProperty";
+import LightSwitchProperty from "./PropertyItems/LightSwitchProperty";
 import SelectProperty from "./PropertyItems/SelectProperty";
 import TextareaProperty from "./PropertyItems/TextareaProperty";
 import TextProperty from "./PropertyItems/TextProperty";
@@ -110,8 +110,8 @@ export default class Form extends BasePropertyEditor {
     return (
       <div>
         <TextProperty
-          label="Name"
-          instructions="Name or title of the form."
+          label="Form Name"
+          instructions="Enter a name or title for the form."
           name="name"
           required={true}
           value={name}
@@ -119,7 +119,7 @@ export default class Form extends BasePropertyEditor {
         />
 
         <TextProperty
-          label="Handle"
+          label="Form Handle"
           instructions="How you’ll refer to this form in the templates."
           name="handle"
           required={true}
@@ -136,10 +136,10 @@ export default class Form extends BasePropertyEditor {
           onChangeHandler={this.update}
         />
 
-        <CheckboxProperty
+        <LightSwitchProperty
           label="Store Submitted Data"
           bold={true}
-          instructions="Should the submission data for this form be stored in the database?"
+          instructions="Store submission data for this form in the database."
           name="storeData"
           checked={storeData}
           onChangeHandler={this.update}
@@ -147,11 +147,11 @@ export default class Form extends BasePropertyEditor {
 
         <SelectProperty
           label="Formatting Template"
-          instructions="The formatting template to assign to this form when using Render method (optional)."
+          instructions="The template used when rendering the form (optional)."
           name="formTemplate"
           value={formTemplate}
           onChangeHandler={this.update}
-          emptyOption="Select a template..."
+          emptyOption="--"
           optionGroups={optionGroups}
         >
           {canManageSettings && <AddNewTemplate />}

@@ -19,7 +19,7 @@ export default class AlwaysNearbyBox extends Component {
   };
 
   parentWidth = 0;
-  parentPaddingX = 15;
+  parentPaddingX = 25;
 
   constructor(props, context) {
     super(props, context);

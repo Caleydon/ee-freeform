@@ -21,6 +21,7 @@ import {
   updateValueSet,
 } from "../../../../actions/Actions";
 import OptionRow from "./OptionRow";
+import LightSwitchProperty from "../../PropertyItems/LightSwitchProperty";
 
 @connect(
   (state) => ({
@@ -78,15 +79,12 @@ export default class OptionTable extends Component {
     return (
       <div className="composer-option-table">
         {showCustomValueToggler && (
-          <label className="composer-options-show-custom-values">
-            <input
-              type="checkbox"
-              checked={showCustomValues}
-              name="showCustomValues"
-              onChange={this.toggleCustomValues}
-            />
-            Use custom values
-          </label>
+          <LightSwitchProperty
+            label="Use custom values"
+            name="showCustomValues"
+            checked={showCustomValues}
+            onChangeHandler={this.toggleCustomValues}
+          />
         )}
 
         <table>

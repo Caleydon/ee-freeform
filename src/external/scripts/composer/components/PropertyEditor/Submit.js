@@ -15,8 +15,8 @@ import FieldHelper from "../../helpers/FieldHelper";
 import BasePropertyEditor from "./BasePropertyEditor";
 import DualPositionProperty from "./Components/Submit/DualPositionProperty";
 import PositionProperty from "./Components/Submit/PositionProperty";
-import CheckboxProperty from "./PropertyItems/CheckboxProperty";
 import TextProperty from "./PropertyItems/TextProperty";
+import LightSwitchProperty from "./PropertyItems/LightSwitchProperty";
 
 @connect(
   state => ({
@@ -77,9 +77,10 @@ export default class Submit extends BasePropertyEditor {
         />
 
         {!isFirstPage &&
-        <CheckboxProperty
+        <LightSwitchProperty
           label="Disable the Previous button"
           name="disablePrev"
+          bold={true}
           checked={disablePrev}
           onChangeHandler={this.update}
         />

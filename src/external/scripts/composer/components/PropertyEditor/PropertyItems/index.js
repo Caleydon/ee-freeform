@@ -7,3 +7,4 @@ export { default as RadioProperty } from "./RadioProperty";
 export { default as SelectProperty } from "./SelectProperty";
 export { default as TextareaProperty } from "./TextareaProperty";
 export { default as TextProperty } from "./TextProperty";
+export { default as LightSwitchProperty } from "./LightSwitchProperty";

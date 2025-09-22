@@ -13,10 +13,10 @@ import React from "react";
 import { connect } from "react-redux";
 import * as FieldTypes from "../../constants/FieldTypes";
 import BasePropertyEditor from "./BasePropertyEditor";
-import CheckboxProperty from "./PropertyItems/CheckboxProperty";
 import SelectProperty from "./PropertyItems/SelectProperty";
 import TextareaProperty from "./PropertyItems/TextareaProperty";
 import TextProperty from "./PropertyItems/TextProperty";
+import LightSwitchProperty from "./PropertyItems/LightSwitchProperty";
 
 @connect(
   (state) => ({
@@ -76,9 +76,10 @@ export default class Confirmation extends BasePropertyEditor {
 
         <hr />
 
-        <CheckboxProperty
+        <LightSwitchProperty
           label="This field is required?"
           name="required"
+          bold={true}
           checked={required}
           onChangeHandler={this.update}
         />
@@ -127,7 +128,7 @@ export default class Confirmation extends BasePropertyEditor {
           name="targetFieldHash"
           onChangeHandler={this.update}
           value={targetFieldHash}
-          emptyOption="Select a field..."
+          emptyOption="--"
           options={allowedFields}
         />
       </div>

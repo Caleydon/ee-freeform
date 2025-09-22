@@ -43,7 +43,7 @@ export default class BasePropertyItem extends Component {
           <label className={required ? "required" : ""}>{label}</label>
           {instructions &&
           <div className="composer-property-instructions">
-            <p>{instructions}</p>
+            {instructions}
           </div>
           }
         </div>
