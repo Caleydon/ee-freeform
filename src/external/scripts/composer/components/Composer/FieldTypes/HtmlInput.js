@@ -48,6 +48,8 @@ export default class HtmlInput extends Component {
   constructor(props, context) {
     super(props, context);
 
+    this.htmlFor = '';
+
     this.getBadges = this.getBadges.bind(this);
     this.getWrapperClassNames = this.getWrapperClassNames.bind(this);
     this.prepareWrapperClass = this.prepareWrapperClass.bind(this);
@@ -83,11 +85,15 @@ export default class HtmlInput extends Component {
   }
 
   render() {
-    const { properties: { type, required, instructions } } = this.props;
-
+    const { properties: { id, handle, type, required, instructions } } = this.props;
+    if (!id) {
+      this.htmlFor = `${Math.random().toString(36).substring(2, 7)}_${handle}`
+    } else {
+      this.htmlFor = `${id}_${handle}`;
+    }
     return (
       <div className={this.prepareWrapperClass()}>
-        <Label label={this.getLabel()} type={type} isRequired={required}>{this.getBadges()}</Label>
+        <Label htmlFor={this.htmlFor} label={this.getLabel()} type={type} isRequired={required}>{this.getBadges()}</Label>
         <Instructions instructions={instructions} />
         <div className="input-wrapper">
           {this.renderInput()}
@@ -98,7 +104,7 @@ export default class HtmlInput extends Component {
 
   renderInput() {
     return (
-      <input readOnly={true} className={this.prepareInputClass()}
+      <input id={this.htmlFor} readOnly={true} className={this.prepareInputClass()}
              type={this.getType()}
              {...this.getCleanProperties()}
       />

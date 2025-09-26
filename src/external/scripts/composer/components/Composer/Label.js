@@ -21,7 +21,7 @@ export default class Label extends Component {
     const { fieldId, label } = this.props;
 
     return (
-      <label for={"composer-input-" + fieldId}>
+      <label htmlFor={"composer-input-" + fieldId}>
         {label}
       </label>
     );

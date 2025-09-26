@@ -73,7 +73,7 @@ export default class DynamicRecipients extends HtmlInput {
 
   renderAsSelect() {
     const { properties } = this.props;
-    const { options, values = [] } = properties;
+    const { id, handle, options, values = [] } = properties;
     const firstValue = values && values.length > 0 ? values[0] : "";
 
     let selectOptions = [];
@@ -94,7 +94,7 @@ export default class DynamicRecipients extends HtmlInput {
 
     return (
       <div className="select">
-        <select readOnly={true} disabled={true} value={firstValue}>
+        <select id={`${id}_${handle}`} readOnly={true} disabled={true} value={firstValue}>
           {selectOptions}
         </select>
       </div>
