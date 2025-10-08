@@ -132,6 +132,10 @@ $minRowHeight: 60px;
           background: $color-droppable;
         }
 
+        input, textarea, select, button {
+          pointer-events: none;
+        }
+
         input[type="color"],
         input[type="file"],
         input[type="month"],
@@ -164,6 +168,7 @@ $minRowHeight: 60px;
         }
 
         select {
+          display: block;
           margin: 0;
           width: 100%;
           font-size: 1rem;
@@ -179,6 +184,7 @@ $minRowHeight: 60px;
 
         textarea {
           margin: 0;
+          display: block;
           -webkit-appearance: none;
           color: var(--ee-input-color);
           background-color: var(--ee-input-bg);
@@ -224,13 +230,11 @@ $minRowHeight: 60px;
         .composer-column-instructions {
           position: relative;
           margin: 0 !important;
-         // margin-top: -5px;
           line-height: 1.4;
           color: var(--ee-text-secondary);
           display: block;
           font-size: 0.8rem;
           font-style: normal;
-          //margin-bottom: 10px;
         }
 
         label {
@@ -238,8 +242,6 @@ $minRowHeight: 60px;
           align-items: center;
           justify-content: flex-start;
           margin: 0;
-          //margin-bottom: 10px;
-          //font-size: 0.8rem;
           font-weight: 500;
           color: var(--ee-text-normal);
 
