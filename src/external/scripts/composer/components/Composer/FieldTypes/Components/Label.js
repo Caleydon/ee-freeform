@@ -20,7 +20,7 @@ export default class Label extends Component {
   };
 
   render() {
-    const { label, isRequired, type } = this.props;
+    const { htmlFor, label, isRequired, type } = this.props;
 
     const labelClass = ["composer-field-label"];
     if (isRequired) {
@@ -32,7 +32,7 @@ export default class Label extends Component {
     }
 
     return (
-      <label className={labelClass.join(" ")}>
+      <label htmlFor={htmlFor} className={labelClass.join(" ")}>
         <span dangerouslySetInnerHTML={{ __html: label }} /> {type === HIDDEN ? " (Hidden field)" : ""}
         {label && isRequired ? <span className="required" /> : ""}
         {this.props.children}

@@ -53,7 +53,7 @@ export default class Datetime extends Text {
   }
 
   renderInput() {
-    const { properties: { generatePlaceholder } } = this.props;
+    const { properties: { id, handle, generatePlaceholder } } = this.props;
 
     let cleanProps = this.getCleanProperties();
 
@@ -63,6 +63,7 @@ export default class Datetime extends Text {
 
     return (
       <input
+        id={`${id}_${handle}`}
         readOnly={true}
         className={this.prepareInputClass()}
         type={this.getType()}

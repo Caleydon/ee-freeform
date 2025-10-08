@@ -156,10 +156,6 @@ $sidebarMinWidth: 18%;
       &.builder {
         border-left: 1px solid var(--ee-border);
         border-right: 1px solid var(--ee-border);
-
-        > div {
-          // padding: 0 0 ($spacing * 6);
-        }
       }
     }
 
@@ -291,7 +287,6 @@ $sidebarMinWidth: 18%;
     box-sizing: content-box;
 
     h3 {
-      //padding: 0 20px;
       letter-spacing: 1px;
       font-size: 85% !important;
       text-transform: uppercase;
@@ -307,16 +302,13 @@ $sidebarMinWidth: 18%;
         li {
           display: block;
           margin: 0 0 $spacing-short;
-          //padding: $spacing-short $spacing;
           padding: 6px $spacing;
 
           cursor: move;
 
-          //background: $color-white;
           border: 1px solid var(--ee-input-border);
           border-radius: 5px;
           box-shadow: 0 1px 2px 0 var(--ee-shadow-input);
-          //background-color: var(--ee-input-bg);
           background-image: none;
 
           color: var(--ee-sidebar-text);
@@ -355,8 +347,6 @@ $sidebarMinWidth: 18%;
   background: #fbfbfd;
   flex: $propertyEditorFlex;
   border-bottom-right-radius: 5px;
-
-  //overflow: hidden;
 
   .composer-form-settings {
     gap: 10px;
@@ -582,7 +572,7 @@ $sidebarMinWidth: 18%;
 }
 
 .composer-property-item {
-  margin: 16px 0;
+  margin: 16px 2px;
 
   .composer-property-heading {
     gap: 5px;
@@ -592,14 +582,12 @@ $sidebarMinWidth: 18%;
 
     > label {
       position: relative;
-      //font-size: 0.8rem;
       font-weight: 500;
       color: var(--ee-text-normal);
       margin: 0 !important;
     }
 
     .composer-property-instructions {
-      //margin-top: 4px;
       margin: 0 !important;
       font-size: 0.8rem;
       line-height: 1.4;
@@ -697,9 +685,16 @@ $sidebarMinWidth: 18%;
       line-height: 1.6;
       color: var(--ee-input-color);
       -webkit-appearance: none;
+
+      &:focus {
+        border-color: var(--ee-input-focus-border);
+        outline: none;
+        box-shadow: 0 0 0 2px var(--ee-accent-medium);
+      }
     }
 
     select {
+      display: block;
       margin: 0;
       width: 100%;
       font-size: 1rem;
@@ -714,6 +709,7 @@ $sidebarMinWidth: 18%;
     }
 
     textarea {
+      display: block;
       margin: 0;
       -webkit-appearance: none;
       color: var(--ee-input-color);
@@ -730,6 +726,12 @@ $sidebarMinWidth: 18%;
       min-height: unset;
       resize: unset;
       background-image: none;
+
+      &:focus {
+        border-color: var(--ee-input-focus-border);
+        outline: none;
+        box-shadow: 0 0 0 2px var(--ee-accent-medium);
+      }
     }
   }
 

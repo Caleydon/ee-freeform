@@ -47,7 +47,7 @@ export default class Select extends HtmlInput {
 
   renderInput() {
     const { properties, generatedOptions, isFetchingOptions } = this.props;
-    const { options = [], source, hash } = properties;
+    const { id, handle, options = [], source, hash } = properties;
 
     if (isFetchingOptions && this.cachedOptions) {
       return this.cachedOptions;
@@ -64,6 +64,7 @@ export default class Select extends HtmlInput {
       return (
         <div className="select">
           <select
+            id={`${id}_${handle}`}
             className={this.prepareInputClass()}
             readOnly={true}
             disabled={true}
@@ -89,6 +90,7 @@ export default class Select extends HtmlInput {
     const field = (
       <div className="select">
         <select
+          id={`${id}_${handle}`}
           className={this.prepareInputClass()}
           readOnly={true}
           disabled={true}

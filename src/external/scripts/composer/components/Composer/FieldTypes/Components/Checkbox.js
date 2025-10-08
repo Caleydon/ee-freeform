@@ -26,8 +26,9 @@ export default class Checkbox extends HtmlInput {
   }
 
   render() {
-    const { label, isChecked, value, isRequired } = this.props;
-
+    const { properties, label, isChecked, value, isRequired } = this.props;
+    const { id, handle } = properties;
+    const htmlFor = String(`${id}_${value}_${handle}`).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-_]/g, '');
     const labelClass = ["composer-field-checkbox-single"];
     if (isRequired) {
       labelClass.push("composer-field-required");
@@ -35,8 +36,9 @@ export default class Checkbox extends HtmlInput {
 
     return (
       <div>
-        <label className={labelClass.join(" ")}>
+        <label htmlFor={htmlFor} className={labelClass.join(" ")}>
           <input
+            id={htmlFor}
             className="composer-ft-checkbox"
             type={this.getType()}
             value={value}

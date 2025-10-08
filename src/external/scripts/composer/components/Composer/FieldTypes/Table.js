@@ -18,10 +18,10 @@ export default class Table extends HtmlInput {
   }
 
   renderTable() {
-    const { properties: { layout } } = this.props;
+    const { properties: { id, handle, layout } } = this.props;
 
     if (!layout || !layout.length) {
-      return <table>
+      return <table id={`${id}_${handle}`}>
         <thead>
         <tr>
           <th>Empty Table</th>
@@ -36,7 +36,7 @@ export default class Table extends HtmlInput {
     }
 
     return (
-      <table>
+      <table id={`${id}_${handle}`} >
         <thead>
         <tr>
           {layout.map(({ label }, i) => (

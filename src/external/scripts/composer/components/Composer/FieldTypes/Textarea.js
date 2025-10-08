@@ -17,10 +17,11 @@ export default class Textarea extends Text {
   }
 
   renderInput() {
-    const { value, rows } = this.props.properties;
+    const { id, handle, value, rows } = this.props.properties;
 
     return (
       <textarea
+        id={`${id}_${handle}`}
         readOnly={true}
         disabled={true}
         rows={rows ? rows : 2}
