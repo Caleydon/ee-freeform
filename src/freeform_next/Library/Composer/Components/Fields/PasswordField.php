@@ -30,11 +30,9 @@ class PasswordField extends TextField implements NoStorageInterface
      *
      * @return string
      */
-    public function getInputHtml()
+    public function getInputHtml(): string
     {
         $output = parent::getInputHtml();
-        $output = str_replace('type="text"', 'type="password"', $output);
-
-        return $output;
+        return str_replace('type="text"', 'type="password"', $output);
     }
 }

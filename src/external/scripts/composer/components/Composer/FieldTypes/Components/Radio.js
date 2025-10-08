@@ -25,12 +25,15 @@ export default class Radio extends HtmlInput {
   }
 
   render() {
-    const { label, isChecked, value } = this.props;
+    const { properties, label, isChecked, value } = this.props;
+    const { id, handle } = properties;
+    const htmlFor = String(`${id}_${value}_${handle}`).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-_]/g, '');
 
     return (
       <div>
-        <label>
+        <label htmlFor={htmlFor}>
           <input className="composer-ft-radio"
+                 id={htmlFor}
                  type={this.getType()}
                  value={value}
                  readOnly={true}
