@@ -11,6 +11,7 @@
 
 namespace Solspace\Addons\FreeformNext\Library\Session;
 
+use DateTime;
 class DbSession implements SessionInterface
 {
     /**
@@ -50,7 +51,7 @@ class DbSession implements SessionInterface
     {
         $valueExists = $this->getQueryInstance($key)->num_rows() > 0;
         $sessionId   = $this->getSessionId();
-        $date        = (new \DateTime())->format('Y-m-d H:i:s');
+        $date        = (new DateTime())->format('Y-m-d H:i:s');
 
         if ($valueExists) {
             ee()->db

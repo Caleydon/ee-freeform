@@ -33,8 +33,6 @@ class ControlPanelView
     }
 
     /**
-     * @param View $view
-     *
      * @return array
      */
     protected final function renderView(View $view)

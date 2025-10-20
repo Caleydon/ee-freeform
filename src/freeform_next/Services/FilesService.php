@@ -11,6 +11,7 @@
 
 namespace Solspace\Addons\FreeformNext\Services;
 
+use DateTime;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\FileUploadField;
 use Solspace\Addons\FreeformNext\Library\FileUploads\FileUploadHandlerInterface;
 use Solspace\Addons\FreeformNext\Library\FileUploads\FileUploadResponse;
@@ -19,7 +20,7 @@ use Solspace\Addons\FreeformNext\Repositories\FileRepository;
 
 class FilesService implements FileUploadHandlerInterface
 {
-    private static $fileKinds;
+    private static ?array $fileKinds = null;
 
     /**
      * @param FileUploadField $field
@@ -60,7 +61,7 @@ class FilesService implements FileUploadHandlerInterface
             $error   = $_FILES[$field->getHandle()]['error'][$index];
             $size    = $_FILES[$field->getHandle()]['size'][$index];
 
-            $identificator = sha1(uniqid(time() . rand(1, 9999), true) . $tmpName);
+            $identificator = sha1(uniqid(time() . random_int(1, 9999), true) . $tmpName);
 
             $_FILES[$identificator]['name']     = $name;
             $_FILES[$identificator]['type']     = $type;
@@ -110,7 +111,7 @@ class FilesService implements FileUploadHandlerInterface
      */
     public function markAssetUnfinalized($assetId)
     {
-        $date = new \DateTime();
+        $date = new DateTime();
 
         ee()->db
             ->insert(
@@ -129,7 +130,7 @@ class FilesService implements FileUploadHandlerInterface
      */
     public function cleanUpUnfinalizedAssets()
     {
-        $date = new \DateTime('-180 minutes');
+        $date = new DateTime('-180 minutes');
 
         $results = ee()->db
             ->select('id, assetId')

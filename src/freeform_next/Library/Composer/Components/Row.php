@@ -11,24 +11,21 @@
 
 namespace Solspace\Addons\FreeformNext\Library\Composer\Components;
 
+use JsonSerializable;
+use Iterator;
+use ArrayAccess;
+use Countable;
+use ReturnTypeWillChange;
 use Solspace\Addons\FreeformNext\Library\Exceptions\FreeformException;
 
-class Row implements \JsonSerializable, \Iterator, \ArrayAccess, \Countable
+class Row implements JsonSerializable, Iterator, ArrayAccess, Countable
 {
-    /** @var string */
-    private $id;
-
-    /** @var AbstractField[] */
-    private $fields;
-
     /**
      * @param string $id
-     * @param array  $fields
+     * @param AbstractField[] $fields
      */
-    public function __construct($id, array $fields)
+    public function __construct(private $id, private array $fields)
     {
-        $this->id     = $id;
-        $this->fields = $fields;
     }
 
     /**
@@ -49,7 +46,7 @@ class Row implements \JsonSerializable, \Iterator, \ArrayAccess, \Countable
      *
      * @return mixed
      */
-	#[\ReturnTypeWillChange]
+	#[ReturnTypeWillChange]
 	public function current()
     {
         return current($this->fields);
@@ -60,7 +57,7 @@ class Row implements \JsonSerializable, \Iterator, \ArrayAccess, \Countable
      *
      * @return void
      */
-	#[\ReturnTypeWillChange]
+	#[ReturnTypeWillChange]
     public function next()
     {
         next($this->fields);
@@ -71,7 +68,7 @@ class Row implements \JsonSerializable, \Iterator, \ArrayAccess, \Countable
 	 *
 	 * @return int|null
 	 */
-	#[\ReturnTypeWillChange]
+	#[ReturnTypeWillChange]
 	public function key()
     {
         return key($this->fields);
@@ -92,7 +89,7 @@ class Row implements \JsonSerializable, \Iterator, \ArrayAccess, \Countable
      *
      * @return void
      */
-	#[\ReturnTypeWillChange]
+	#[ReturnTypeWillChange]
     public function rewind()
     {
         reset($this->fields);
@@ -119,7 +116,7 @@ class Row implements \JsonSerializable, \Iterator, \ArrayAccess, \Countable
     /**
      * @inheritDoc
      */
-	#[\ReturnTypeWillChange]
+	#[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->offsetExists($offset) ? $this->fields[$offset] : null;
@@ -128,7 +125,7 @@ class Row implements \JsonSerializable, \Iterator, \ArrayAccess, \Countable
     /**
      * @inheritDoc
      */
-	#[\ReturnTypeWillChange]
+	#[ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         throw new FreeformException("Form Page Row ArrayAccess does not allow unsetting values");
@@ -137,7 +134,7 @@ class Row implements \JsonSerializable, \Iterator, \ArrayAccess, \Countable
     /**
      * @inheritDoc
      */
-	#[\ReturnTypeWillChange]
+	#[ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         throw new FreeformException("Form Page Row ArrayAccess does not allow unsetting values");

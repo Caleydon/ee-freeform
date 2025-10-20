@@ -15,11 +15,10 @@ use Hashids\Hashids;
 
 class HashHelper
 {
-    const SALT       = "composer";
-    const MIN_LENGTH = 9;
+    public const SALT       = "composer";
+    public const MIN_LENGTH = 9;
 
-    /** @var Hashids */
-    private static $hashids;
+    private static ?Hashids $hashids = null;
 
     /**
      * @param int $id
@@ -54,13 +53,11 @@ class HashHelper
     }
 
     /**
-     * @param mixed $value
      * @param int   $length
      * @param int   $offset
-     *
      * @return string
      */
-    public static function sha1($value, $length = null, $offset = 0)
+    public static function sha1(mixed $value, $length = null, $offset = 0)
     {
         $hash = sha1($value);
 

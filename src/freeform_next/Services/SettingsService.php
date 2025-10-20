@@ -2,6 +2,8 @@
 
 namespace Solspace\Addons\FreeformNext\Services;
 
+use DirectoryIterator;
+use DateTime;
 use Solspace\Addons\FreeformNext\Library\DataObjects\FormTemplate;
 use Solspace\Addons\FreeformNext\Library\Session\DbSession;
 use Solspace\Addons\FreeformNext\Library\Session\EESession;
@@ -54,7 +56,7 @@ class SettingsService
         }
 
         $files = [];
-        $dir = new \DirectoryIterator($templateDirectoryPath);
+        $dir = new DirectoryIterator($templateDirectoryPath);
         foreach ($dir as $fileInfo) {
             if (!$fileInfo->isDot() && !$fileInfo->isDir() && $fileInfo->getFilename() !== '.htaccess') {
                 $files[] = new FormTemplate($templateDirectoryPath . '/' . $fileInfo->getFilename());
@@ -138,7 +140,7 @@ class SettingsService
      */
     public function cleanUpDatabaseSessionData()
     {
-        $date = new \DateTime('-180 minutes');
+        $date = new DateTime('-180 minutes');
 
         ee()->db
             ->delete(

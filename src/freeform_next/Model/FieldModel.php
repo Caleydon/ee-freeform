@@ -11,6 +11,10 @@
 
 namespace Solspace\Addons\FreeformNext\Model;
 
+use DateTime;
+use JsonSerializable;
+use stdClass;
+use Exception;
 use EllisLab\ExpressionEngine\Service\Model\Model;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\FieldInterface;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\FileUploadField;
@@ -37,14 +41,14 @@ use Solspace\Addons\FreeformNext\Services\FieldsService;
  * @property int       $rows
  * @property array     $fileKinds
  * @property int       $maxFileSizeKB
- * @property \DateTime $dateCreated
- * @property \DateTime $dateUpdated
+ * @property DateTime $dateCreated
+ * @property DateTime $dateUpdated
  * @property array     $additionalProperties
  */
-class FieldModel extends Model implements \JsonSerializable
+class FieldModel extends Model implements JsonSerializable
 {
-    const MODEL = 'freeform_next:FieldModel';
-    const TABLE = 'freeform_next_fields';
+    public const MODEL = 'freeform_next:FieldModel';
+    public const TABLE = 'freeform_next_fields';
 
     protected static $_primary_key = 'id';
     protected static $_table_name  = self::TABLE;
@@ -277,7 +281,6 @@ class FieldModel extends Model implements \JsonSerializable
     }
 
     /**
-     * @param array $postValues
      * @param bool  $forceLabelToValue
      */
     public function setPostValues(array $postValues, $forceLabelToValue = false)
@@ -324,7 +327,7 @@ class FieldModel extends Model implements \JsonSerializable
                 }
             }
 
-            $item        = new \stdClass();
+            $item        = new stdClass();
             $item->value = $fieldValue;
             $item->label = $fieldLabel;
 
@@ -382,16 +385,10 @@ class FieldModel extends Model implements \JsonSerializable
     {
         $columnType = 'TEXT';
 
-        switch ($this->type) {
-            case FieldInterface::TYPE_FILE:
-            case FieldInterface::TYPE_CHECKBOX_GROUP:
-            case FieldInterface::TYPE_EMAIL:
-            case FieldInterface::TYPE_TEXTAREA:
-            case FieldInterface::TYPE_TABLE:
-                $columnType = 'TEXT';
-
-                break;
-        }
+        $columnType = match ($this->type) {
+            FieldInterface::TYPE_FILE, FieldInterface::TYPE_CHECKBOX_GROUP, FieldInterface::TYPE_EMAIL, FieldInterface::TYPE_TEXTAREA, FieldInterface::TYPE_TABLE => 'TEXT',
+            default => $columnType,
+        };
 
         return $columnType;
     }
@@ -401,25 +398,18 @@ class FieldModel extends Model implements \JsonSerializable
      */
     public function isSerializable()
     {
-        switch ($this->type) {
-            case FieldInterface::TYPE_FILE:
-            case FieldInterface::TYPE_CHECKBOX_GROUP:
-            case FieldInterface::TYPE_DYNAMIC_RECIPIENTS:
-            case FieldInterface::TYPE_EMAIL:
-            case FieldInterface::TYPE_TABLE:
-                return true;
-        }
-
-        return false;
+        return match ($this->type) {
+            FieldInterface::TYPE_FILE, FieldInterface::TYPE_CHECKBOX_GROUP, FieldInterface::TYPE_DYNAMIC_RECIPIENTS, FieldInterface::TYPE_EMAIL, FieldInterface::TYPE_TABLE => true,
+            default => false,
+        };
     }
 
     /**
      * @param string $name
-     * @param mixed  $defaultValue
      *
      * @return mixed|null
      */
-    public function getAdditionalProperty($name, $defaultValue = null)
+    public function getAdditionalProperty($name, mixed $defaultValue = null)
     {
         if (is_array($this->additionalProperties) && isset($this->additionalProperties[$name])) {
             $value = $this->additionalProperties[$name];
@@ -436,11 +426,10 @@ class FieldModel extends Model implements \JsonSerializable
 
     /**
      * @param string $name
-     * @param mixed  $value
      *
      * @return $this
      */
-    public function setAdditionalProperty($name, $value)
+    public function setAdditionalProperty($name, mixed $value)
     {
         $props = $this->additionalProperties ?: [];
 
@@ -465,7 +454,7 @@ class FieldModel extends Model implements \JsonSerializable
 
         try {
             ee()->db->query("ALTER TABLE exp_freeform_next_submissions ADD COLUMN $columnName $type NULL DEFAULT NULL");
-        } catch (\Exception $e) {
+        } catch (Exception) {
         }
     }
 
@@ -478,7 +467,7 @@ class FieldModel extends Model implements \JsonSerializable
 
         try {
             ee()->db->query("ALTER TABLE exp_freeform_next_submissions DROP COLUMN $columnName");
-        } catch (\Exception $e) {
+        } catch (Exception) {
         }
 
         static $fieldsService;
@@ -512,7 +501,7 @@ class FieldModel extends Model implements \JsonSerializable
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     private function getTimestampableDate()
     {
@@ -529,11 +518,10 @@ class FieldModel extends Model implements \JsonSerializable
 
     /**
      * @param string $name
-     * @param mixed  $value
      *
      * @return mixed
      */
-    private function getCleanedPropertyValue($name, $value)
+    private function getCleanedPropertyValue($name, mixed $value)
     {
         static $customTypes = [
             'generatePlaceholder' => 'bool',

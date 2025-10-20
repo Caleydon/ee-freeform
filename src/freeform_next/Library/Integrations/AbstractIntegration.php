@@ -11,6 +11,8 @@
 
 namespace Solspace\Addons\FreeformNext\Library\Integrations;
 
+use DateTime;
+use ReflectionClass;
 use Solspace\Addons\FreeformNext\Library\Configuration\ConfigurationInterface;
 use Solspace\Addons\FreeformNext\Library\Database\IntegrationHandlerInterface;
 use Solspace\Addons\FreeformNext\Library\Exceptions\Integrations\IntegrationException;
@@ -20,38 +22,9 @@ use Solspace\Addons\FreeformNext\Library\Translations\TranslatorInterface;
 
 abstract class AbstractIntegration implements IntegrationInterface
 {
-    /** @var int */
-    private $id;
+    private ?bool $accessTokenUpdated = null;
 
-    /** @var string */
-    private $name;
-
-    /** @var \DateTime */
-    private $lastUpdate;
-
-    /** @var string */
-    private $accessToken;
-
-    /** @var bool */
-    private $accessTokenUpdated;
-
-    /** @var array */
-    private $settings;
-
-    /** @var ConfigurationInterface */
-    private $configuration;
-
-    /** @var LoggerInterface */
-    private $logger;
-
-    /** @var bool */
-    private $forceUpdate;
-
-    /** @var TranslatorInterface */
-    private $translator;
-
-    /** @var IntegrationHandlerInterface */
-    private $handler;
+    private ?bool $forceUpdate = null;
 
     /**
      * Returns a list of additional settings for this integration
@@ -67,33 +40,11 @@ abstract class AbstractIntegration implements IntegrationInterface
     /**
      * @param int                    $id
      * @param string                 $name
-     * @param \DateTime              $lastUpdate
      * @param string                 $accessToken
      * @param array|null             $settings
-     * @param LoggerInterface        $logger
-     * @param ConfigurationInterface $configuration
-     * @param TranslatorInterface    $translator
      */
-    public function __construct(
-        $id,
-        $name,
-        \DateTime $lastUpdate,
-        $accessToken,
-        $settings,
-        LoggerInterface $logger,
-        ConfigurationInterface $configuration,
-        TranslatorInterface $translator,
-        IntegrationHandlerInterface $handler
-    ) {
-        $this->id            = $id;
-        $this->name          = $name;
-        $this->lastUpdate    = $lastUpdate;
-        $this->accessToken   = $accessToken;
-        $this->settings      = $settings;
-        $this->logger        = $logger;
-        $this->configuration = $configuration;
-        $this->translator    = $translator;
-        $this->handler       = $handler;
+    public function __construct(private $id, private $name, private DateTime $lastUpdate, private $accessToken, private $settings, private LoggerInterface $logger, private ConfigurationInterface $configuration, private TranslatorInterface $translator, private IntegrationHandlerInterface $handler)
+    {
     }
 
     /**
@@ -120,7 +71,7 @@ abstract class AbstractIntegration implements IntegrationInterface
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastUpdate()
     {
@@ -153,7 +104,7 @@ abstract class AbstractIntegration implements IntegrationInterface
      */
     public function getServiceProvider()
     {
-        $reflection = new \ReflectionClass($this);
+        $reflection = new ReflectionClass($this);
 
         return $reflection->getShortName();
     }
@@ -174,8 +125,6 @@ abstract class AbstractIntegration implements IntegrationInterface
 
     /**
      * Perform anything necessary before this integration is saved
-     *
-     * @param IntegrationStorageInterface $model
      */
     public function onBeforeSave(IntegrationStorageInterface $model)
     {
@@ -218,9 +167,7 @@ abstract class AbstractIntegration implements IntegrationInterface
     }
 
     /**
-     * @param FieldObject $fieldObject
      * @param mixed|null  $value
-     *
      * @return bool|string
      */
     public function convertCustomFieldValue(FieldObject $fieldObject, $value = null)
@@ -340,11 +287,10 @@ abstract class AbstractIntegration implements IntegrationInterface
 
     /**
      * @param string $handle
-     * @param mixed  $value
      *
      * @return $this
      */
-    final protected function setSetting($handle, $value)
+    final protected function setSetting($handle, mixed $value)
     {
         // Check for blueprint validity
         $this->getSettingBlueprint($handle);

@@ -25,11 +25,9 @@ abstract class AddonUpdater
      */
     public $version;
 
-    /** @var bool */
-    private $hasBackend = true;
+    private bool $hasBackend = true;
 
-    /** @var bool */
-    private $hasPublishFields = false;
+    private bool $hasPublishFields = false;
 
     /**
      * AddonUpdater constructor.

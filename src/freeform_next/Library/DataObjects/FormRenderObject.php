@@ -6,20 +6,14 @@ use Solspace\Addons\FreeformNext\Library\Composer\Components\Form;
 
 class FormRenderObject
 {
-    /** @var Form */
-    private $form;
-
     /** @var string[] */
-    private $outputChunks;
+    private array $outputChunks;
 
     /**
      * FormRenderEvent constructor.
-     *
-     * @param Form $form
      */
-    public function __construct(Form $form)
+    public function __construct(private Form $form)
     {
-        $this->form         = $form;
         $this->outputChunks = [];
     }
 

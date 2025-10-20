@@ -11,6 +11,7 @@
 
 namespace Solspace\Addons\FreeformNext\Library\Migrations\Helpers;
 
+use stdClass;
 use Solspace\Addons\Freeform\Library\AddonBuilder;
 use EllisLab\ExpressionEngine\Library\CP\Table;
 use Solspace\Addons\FreeformNext\Repositories\FormRepository;
@@ -170,14 +171,14 @@ class ClassicSubmissionHelper extends AddonBuilder
      * @return	array array of visible columns
      */
 
-    protected function visible_columns($standard_columns = array(),
-                                       $possible_columns = array())
+    protected function visible_columns($standard_columns = [],
+                                       $possible_columns = [])
     {
         // -------------------------------------
         //	get column settings
         // -------------------------------------
 
-        $column_settings	= array();
+        $column_settings	= [];
 
 
 
@@ -192,9 +193,7 @@ class ClassicSubmissionHelper extends AddonBuilder
             //$field_layout_prefs = json_decode($field_layout_prefs, TRUE);
 
             $entry_layout_prefs = (
-            isset($field_layout_prefs['entry_layout_prefs']) ?
-                $field_layout_prefs['entry_layout_prefs'] :
-                FALSE
+            $field_layout_prefs['entry_layout_prefs'] ?? FALSE
             );
 
             if ($entry_layout_prefs)
@@ -223,7 +222,7 @@ class ClassicSubmissionHelper extends AddonBuilder
         //hose everything, but who knows? ;)
         if ( ! empty($column_settings))
         {
-            $to_sort = array();
+            $to_sort = [];
 
             //we are going over possible instead of settings in case something
             //is new or an old column is missing
@@ -287,7 +286,7 @@ class ClassicSubmissionHelper extends AddonBuilder
 
             //in theory it should always be there if prefs are empty ...
 
-            $default_hide = array('site_id', 'entry_id', 'complete');
+            $default_hide = ['site_id', 'entry_id', 'complete'];
 
             foreach ($default_hide as $hide_me_seymour)
             {
@@ -305,7 +304,7 @@ class ClassicSubmissionHelper extends AddonBuilder
             }
 
             //fix keys, but preserve order
-            $visible_columns = array_merge(array(), $visible_columns);
+            $visible_columns = array_merge([], $visible_columns);
         }
 
         return $visible_columns;
@@ -319,7 +318,7 @@ class ClassicSubmissionHelper extends AddonBuilder
      * @return	string			unit time formatted to cp date formatting pref
      */
 
-    public function format_cp_date($date)
+    public function format_cp_date(mixed $date)
     {
         return $this->lib('Utils')->format_cp_date($date);
     }
@@ -336,14 +335,14 @@ class ClassicSubmissionHelper extends AddonBuilder
      * @return	string						html view for field in form
      */
 
-    protected function setup_select_fields($available_fields, $order = array())
+    protected function setup_select_fields($available_fields, $order = [])
     {
         //---------------------------------------------
         //  Dependencies
         //---------------------------------------------
 
         $multiple	= true;
-        $channels	= array();
+        $channels	= [];
         $field_name = 'form_fields';
         $settings   = '';
         $selected	= $order;
@@ -351,16 +350,12 @@ class ClassicSubmissionHelper extends AddonBuilder
         //because the related field is weird like that
         $related	= count($order) ?
             array_combine($order, array_fill(0, count($order), '')) :
-            array();
-        $entries	= array();
+            [];
+        $entries	= [];
 
         sort($selected);
 
-        ee()->cp->add_js_script(array(
-            'plugin'	=> 'ee_interact.event',
-            'file'		=> 'fields/relationship/cp',
-            'ui'		=> 'sortable'
-        ));
+        ee()->cp->add_js_script(['plugin'	=> 'ee_interact.event', 'file'		=> 'fields/relationship/cp', 'ui'		=> 'sortable']);
 
         // -------------------------------------
         //	fields ('entries')
@@ -370,8 +365,8 @@ class ClassicSubmissionHelper extends AddonBuilder
         {
             foreach ($available_fields as $field_id => $field_label)
             {
-                $new					= new \stdClass();
-                $channel				= new \stdClass();
+                $new					= new stdClass();
+                $channel				= new stdClass();
                 $channel->channel_id	= 0;
                 $channel->channel_title	= '';
                 $new->Channel			= $channel;
@@ -412,7 +407,7 @@ class ClassicSubmissionHelper extends AddonBuilder
         //---------------------------------------------
 
         $field_view	= str_replace(
-            array(
+            [
                 lang('item_to_relate_with'),
                 lang('items_to_relate_with'),
                 lang('items_related_to'),
@@ -428,22 +423,8 @@ class ClassicSubmissionHelper extends AddonBuilder
                 //last because its generic and can affect
                 //other items
                 lang('items'),
-            ),
-            array(
-                lang('available_fields'),
-                lang('available_fields'),
-                lang('selected_fields'),
-                '',
-                '',
-                '',
-                '',
-                lang('no_fields'),
-                lang('no_fields_chosen'),
-                '',
-                '<div class="filters" style="display:none">',
-                'class="relate-actions" style="display:none"',
-                lang('fields'),
-            ),
+            ],
+            [lang('available_fields'), lang('available_fields'), lang('selected_fields'), '', '', '', '', lang('no_fields'), lang('no_fields_chosen'), '', '<div class="filters" style="display:none">', 'class="relate-actions" style="display:none"', lang('fields')],
             $field_view
         );
 

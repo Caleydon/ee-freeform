@@ -20,7 +20,7 @@ use Solspace\Addons\FreeformNext\Library\Codepack\Components\AssetsFileComponent
 
 class Codepack
 {
-    const MANIFEST_NAME = 'manifest.json';
+    public const MANIFEST_NAME = 'manifest.json';
 
     /** @var string */
     private $location;

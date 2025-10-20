@@ -22,8 +22,8 @@ use Solspace\Addons\FreeformNext\Library\Integrations\TokenRefreshInterface;
 
 class ConstantContactV3 extends MailingListOAuthConnector implements TokenRefreshInterface
 {
-    const TITLE = "Constant Contact (v3)";
-    const LOG_CATEGORY = "ConstantContact_v3";
+    public const TITLE = "Constant Contact (v3)";
+    public const LOG_CATEGORY = "ConstantContact_v3";
 
     /**
      * @return string

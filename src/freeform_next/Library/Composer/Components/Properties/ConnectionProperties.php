@@ -13,8 +13,7 @@ class ConnectionProperties extends AbstractProperties
     /** @var array */
     protected $list;
 
-    /** @var array */
-    private $compiledList;
+    private ?array $compiledList = null;
 
     /**
      * @return ConnectionInterface[]

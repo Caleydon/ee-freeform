@@ -13,22 +13,14 @@ namespace Solspace\Addons\FreeformNext\Utilities\ControlPanel;
 
 class FileDownloadView extends View implements RenderlessViewInterface
 {
-    /** @var string */
-    private $fileName;
-
-    /** @var string */
-    private $content;
-
     /**
      * AjaxView constructor.
      *
      * @param string $fileName
      * @param string $content
      */
-    public function __construct($fileName, $content)
+    public function __construct(private $fileName, private $content)
     {
-        $this->fileName = $fileName;
-        $this->content  = $content;
     }
 
     /**

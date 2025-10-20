@@ -2,6 +2,7 @@
 
 namespace Solspace\Addons\FreeformNext\Controllers;
 
+use Solspace\Addons\FreeformNext\Library\Helpers\FreeformHelper;
 use Solspace\Addons\FreeformNext\Library\Exceptions\FreeformException;
 use Solspace\Addons\FreeformNext\Library\Helpers\UrlHelper;
 use Solspace\Addons\FreeformNext\Model\PermissionsModel;
@@ -20,18 +21,17 @@ use ExpressionEngine\Model\Member\Role;
 
 class SettingsController extends Controller
 {
-    const TYPE_STATUSES             = 'statuses';
-    const TYPE_LICENSE              = 'license';
-    const TYPE_GENERAL              = 'general';
-    const TYPE_SPAM_PROTECTION      = 'spam_protection';
-    const TYPE_PERMISSIONS          = 'permissions';
-    const TYPE_FORMATTING_TEMPLATES = 'formatting_templates';
-    const TYPE_EMAIL_TEMPLATES      = 'email_templates';
-    const TYPE_DEMO_TEMPLATES       = 'demo_templates';
-    const TYPE_RECAPTCHA            = 'recaptcha';
+    public const TYPE_STATUSES             = 'statuses';
+    public const TYPE_LICENSE              = 'license';
+    public const TYPE_GENERAL              = 'general';
+    public const TYPE_SPAM_PROTECTION      = 'spam_protection';
+    public const TYPE_PERMISSIONS          = 'permissions';
+    public const TYPE_FORMATTING_TEMPLATES = 'formatting_templates';
+    public const TYPE_EMAIL_TEMPLATES      = 'email_templates';
+    public const TYPE_DEMO_TEMPLATES       = 'demo_templates';
+    public const TYPE_RECAPTCHA            = 'recaptcha';
 
-    /** @var array */
-    private static $allowedTypes = [
+    private static array $allowedTypes = [
         self::TYPE_STATUSES,
         self::TYPE_LICENSE,
         self::TYPE_GENERAL,
@@ -72,35 +72,17 @@ class SettingsController extends Controller
             return new RedirectView($this->getLink('settings/' . $type));
         }
 
-        switch ($type) {
-            case self::TYPE_STATUSES:
-                return $this->statusesAction($id);
-
-            case self::TYPE_LICENSE:
-                return $this->licenseAction();
-
-            case self::TYPE_FORMATTING_TEMPLATES:
-                return $this->formattingTemplatesAction();
-
-            case self::TYPE_EMAIL_TEMPLATES:
-                return $this->emailTemplatesAction();
-
-            case self::TYPE_DEMO_TEMPLATES:
-                return $this->demoTemplatesAction();
-
-            case self::TYPE_PERMISSIONS:
-                return $this->permissionsAction();
-
-            case self::TYPE_RECAPTCHA:
-                return $this->recaptchaAction();
-
-			case self::TYPE_SPAM_PROTECTION:
-				return $this->spamProtectionAction();
-
-            case self::TYPE_GENERAL:
-            default:
-                return $this->generalAction();
-        }
+        return match ($type) {
+            self::TYPE_STATUSES => $this->statusesAction($id),
+            self::TYPE_LICENSE => $this->licenseAction(),
+            self::TYPE_FORMATTING_TEMPLATES => $this->formattingTemplatesAction(),
+            self::TYPE_EMAIL_TEMPLATES => $this->emailTemplatesAction(),
+            self::TYPE_DEMO_TEMPLATES => $this->demoTemplatesAction(),
+            self::TYPE_PERMISSIONS => $this->permissionsAction(),
+            self::TYPE_RECAPTCHA => $this->recaptchaAction(),
+            self::TYPE_SPAM_PROTECTION => $this->spamProtectionAction(),
+            default => $this->generalAction(),
+        };
     }
 
     /**
@@ -366,7 +348,7 @@ class SettingsController extends Controller
      */
     private function permissionsAction()
     {
-        $version = \Solspace\Addons\FreeformNext\Library\Helpers\FreeformHelper::get('version');
+        $version = FreeformHelper::get('version');
 
         $permissionsModel = $this->getPermissionsModel();
 
@@ -509,7 +491,7 @@ class SettingsController extends Controller
             ],
         ];
 
-        $sections = array_merge($sections, $additionalSections);
+        $sections = [...$sections, ...$additionalSections];
 
         $fields = [
             'base_url'              => ee('CP/URL', $this->getActionUrl(__FUNCTION__)),

@@ -25,7 +25,6 @@ interface CRMIntegrationInterface
     /**
      * Push objects to the CRM
      *
-     * @param array $keyValueList
      *
      * @return bool
      */

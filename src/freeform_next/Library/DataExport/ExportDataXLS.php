@@ -27,8 +27,8 @@ namespace Solspace\Addons\FreeformNext\Library\DataExport;
  */
 class ExportDataExcel extends ExportData {
 
-    const XmlHeader = "<?xml version=\"1.0\" encoding=\"%s\"?\>\n<Workbook xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:html=\"http://www.w3.org/TR/REC-html40\">";
-    const XmlFooter = "</Workbook>";
+    public const XmlHeader = "<?xml version=\"1.0\" encoding=\"%s\"?\>\n<Workbook xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:html=\"http://www.w3.org/TR/REC-html40\">";
+    public const XmlFooter = "</Workbook>";
 
     public $encoding = 'UTF-8'; // encoding type to specify in file.
     // Note that you're on your own for making sure your data is actually encoded to this encoding

@@ -2,6 +2,7 @@
 
 namespace Solspace\Addons\FreeformNext\Controllers;
 
+use Exception;
 use EllisLab\ExpressionEngine\Library\CP\Table;
 use Solspace\Addons\FreeformNext\Library\Exceptions\FreeformException;
 use Solspace\Addons\FreeformNext\Library\Helpers\ExtensionHelper;
@@ -243,7 +244,7 @@ class StatusController extends Controller
                 ->asSuccess()
                 ->withTitle(lang('Success'))
                 ->defer();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             ee('CP/Alert')
                 ->makeInline('shared-form')
                 ->asIssue()

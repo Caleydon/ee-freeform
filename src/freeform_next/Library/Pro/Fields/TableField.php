@@ -11,9 +11,9 @@ class TableField extends AbstractField implements MultipleValueInterface, MultiD
 {
     use MultipleValueTrait;
 
-    const COLUMN_TYPE_STRING   = 'string';
-    const COLUMN_TYPE_SELECT   = 'select';
-    const COLUMN_TYPE_CHECKBOX = 'checkbox';
+    public const COLUMN_TYPE_STRING   = 'string';
+    public const COLUMN_TYPE_SELECT   = 'select';
+    public const COLUMN_TYPE_CHECKBOX = 'checkbox';
 
     /** @var array */
     protected $layout;
@@ -75,7 +75,7 @@ class TableField extends AbstractField implements MultipleValueInterface, MultiD
     {
         $attributes = $this->getCustomAttributes();
 
-        return $attributes->getAddButtonLabel() !== null ? $attributes->getAddButtonLabel() : $this->addButtonLabel;
+        return $attributes->getAddButtonLabel() ?? $this->addButtonLabel;
     }
 
     /**
@@ -117,7 +117,7 @@ class TableField extends AbstractField implements MultipleValueInterface, MultiD
     {
         $attributes = $this->getCustomAttributes();
 
-        return $attributes->getRemoveButtonLabel() !== null ? $attributes->getRemoveButtonLabel() : $this->removeButtonLabel;
+        return $attributes->getRemoveButtonLabel() ?? $this->removeButtonLabel;
     }
 
     /**
@@ -174,7 +174,7 @@ class TableField extends AbstractField implements MultipleValueInterface, MultiD
             $hasSingleValue = false;
             $rowValues      = [];
             foreach ($layout as $index => $column) {
-                $value = isset($row[$index]) ? $row[$index] : '';
+                $value = $row[$index] ?? '';
                 if ($value) {
                     $hasSingleValue = true;
                 }
@@ -212,11 +212,11 @@ class TableField extends AbstractField implements MultipleValueInterface, MultiD
         if (empty($values)) {
             $values = [];
             foreach ($layout as $column) {
-                $type = isset($column['type']) ? $column['type'] : self::COLUMN_TYPE_STRING;
+                $type = $column['type'] ?? self::COLUMN_TYPE_STRING;
                 if ($type === self::COLUMN_TYPE_CHECKBOX) {
                     $values[] = null;
                 } else {
-                    $values[] = isset($column['value']) ? $column['value'] : null;
+                    $values[] = $column['value'] ?? null;
                 }
             }
 
@@ -229,7 +229,7 @@ class TableField extends AbstractField implements MultipleValueInterface, MultiD
         $output .= '<thead>';
         $output .= '<tr>';
         foreach ($layout as $column) {
-            $label = isset($column['label']) ? $column['label'] : '';
+            $label = $column['label'] ?? '';
 
             $output .= '<th>' . htmlentities($label) . '</th>';
         }
@@ -241,9 +241,9 @@ class TableField extends AbstractField implements MultipleValueInterface, MultiD
             $output .= '<tr>';
 
             foreach ($layout as $index => $column) {
-                $type         = isset($column['type']) ? $column['type'] : self::COLUMN_TYPE_STRING;
-                $defaultValue = isset($column['value']) ? $column['value'] : '';
-                $value        = $row[$index] !== null ? $row[$index] : $defaultValue;
+                $type         = $column['type'] ?? self::COLUMN_TYPE_STRING;
+                $defaultValue = $column['value'] ?? '';
+                $value        = $row[$index] ?? $defaultValue;
                 $value        = htmlentities($value);
 
                 $output .= '<td>';

@@ -11,6 +11,7 @@
 
 namespace Solspace\Addons\FreeformNext\Controllers;
 
+use Exception;
 use EllisLab\ExpressionEngine\Library\CP\Table;
 use EllisLab\ExpressionEngine\Service\Validation\Result;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\FieldInterface;
@@ -241,7 +242,7 @@ class FieldController extends Controller
         $isNew = !$field->id;
 
         $post        = $_POST;
-        $type        = isset($_POST['type']) ? $_POST['type'] : $field->type;
+        $type        = $_POST['type'] ?? $field->type;
         $validValues = $additionalProperties = [];
         foreach ($post as $key => $value) {
             if (property_exists($field, $key)) {
@@ -353,7 +354,7 @@ class FieldController extends Controller
                 ->defer();
 
             return $field;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             ee('CP/Alert')
                 ->makeInline('shared-form')
                 ->asIssue()
@@ -398,8 +399,6 @@ class FieldController extends Controller
     }
 
     /**
-     * @param FieldModel $model
-     *
      * @return array
      */
     private function getFieldSettingsByType(FieldModel $model)
@@ -1101,7 +1100,7 @@ class FieldController extends Controller
                 $sectionData[] = [
                     'group'  => $type,
                     'title'  => $data['title'],
-                    'desc'   => isset($data['desc']) ? $data['desc'] : '',
+                    'desc'   => $data['desc'] ?? '',
                     'fields' => $fields,
                 ];
             }
@@ -1111,9 +1110,7 @@ class FieldController extends Controller
     }
 
     /**
-     * @param FieldModel $model
      * @param string     $template
-     *
      * @return string
      */
     private function getFieldHtml(FieldModel $model, $template, $type)

@@ -8,7 +8,8 @@
  * @link          https://docs.solspace.com/expressionengine/freeform/v3/
  * @license       https://docs.solspace.com/license-agreement/
  */
-
+use Solspace\Addons\FreeformNext\Services\FilesService;
+use Solspace\Addons\FreeformNext\Services\SettingsService;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Form;
 use Solspace\Addons\FreeformNext\Library\DataObjects\SubmissionAttributes;
 use Solspace\Addons\FreeformNext\Library\EETags\FormTagParamUtilities;
@@ -32,10 +33,10 @@ class Freeform_Next extends Plugin
     public function __construct()
     {
         // TODO: Prevent this from firing all the time
-        $fileService = new \Solspace\Addons\FreeformNext\Services\FilesService();
+        $fileService = new FilesService();
         $fileService->cleanUpUnfinalizedAssets();
 
-        $settingsService = new \Solspace\Addons\FreeformNext\Services\SettingsService();
+        $settingsService = new SettingsService();
         $settingsService->cleanUpDatabaseSessionData();
 
         $this->loadLanguageFiles();
@@ -43,7 +44,7 @@ class Freeform_Next extends Plugin
 
     /**
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function render()
     {
@@ -102,7 +103,7 @@ class Freeform_Next extends Plugin
 
         $data = [];
         foreach ($forms as $formModel) {
-            $submissionCount = isset($submissionCounts[$formModel->id]) ? $submissionCounts[$formModel->id] : 0;
+            $submissionCount = $submissionCounts[$formModel->id] ?? 0;
             $data[]          = $transformer->transformForm($formModel->getForm(), $submissionCount);
         }
 
@@ -173,8 +174,6 @@ class Freeform_Next extends Plugin
     }
 
     /**
-     * @param Form $form
-     *
      * @throws FreeformException
      */
     public function submitForm(Form $form = null)
@@ -210,7 +209,7 @@ class Freeform_Next extends Plugin
                     $crypt = ee('Encrypt');
                     $postedReturnUrl = $crypt->decode($postedReturnUrl);
                     $postedReturnUrl = $crypt->decrypt($postedReturnUrl);
-                    $returnUrl = $postedReturnUrl ? $postedReturnUrl : $form->getReturnUrl();
+                    $returnUrl = $postedReturnUrl ?: $form->getReturnUrl();
                 } else {
                     $returnUrl = $form->getReturnUrl();
                 }
@@ -326,17 +325,13 @@ class Freeform_Next extends Plugin
         return $form;
     }
 
-    /**
-     * @param Form                 $form
-     * @param SubmissionAttributes $attributes
-     */
     private function findAndAttachSearchParams(Form $form, SubmissionAttributes $attributes)
     {
         $table = ee()->db->dbprefix('freeform_next_submissions');
 
         foreach (ee()->TMPL->tagparams as $key => $value) {
             if (preg_match("/^search:(\w+)$/", $key, $matches)) {
-                list ($_, $handle) = $matches;
+                [$_, $handle] = $matches;
 
                 $field = $form->get($handle);
                 if (!$field) {
@@ -364,13 +359,13 @@ class Freeform_Next extends Plugin
     {
         $search_method = '_field_search';
 
-        if (strncmp($terms, '=', 1) == 0) {
+        if (str_starts_with($terms, '=')) {
             // Remove the '=' sign that specified exact match.
             $terms = substr($terms, 1);
 
             $search_method = '_exact_field_search';
-        } else if (strncmp($terms, '<', 1) == 0 ||
-            strncmp($terms, '>', 1) == 0) {
+        } else if (str_starts_with($terms, '<') ||
+            str_starts_with($terms, '>')) {
             $search_method = '_numeric_comparison_search';
         }
 
@@ -424,7 +419,7 @@ class Freeform_Next extends Plugin
         }
 
         // Trivial case, we don't have special IS_EMPTY handling.
-        if (strpos($terms, 'IS_EMPTY') === false) {
+        if (!str_contains($terms, 'IS_EMPTY')) {
             $no_is_empty = substr(ee()->functions->sql_andor_string(($not ? 'not ' . $terms : $terms), $col_name), 3) . ' ';
 
             if ($not) {
@@ -434,7 +429,7 @@ class Freeform_Next extends Plugin
             return $no_is_empty;
         }
 
-        if (strpos($terms, '|') !== false) {
+        if (str_contains($terms, '|')) {
             $terms = str_replace('IS_EMPTY|', '', $terms);
         } else {
             $terms = str_replace('IS_EMPTY', '', $terms);
@@ -476,7 +471,7 @@ class Freeform_Next extends Plugin
             $not   = 'NOT';
         }
 
-        if (strpos($terms, '&&') !== false) {
+        if (str_contains($terms, '&&')) {
             $terms = explode('&&', $terms);
             $andor = $not == 'NOT' ? 'OR' : 'AND';
         } else {
@@ -500,7 +495,7 @@ class Freeform_Next extends Plugin
                 // IS (NOT) NULL
                 $search_sql .= $not ? ' AND ' : ' OR ';
                 $search_sql .= $col_name . ' IS ' . ($not ?: '') . ' NULL) ';
-            } else if (strpos($term, '\W') !== false) // full word only, no partial matches
+            } else if (str_contains($term, '\W')) // full word only, no partial matches
             {
                 // Note: MySQL's nutty POSIX regex word boundary is [[:>:]]
                 $term = '([[:<:]]|^)' . preg_quote(str_replace('\W', '', $term)) . '([[:>:]]|$)';

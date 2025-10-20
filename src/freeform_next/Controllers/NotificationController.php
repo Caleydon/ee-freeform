@@ -379,9 +379,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * @param NotificationModel $model
      * @param string            $template
-     *
      * @return string
      */
     private function getFieldHtml(NotificationModel $model, $template)

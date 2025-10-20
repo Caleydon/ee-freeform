@@ -2,6 +2,7 @@
 
 namespace Solspace\Addons\FreeformNext\Repositories;
 
+use Exception;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Form;
 use Solspace\Addons\FreeformNext\Library\DataObjects\SubmissionAttributes;
 use Solspace\Addons\FreeformNext\Model\SpamReasonModel;
@@ -19,9 +20,7 @@ class SubmissionRepository extends Repository
     }
 
     /**
-     * @param Form $form
      * @param int  $submissionId
-     *
      * @return SubmissionModel
      */
     public function getSubmission(Form $form, $submissionId)
@@ -51,8 +50,6 @@ class SubmissionRepository extends Repository
     }
 
     /**
-     * @param array $ids
-     *
      * @return SubmissionModel[]
      */
     public function getSubmissionsByIdList(array $ids)
@@ -86,9 +83,7 @@ class SubmissionRepository extends Repository
     }
 
     /**
-     * @param Form   $form
      * @param string $token
-     *
      * @return SubmissionModel|null
      */
     public function getSubmissionByToken(Form $form, $token)
@@ -119,10 +114,9 @@ class SubmissionRepository extends Repository
     }
 
     /**
-     * @param SubmissionAttributes $attributes
      *
      * @return SubmissionModel[]
-     * @throws \Exception
+     * @throws Exception
      */
     public function getAllSubmissionsFor(SubmissionAttributes $attributes)
     {
@@ -201,9 +195,9 @@ class SubmissionRepository extends Repository
             $query->_reset_select();
             ee()->db->_reset_select();
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if (preg_match("/Column not found: 1054.*in 'order clause'/", $e->getMessage())) {
-                throw new \Exception(sprintf('Cannot order by %s', $attributes->getOrderBy()));
+                throw new Exception(sprintf('Cannot order by %s', $attributes->getOrderBy()));
             }
 
             return [];
@@ -220,8 +214,6 @@ class SubmissionRepository extends Repository
     }
 
     /**
-     * @param SubmissionAttributes $attributes
-     *
      * @return int
      */
     public function getAllSubmissionCountFor(SubmissionAttributes $attributes)
@@ -384,7 +376,7 @@ class SubmissionRepository extends Repository
         preg_match($pattern, $sql, $matches);
 
         if ($matches) {
-            list ($_, $existingRules) = $matches;
+            [$_, $existingRules] = $matches;
 
             $sql = str_replace(
                 'WHERE ' . $existingRules,
@@ -397,7 +389,7 @@ class SubmissionRepository extends Repository
             preg_match($pattern, $sql, $matches);
 
             if ($matches) {
-                list ($_, $existingRules) = $matches;
+                [$_, $existingRules] = $matches;
 
                 $sql = str_replace(
                     'WHERE ' . $existingRules,

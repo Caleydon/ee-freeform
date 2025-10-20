@@ -31,11 +31,11 @@ use EllisLab\ExpressionEngine\Service\Model\Model;
  */
 class PermissionsModel extends Model
 {
-    const MODEL = 'freeform_next:PermissionsModel';
-    const TABLE = 'freeform_next_permissions';
+    public const MODEL = 'freeform_next:PermissionsModel';
+    public const TABLE = 'freeform_next_permissions';
 
-    const DEFAULT_PERMISSIONS__ALLOW_ALL = 'allow_all';
-    const DEFAULT_PERMISSIONS__DENY_ALL  = 'deny_all';
+    public const DEFAULT_PERMISSIONS__ALLOW_ALL = 'allow_all';
+    public const DEFAULT_PERMISSIONS__DENY_ALL  = 'deny_all';
 
     protected static $_primary_key = 'id';
     protected static $_table_name  = self::TABLE;

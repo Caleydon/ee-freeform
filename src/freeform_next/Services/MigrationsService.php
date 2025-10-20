@@ -11,6 +11,11 @@
 
 namespace Solspace\Addons\FreeformNext\Services;
 
+use Solspace\Addons\FreeformNext\Model\FieldModel;
+use Solspace\Addons\FreeformNext\Model\StatusModel;
+use Solspace\Addons\FreeformNext\Model\NotificationModel;
+use Exception;
+use Solspace\Addons\FreeformNext\Library\Exceptions\FreeformException;
 use Solspace\Addons\Freeform\Library\AddonBuilder;
 use Solspace\Addons\FreeformNext\Library\Helpers\FreeformHelper;
 use Solspace\Addons\FreeformNext\Library\Migrations\Helpers\ClassicFieldHelper;
@@ -30,11 +35,11 @@ use Solspace\Addons\FreeformNext\Repositories\StatusRepository;
 
 class MigrationsService
 {
-    const STATUS__FIELDS = 'status-fields';
-    const STATUS__FORM_STATUSES = 'form-statuses';
-    const STATUS__FORM_NOTIFICATIONS = 'form-notifications';
-    const STATUS__FORMS = 'status-forms';
-    const STATUS__SUBMISSIONS = 'status-submissions';
+    public const STATUS__FIELDS = 'status-fields';
+    public const STATUS__FORM_STATUSES = 'form-statuses';
+    public const STATUS__FORM_NOTIFICATIONS = 'form-notifications';
+    public const STATUS__FORMS = 'status-forms';
+    public const STATUS__SUBMISSIONS = 'status-submissions';
 
     /** @var MigrationResultObject */
     public $result;
@@ -207,7 +212,7 @@ class MigrationsService
     /**
      * @param $classicField
      *
-     * @return bool|\Solspace\Addons\FreeformNext\Model\FieldModel
+     * @return bool|FieldModel
      */
     public function saveNextField($classicField)
     {
@@ -240,7 +245,7 @@ class MigrationsService
      * @param string $handle
      * @param string $name
      *
-     * @return bool|\Solspace\Addons\FreeformNext\Model\StatusModel
+     * @return bool|StatusModel
      */
     public function saveNextFormStatus($handle, $name)
     {
@@ -252,7 +257,7 @@ class MigrationsService
     /**
      * @param $notification
      *
-     * @return bool|\Solspace\Addons\FreeformNext\Model\NotificationModel
+     * @return bool|NotificationModel
      */
     public function saveNextFormNotification($notification)
     {
@@ -275,8 +280,8 @@ class MigrationsService
      * @param $classicForm
      *
      * @return bool
-     * @throws \Exception
-     * @throws \Solspace\Addons\FreeformNext\Library\Exceptions\FreeformException
+     * @throws Exception
+     * @throws FreeformException
      */
     public function saveNextForms($classicForm)
     {
@@ -303,7 +308,7 @@ class MigrationsService
      * @param int $formId
      *
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function saveNextSubmission($classicSubmission, $formId)
     {

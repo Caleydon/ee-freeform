@@ -22,8 +22,6 @@ use Solspace\Addons\FreeformNext\Library\Pro\Fields\TableField;
 class FieldTransformer
 {
     /**
-     * @param AbstractField $field
-     * @param mixed         $value
      * @param string        $prefix
      * @param null          $columnIndex
      * @param null          $columnCount
@@ -32,7 +30,7 @@ class FieldTransformer
      */
     public function transformField(
         AbstractField $field,
-        $value = null,
+        mixed $value = null,
         $prefix = 'field:',
         $columnIndex = null,
         $columnCount = null
@@ -142,8 +140,6 @@ class FieldTransformer
     }
 
     /**
-     * @param AbstractField $field
-     *
      * @return array|null
      */
     private function getOptions(AbstractField $field)
@@ -167,8 +163,6 @@ class FieldTransformer
     }
 
     /**
-     * @param AbstractField $field
-     *
      * @return string|null
      */
     private function getOptionValues(AbstractField $field)
@@ -188,8 +182,6 @@ class FieldTransformer
     }
 
     /**
-     * @param AbstractField $field
-     *
      * @return array|null
      */
     private function getTableLayout(AbstractField $field)
@@ -203,9 +195,9 @@ class FieldTransformer
         $layoutColumnData = [];
         foreach ($field->getLayout() as $column) {
             $layoutColumnData[] = [
-                'column:type'         => isset($column['type']) ? $column['type'] : null,
-                'column:defaultValue' => isset($column['defaultValue']) ? $column['defaultValue'] : '',
-                'column:label'        => isset($column['label']) ? $column['label'] : '',
+                'column:type'         => $column['type'] ?? null,
+                'column:defaultValue' => $column['defaultValue'] ?? '',
+                'column:label'        => $column['label'] ?? '',
             ];
         }
 
@@ -214,11 +206,11 @@ class FieldTransformer
         if (empty($rows)) {
             $firstRow = [];
             foreach ($field->getLayout() as $column) {
-                $type = isset($column['type']) ? $column['type'] : TableField::COLUMN_TYPE_STRING;
+                $type = $column['type'] ?? TableField::COLUMN_TYPE_STRING;
                 if ($type === TableField::COLUMN_TYPE_CHECKBOX) {
                     $firstRow[] = null;
                 } else {
-                    $firstRow[] = isset($column['value']) ? $column['value'] : '';
+                    $firstRow[] = $column['value'] ?? '';
                 }
             }
 
@@ -229,10 +221,10 @@ class FieldTransformer
         foreach ($rows as $rowIndex => $row) {
             $rowData = ['row:columns' => [], 'row:index' => $rowIndex];
             foreach ($field->getLayout() as $index => $column) {
-                $type         = isset($column['type']) ? $column['type'] : TableField::COLUMN_TYPE_STRING;
-                $label        = isset($column['label']) ? $column['label'] : '';
-                $defaultValue = isset($column['value']) ? $column['value'] : '';
-                $value        = $row[$index] !== null ? $row[$index] : $defaultValue;
+                $type         = $column['type'] ?? TableField::COLUMN_TYPE_STRING;
+                $label        = $column['label'] ?? '';
+                $defaultValue = $column['value'] ?? '';
+                $value        = $row[$index] ?? $defaultValue;
                 $value        = htmlentities($value);
                 $templateOptions = [];
 

@@ -11,6 +11,7 @@
 
 namespace Solspace\Addons\FreeformNext\Library\Integrations;
 
+use DateTime;
 interface IntegrationInterface
 {
     /**
@@ -38,7 +39,7 @@ interface IntegrationInterface
     public function getName();
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastUpdate();
 

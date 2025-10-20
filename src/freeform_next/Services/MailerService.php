@@ -11,6 +11,7 @@
 
 namespace Solspace\Addons\FreeformNext\Services;
 
+use Exception;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\Interfaces\FileUploadInterface;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Form;
 use Solspace\Addons\FreeformNext\Library\Exceptions\FreeformException;
@@ -129,7 +130,7 @@ class MailerService implements MailHandlerInterface
                     $notification,
                     $submission
                 );
-            } catch (\Exception $e) {
+            } catch (Exception) {
             }
         }
 

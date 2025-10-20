@@ -58,7 +58,6 @@ abstract class AbstractAttributes
     /**
      * Walk through the array and create an attribute string
      *
-     * @param array $array
      *
      * @return string
      */
@@ -96,22 +95,15 @@ abstract class AbstractAttributes
     }
 
     /**
-     * @param mixed $value
-     *
      * @return bool|null
      */
-    final protected function getBooleanValue($value = null)
+    final protected function getBooleanValue(mixed $value = null)
     {
         if ($value !== null) {
-            switch (strtolower($value)) {
-                case 'yes':
-                case '1':
-                case 'y':
-                    return true;
-
-                default:
-                    return false;
-            }
+            return match (strtolower($value)) {
+                'yes', '1', 'y' => true,
+                default => false,
+            };
         }
 
         return null;

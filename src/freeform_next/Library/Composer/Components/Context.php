@@ -11,13 +11,13 @@
 
 namespace Solspace\Addons\FreeformNext\Library\Composer\Components;
 
+use JsonSerializable;
 use Solspace\Addons\FreeformNext\Library\Composer\Composer;
 use Solspace\Addons\FreeformNext\Library\Exceptions\Composer\ComposerException;
 
-class Context implements \JsonSerializable
+class Context implements JsonSerializable
 {
-    /** @var int */
-    private $page;
+    private int $page;
 
     /** @var string */
     private $hash;
@@ -25,14 +25,13 @@ class Context implements \JsonSerializable
     /**
      * Context constructor.
      *
-     * @param array $contextData
      *
      * @throws ComposerException
      */
     public function __construct(array $contextData)
     {
         $this->page = isset($contextData['page']) ? (int)$contextData['page'] : 0;
-        $this->hash = isset($contextData['hash']) ? $contextData['hash'] : Composer::KEY_FORM;
+        $this->hash = $contextData['hash'] ?? Composer::KEY_FORM;
     }
 
     /**

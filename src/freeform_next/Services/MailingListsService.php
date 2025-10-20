@@ -11,6 +11,8 @@
 
 namespace Solspace\Addons\FreeformNext\Services;
 
+use Solspace\Addons\FreeformNext\Library\Integrations\MailingLists\MailingListIntegrationInterface;
+use ReflectionClass;
 use Solspace\Addons\FreeformNext\Library\Database\MailingListHandlerInterface;
 use Solspace\Addons\FreeformNext\Library\Exceptions\Integrations\IntegrationException;
 use Solspace\Addons\FreeformNext\Library\Exceptions\Integrations\ListNotFoundException;
@@ -31,8 +33,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class MailingListsService  extends AbstractIntegrationService implements MailingListHandlerInterface
 {
-    /** @var array */
-    private static $integrations;
+    private static ?array $integrations = null;
 
     /**
      * @param AbstractMailingListIntegration $integration
@@ -339,7 +340,7 @@ class MailingListsService  extends AbstractIntegrationService implements Mailing
     public function getAllMailingListServiceProviders()
     {
         if (null === self::$integrations) {
-            $interface = 'Solspace\Addons\FreeformNext\Library\Integrations\MailingLists\MailingListIntegrationInterface';
+            $interface = MailingListIntegrationInterface::class;
             $integrations = $validIntegrations = [];
 
             $addonIntegrations = [];
@@ -372,7 +373,7 @@ class MailingListsService  extends AbstractIntegrationService implements Mailing
 
 
             foreach ($integrations as $class => $name) {
-                $reflectionClass = new \ReflectionClass($class);
+                $reflectionClass = new ReflectionClass($class);
 
                 if ($reflectionClass->implementsInterface($interface)) {
                     $validIntegrations[$class] = $reflectionClass->getConstant('TITLE');
@@ -441,8 +442,6 @@ class MailingListsService  extends AbstractIntegrationService implements Mailing
 
     /**
      * Update the access token of an integration
-     *
-     * @param AbstractMailingListIntegration $integration
      */
     public function updateAccessToken(AbstractMailingListIntegration $integration)
     {

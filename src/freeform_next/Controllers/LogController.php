@@ -2,6 +2,7 @@
 
 namespace Solspace\Addons\FreeformNext\Controllers;
 
+use DateTime;
 use Solspace\Addons\FreeformNext\Library\Exceptions\FreeformException;
 use Solspace\Addons\FreeformNext\Utilities\ControlPanel\CpView;
 use Solspace\Addons\FreeformNext\Utilities\ControlPanel\Navigation\NavigationLink;
@@ -83,10 +84,10 @@ class LogController extends Controller
                     $line = $this->readNotSeek($v, $charCounter); //prints current line
 
                     if (preg_match('/^\s*([0-9-T:+]+)\s([\w]+)\s+([\w\d_]+)\s+(.*)$/', $line, $matches)) {
-                        list($_, $date, $level, $category, $message) = $matches;
+                        [$_, $date, $level, $category, $message] = $matches;
 
                         $content[] = [
-                            'date'     => new \DateTime($date),
+                            'date'     => new DateTime($date),
                             'level'    => $level,
                             'category' => $category,
                             'message'  => $messageBuffer . $message,

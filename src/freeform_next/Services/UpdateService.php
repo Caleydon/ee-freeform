@@ -2,25 +2,23 @@
 
 namespace Solspace\Addons\FreeformNext\Services;
 
+use DateTime;
 use Solspace\Addons\FreeformNext\Library\DataObjects\PluginUpdate;
 use Solspace\Addons\FreeformNext\Utilities\AddonInfo;
 
 class UpdateService
 {
     /** @var PluginUpdate[] */
-    private static $feed;
+    private static ?array $feed = null;
 
-    /** @var string */
-    private $jsonUrl;
+    private string $jsonUrl;
 
-    /** @var string */
-    private $jsonPath;
+    private string $jsonPath;
 
     /** @var AddonInfo */
     private $addonInfo;
 
-    /** @var bool */
-    private $writeToCache;
+    private bool $writeToCache;
 
     /**
      * UpdateService constructor.
@@ -78,7 +76,7 @@ class UpdateService
                         continue;
                     }
 
-                    $date       = new \DateTime($item->date);
+                    $date       = new DateTime($item->date);
                     $feedData[] = new PluginUpdate($item->version, $item->downloadUrl, $date, $item->notes);
                 }
             }

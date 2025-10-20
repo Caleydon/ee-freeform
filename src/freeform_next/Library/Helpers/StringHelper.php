@@ -32,8 +32,6 @@ class StringHelper
     }
 
     /**
-     * @param array $values
-     *
      * @return array
      */
     public static function flattenArrayValues(array $values)
@@ -83,7 +81,6 @@ class StringHelper
 
     /**
      * @param string $string
-     * @param array  $noStrip
      *
      * @return mixed|string
      */

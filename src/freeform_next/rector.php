@@ -22,7 +22,13 @@ return static function (RectorConfig $config): void {
     ]);
 
     $config->skip([
+        __DIR__ . '/codepack',
+        __DIR__ . '/javascript',
+        __DIR__ . '/language',
+        __DIR__ . '/logs',
+        __DIR__ . '/Templates',
         __DIR__ . '/vendor',
+        __DIR__ . '/View',
         JsonThrowOnErrorRector::class,
         SensitiveConstantNameRector::class,
         BinaryOpBetweenNumberAndStringRector::class,

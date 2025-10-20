@@ -40,7 +40,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 
 class NextFormNotificationHelper
 {
-    const STRICT_MODE = true;
+    public const STRICT_MODE = true;
 
     /** @var array */
     public $errors;

@@ -11,6 +11,7 @@
 
 namespace Solspace\Addons\FreeformNext\Library\Migrations\Helpers;
 
+use Exception;
 use Solspace\Addons\Freeform\Library\AddonBuilder;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\FieldInterface;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\FileUploadField;
@@ -24,12 +25,12 @@ use Solspace\Addons\FreeformNext\Library\Logging\LoggerInterface;
 
 class NextFieldHelper
 {
-    const STRICT_MODE = true;
+    public const STRICT_MODE = true;
 
     /** @var array */
     public $errors;
 
-    private $restrictedHandleCounter = 0;
+    private int|float $restrictedHandleCounter = 0;
 
     /** @var ClassicFieldHelper */
     private $classicFieldHelper;
@@ -58,7 +59,7 @@ class NextFieldHelper
         $isNew = !$field->id;
 
         $post        = $data;
-        $type        = isset($data['type']) ? $data['type'] : $field->type;
+        $type        = $data['type'] ?? $field->type;
         $validValues = $additionalProperties = [];
         foreach ($post as $key => $value) {
             if (property_exists($field, $key)) {
@@ -157,7 +158,7 @@ class NextFieldHelper
 
         try {
             $field->save();
-        } catch (\Exception $e) {
+        } catch (Exception) {
             // There might be already a field with the same name
         }
 
@@ -223,7 +224,7 @@ class NextFieldHelper
 
     private function containsEmail($handle)
     {
-        if (strpos($handle, 'email') !== false) {
+        if (str_contains($handle, 'email')) {
             return true;
         }
 
@@ -1047,9 +1048,9 @@ class NextFieldHelper
 
     private function getClassicFieldHelper()
     {
-        $fieldService = 'Solspace\Addons\FreeformNext\Library\Migrations\Helpers\ClassicFieldHelper';
+        $fieldService = ClassicFieldHelper::class;
         if (class_exists($fieldService)) {
-            /** @var \Solspace\Addons\FreeformNext\Library\Migrations\Helpers\ClassicFieldHelper $fieldService */
+            /** @var ClassicFieldHelper $fieldService */
             $fieldService = new $fieldService();
 
             return $fieldService;

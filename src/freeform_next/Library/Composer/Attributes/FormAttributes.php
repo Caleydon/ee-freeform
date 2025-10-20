@@ -18,9 +18,6 @@ use Solspace\Addons\FreeformNext\Library\Session\SessionInterface;
 
 class FormAttributes
 {
-    /** @var int */
-    private $id;
-
     /** @var bool */
     private $csrfEnabled;
 
@@ -33,8 +30,7 @@ class FormAttributes
     /** @var string */
     private $actionUrl;
 
-    /** @var string */
-    private $method;
+    private string $method;
 
     /** @var FormValueContext */
     private $formValueContext;
@@ -43,12 +39,10 @@ class FormAttributes
      * FormAttributes constructor.
      *
      * @param                  $formId
-     * @param SessionInterface $session
-     * @param RequestInterface $request
+     * @param int $formId
      */
-    public function __construct($formId, SessionInterface $session, RequestInterface $request)
+    public function __construct(private $id, SessionInterface $session, RequestInterface $request)
     {
-        $this->id     = $formId;
         $this->method = 'POST';
         $this->setFormValueContext($session, $request);
     }
@@ -170,8 +164,6 @@ class FormAttributes
     }
 
     /**
-     * @param SessionInterface $session
-     * @param RequestInterface $request
      *
      * @return FormValueContext
      */

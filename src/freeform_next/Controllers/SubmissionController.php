@@ -46,11 +46,9 @@ use Solspace\Addons\FreeformNext\Utilities\ControlPanel\RedirectView;
 
 class SubmissionController extends Controller
 {
-    const MAX_PER_PAGE = 25;
+    public const MAX_PER_PAGE = 25;
 
     /**
-     * @param Form $form
-     *
      * @return CpView
      */
     public function index(Form $form)
@@ -113,7 +111,7 @@ class SubmissionController extends Controller
                         $type   = Table::COL_TEXT;
                         $encode = false;
                     }
-                } catch (FreeformException $e) {
+                } catch (FreeformException) {
                     continue;
                 }
             }
@@ -362,7 +360,7 @@ class SubmissionController extends Controller
 
                         try {
                             $value = $submission->getFieldValueAsString($field->getHandle());
-                        } catch (FreeformException $e) {
+                        } catch (FreeformException) {
                             $value = '';
                         }
 
@@ -401,10 +399,7 @@ class SubmissionController extends Controller
                                     $content .= '        </style>';
 
                                     if ($asset->isImage()) {
-                                        $modal_vars = array(
-                                            'name' => 'asset_' . $assetId . '_modal',
-                                            'contents' => '<img src="' . $asset->getAbsoluteURL() . '" />'
-                                        );
+                                        $modal_vars = ['name' => 'asset_' . $assetId . '_modal', 'contents' => '<img src="' . $asset->getAbsoluteURL() . '" />'];
 
                                         $modal_html = ee('View')->make('ee:_shared/modal')->render($modal_vars);
 
@@ -431,7 +426,7 @@ class SubmissionController extends Controller
                         } else {
                             $data[] = $value;
                         }
-                    } catch (FreeformException $e) {
+                    } catch (FreeformException) {
                         continue;
                     }
                 }
@@ -484,7 +479,7 @@ class SubmissionController extends Controller
             ],
         ];
 
-        if (class_exists('Solspace\Addons\FreeformNext\Controllers\ExportController')) {
+        if (class_exists(ExportController::class)) {
             array_unshift($formRightLinks, [
                 'title' => lang('Quick Export'),
                 'link'  => '#',
@@ -523,7 +518,7 @@ class SubmissionController extends Controller
 			'form_url' => ee('CP/URL')->getCurrentUrl(),
 			'form_attributes' => [
 				'id' => 'entry-filters',
-				'data-action' => isset($entries_filter_uri) ? $entries_filter_uri : ""
+				'data-action' => $entries_filter_uri ?? ""
 			],
 			'currentSearchOnField'  => $currentSearchOnField,
 			'currentKeyword'        => $currentKeyword,
@@ -548,7 +543,7 @@ class SubmissionController extends Controller
 
         $view = new CpView('submissions/listing', $template);
 
-        $exportServiceClassName = 'Solspace\Addons\FreeformNext\Services\ExportService';
+        $exportServiceClassName = ExportService::class;
         if (class_exists($exportServiceClassName)) {
             $exportService = new $exportServiceClassName();
             $view->addTemplateVariables($exportService->getExportDialogueTemplateVariables($form->getId()));
@@ -623,7 +618,7 @@ class SubmissionController extends Controller
                         $type   = Table::COL_TEXT;
                         $encode = false;
                     }
-                } catch (FreeformException $e) {
+                } catch (FreeformException) {
                     continue;
                 }
             }
@@ -881,7 +876,7 @@ class SubmissionController extends Controller
 
                         try {
                             $value = $submission->getFieldValueAsString($field->getHandle());
-                        } catch (FreeformException $e) {
+                        } catch (FreeformException) {
                             $value = '';
                         }
 
@@ -920,10 +915,7 @@ class SubmissionController extends Controller
                                     $content .= '        </style>';
 
                                     if ($asset->isImage()) {
-                                        $modal_vars = array(
-                                            'name' => 'asset_' . $assetId . '_modal',
-                                            'contents' => '<img src="' . $asset->getAbsoluteURL() . '" />'
-                                        );
+                                        $modal_vars = ['name' => 'asset_' . $assetId . '_modal', 'contents' => '<img src="' . $asset->getAbsoluteURL() . '" />'];
 
                                         $modal_html = ee('View')->make('ee:_shared/modal')->render($modal_vars);
 
@@ -950,7 +942,7 @@ class SubmissionController extends Controller
                         } else {
                             $data[] = $value;
                         }
-                    } catch (FreeformException $e) {
+                    } catch (FreeformException) {
                         continue;
                     }
                 }
@@ -1005,7 +997,7 @@ class SubmissionController extends Controller
             ],
         ];
 
-        if (class_exists('Solspace\Addons\FreeformNext\Controllers\ExportController')) {
+        if (class_exists(ExportController::class)) {
             array_unshift($formRightLinks, [
                 'title' => lang('Quick Export'),
                 'link'  => '#',
@@ -1044,7 +1036,7 @@ class SubmissionController extends Controller
             'form_url' => ee('CP/URL')->getCurrentUrl(),
             'form_attributes' => [
                 'id' => 'entry-filters',
-                'data-action' => isset($entries_filter_uri) ? $entries_filter_uri : ""
+                'data-action' => $entries_filter_uri ?? ""
             ],
             'currentSearchOnField'  => $currentSearchOnField,
             'currentKeyword'        => $currentKeyword,
@@ -1069,7 +1061,7 @@ class SubmissionController extends Controller
 
         $view = new CpView('spam/listing', $template);
 
-        $exportServiceClassName = 'Solspace\Addons\FreeformNext\Services\ExportService';
+        $exportServiceClassName = ExportService::class;
         if (class_exists($exportServiceClassName)) {
             $exportService = new $exportServiceClassName();
             $view->addTemplateVariables($exportService->getExportDialogueTemplateVariables($form->getId()));
@@ -1090,8 +1082,6 @@ class SubmissionController extends Controller
     }
 
     /**
-     * @param Form            $form
-     * @param SubmissionModel $submission
      *
      * @return CpView
      */
@@ -1269,10 +1259,7 @@ class SubmissionController extends Controller
                                     $content .= '        }';
                                     $content .= '        </style>';
 
-                                    $modal_vars = array(
-                                        'name' => 'asset_' . $assetId . '_modal',
-                                        'contents' => '<img src="' . $asset->getAbsoluteURL() . '" />'
-                                    );
+                                    $modal_vars = ['name' => 'asset_' . $assetId . '_modal', 'contents' => '<img src="' . $asset->getAbsoluteURL() . '" />'];
 
                                     $modal_html = ee('View')->make('ee:_shared/modal')->render($modal_vars);
 
@@ -1403,8 +1390,6 @@ class SubmissionController extends Controller
     }
 
     /**
-     * @param Form            $form
-     * @param SubmissionModel $submission
      *
      * @return bool
      */
@@ -1473,8 +1458,6 @@ class SubmissionController extends Controller
     }
 
     /**
-     * @param Form $form
-     *
      * @return RedirectView
      */
     public function batchDelete(Form $form)

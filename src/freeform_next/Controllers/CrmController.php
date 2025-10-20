@@ -2,6 +2,7 @@
 
 namespace Solspace\Addons\FreeformNext\Controllers;
 
+use Exception;
 use EllisLab\ExpressionEngine\Library\CP\Table;
 use GuzzleHttp\Exception\BadResponseException;
 use Solspace\Addons\FreeformNext\Library\Exceptions\Integrations\IntegrationException;
@@ -207,7 +208,7 @@ class CrmController extends Controller
                         $hash . '-' . $item->getHandle() => [
                             'type'     => $item->getType() === SettingBlueprint::TYPE_BOOL ? 'yes_no' : 'text',
                             'required' => $item->isRequired(),
-                            'value'    => isset($settings[$item->getHandle()]) ? $settings[$item->getHandle()] : null,
+                            'value'    => $settings[$item->getHandle()] ?? null,
                         ],
                     ],
                 ];
@@ -312,8 +313,6 @@ class CrmController extends Controller
     }
 
     /**
-     * @param IntegrationModel $model
-     *
      * @return bool
      */
     public function save(IntegrationModel $model)
@@ -333,7 +332,7 @@ class CrmController extends Controller
 
         $postedSettings = [];
         foreach ($_POST as $key => $value) {
-            if (strpos($key, $hash) === 0) {
+            if (str_starts_with($key, $hash)) {
                 $postedSettings[str_replace($hash . '-', '', $key)] = $value;
             }
         }
@@ -440,8 +439,6 @@ class CrmController extends Controller
 
     /**
      * Handle OAuth2 authorization
-     *
-     * @param IntegrationModel $model
      */
     private function handleAuthorization(IntegrationModel $model)
     {
@@ -495,7 +492,7 @@ class CrmController extends Controller
                         $view->addVariable('success', false);
                         $view->addError($e->getResponse()->getBody(true));
                     }
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $view->addVariable('success', false);
                     $view->addError($e->getMessage());
                 }

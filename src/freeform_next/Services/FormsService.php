@@ -11,6 +11,7 @@
 
 namespace Solspace\Addons\FreeformNext\Services;
 
+use Exception;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\SubmitField;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Form;
 use Solspace\Addons\FreeformNext\Library\Database\FormHandlerInterface;
@@ -25,8 +26,7 @@ use Solspace\Addons\FreeformNext\Repositories\SettingsRepository;
 
 class FormsService implements FormHandlerInterface
 {
-    /** @var array */
-    private static $spamBlockCache = [];
+    private static array $spamBlockCache = [];
 
     /**
      * @param Form   $form
@@ -137,15 +137,12 @@ class FormsService implements FormHandlerInterface
         try {
             $actionId = ee()->db
                 ->where(
-                    array(
-                        'class'  => 'Freeform_next',
-                        'method' => 'submitForm',
-                    )
+                    ['class'  => 'Freeform_next', 'method' => 'submitForm']
                 )
                 ->get('actions')
                 ->row()
                 ->action_id;
-        } catch (\Exception $e) {
+        } catch (Exception) {
             return null;
         }
 

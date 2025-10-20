@@ -17,22 +17,14 @@ use Solspace\Addons\FreeformNext\Utilities\ControlPanel\Navigation\NavigationLin
 
 class PlainView extends View
 {
-    /** @var string */
-    private $template;
-
-    /** @var array */
-    private $templateVariables;
-
     /**
      * CpView constructor.
      *
      * @param       $template
-     * @param array $templateVariables
+     * @param string $template
      */
-    public function __construct($template, array $templateVariables = [])
+    public function __construct(private $template, private array $templateVariables = [])
     {
-        $this->template          = $template;
-        $this->templateVariables = $templateVariables;
     }
 
     /**

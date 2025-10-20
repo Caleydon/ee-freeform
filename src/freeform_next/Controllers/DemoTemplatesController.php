@@ -14,7 +14,7 @@ use Solspace\Addons\FreeformNext\Utilities\ControlPanel\View;
 
 class DemoTemplatesController extends Controller
 {
-    const FLASH_VAR_KEY = 'codepack_prefix';
+    public const FLASH_VAR_KEY = 'codepack_prefix';
 
     /**
      * Show CodePack contents
@@ -148,9 +148,7 @@ class DemoTemplatesController extends Controller
     }
 
     /**
-     * @param Codepack $codepack
      * @param string   $prefix
-     *
      * @return array
      */
     private function getPostInstallTable(Codepack $codepack, $prefix)

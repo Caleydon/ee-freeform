@@ -27,8 +27,7 @@ class FieldRepository extends Repository
     /** @var FieldModel[] */
     private static $fieldCache;
 
-    /** @var bool */
-    private static $allFieldsLoaded;
+    private static ?bool $allFieldsLoaded = null;
 
     /**
      * @param int|null $fieldId
@@ -63,8 +62,6 @@ class FieldRepository extends Repository
     }
 
     /**
-     * @param array $ids
-     *
      * @return FieldModel[]
      */
     public function getFieldsByIdList(array $ids)

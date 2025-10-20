@@ -10,22 +10,18 @@ use Solspace\Addons\FreeformNext\Model\SpamReasonModel;
 
 class HoneypotService
 {
-    const FORM_HONEYPOT_KEY  = 'freeformHoneypotHashList';
-    const FORM_HONEYPOT_NAME = 'form_name_handle';
+    public const FORM_HONEYPOT_KEY  = 'freeformHoneypotHashList';
+    public const FORM_HONEYPOT_NAME = 'form_name_handle';
 
-    const MAX_HONEYPOT_TTL   = 10800; // 3 Hours
-    const MAX_HONEYPOT_COUNT = 100;   // Limit the number of maximum honeypot values per session
-
-    /** @var array */
-    private static $validHoneypots = [];
+    public const MAX_HONEYPOT_TTL   = 10800; // 3 Hours
+    public const MAX_HONEYPOT_COUNT = 100;   // Limit the number of maximum honeypot values per session
+    private static array $validHoneypots = [];
 
     /** @var Honeypot[] */
-    private $honeypotCache = [];
+    private array $honeypotCache = [];
 
     /**
      * Adds honeypot javascript to forms
-     *
-     * @param FormRenderObject $renderObject
      */
     public function addFormJavascript(FormRenderObject $renderObject)
     {
@@ -39,17 +35,12 @@ class HoneypotService
 
     /**
      * Assembles a honeypot field
-     *
-     * @param FormRenderObject $renderObject
      */
     public function addHoneyPotInputToForm(FormRenderObject $renderObject)
     {
         $renderObject->appendToOutput($this->getHoneypotInput($renderObject->getForm()));
     }
 
-    /**
-     * @param Form $form
-     */
     public function validateFormHoneypot(Form $form)
     {
         if (!$this->getSettingsService()->getSettingsModel()->isSpamProtectionEnabled()) {
@@ -98,8 +89,6 @@ class HoneypotService
     }
 
     /**
-     * @param Form $form
-     *
      * @return string
      */
     public function getHoneypotJavascriptScript(Form $form)
@@ -110,8 +99,6 @@ class HoneypotService
     }
 
     /**
-     * @param Form $form
-     *
      * @return Honeypot
      */
     public function getHoneypot(Form $form)
@@ -158,8 +145,6 @@ class HoneypotService
     }
 
     /**
-     * @param array $honeypotList
-     *
      * @return array
      */
     private function weedOutOldHoneypots(array $honeypotList)
@@ -170,20 +155,12 @@ class HoneypotService
 
         $cleanList = array_filter(
             $honeypotList,
-            function (Honeypot $honeypot) {
-                return $honeypot->getTimestamp() > (time() - self::MAX_HONEYPOT_TTL);
-            }
+            fn(Honeypot $honeypot) => $honeypot->getTimestamp() > (time() - self::MAX_HONEYPOT_TTL)
         );
 
         usort(
             $cleanList,
-            function (Honeypot $a, Honeypot $b) {
-                if ($a->getTimestamp() === $b->getTimestamp()) {
-                    return 0;
-                }
-
-                return ($a->getTimestamp() < $b->getTimestamp()) ? 1 : -1;
-            }
+            fn(Honeypot $a, Honeypot $b) => $b->getTimestamp() <=> $a->getTimestamp()
         );
 
         if (\count($cleanList) > self::MAX_HONEYPOT_COUNT) {
@@ -195,8 +172,6 @@ class HoneypotService
 
     /**
      * Removes a honeypot from the list once it has been validated
-     *
-     * @param Honeypot $honeypot
      */
     private function removeHoneypot(Honeypot $honeypot)
     {
@@ -213,9 +188,6 @@ class HoneypotService
         $this->updateHoneypotList($list);
     }
 
-    /**
-     * @param array $honeypotList
-     */
     private function updateHoneypotList(array $honeypotList)
     {
         $this->getSession()->set(self::FORM_HONEYPOT_KEY, json_encode($honeypotList));
@@ -244,8 +216,6 @@ class HoneypotService
     }
 
     /**
-     * @param Form $form
-     *
      * @return string
      */
     public function getHoneypotInput(Form $form)
@@ -253,7 +223,7 @@ class HoneypotService
         static $honeypotHashes = [];
 
         if (!isset($honeypotHashes[$form->getHash()])) {
-            $random                           = time() . mt_rand(0, 999) . (time() + 999);
+            $random                           = time() . random_int(0, 999) . (time() + 999);
             $honeypotHashes[$form->getHash()] = substr(sha1($random), 0, 6);
         }
 

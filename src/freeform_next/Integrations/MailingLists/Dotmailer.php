@@ -22,13 +22,13 @@ use Solspace\Addons\FreeformNext\Library\Integrations\SettingBlueprint;
 
 class Dotmailer extends AbstractMailingListIntegration
 {
-    const TITLE        = 'Dotmailer';
-    const LOG_CATEGORY = 'Dotmailer';
+    public const TITLE        = 'Dotmailer';
+    public const LOG_CATEGORY = 'Dotmailer';
 
-    const SETTING_USER_EMAIL    = 'user_email';
-    const SETTING_USER_PASS     = 'user_pass';
-    const SETTING_DOUBLE_OPT_IN = 'double_opt_in';
-    const SETTING_ENDPOINT      = 'endpoint';
+    public const SETTING_USER_EMAIL    = 'user_email';
+    public const SETTING_USER_PASS     = 'user_pass';
+    public const SETTING_DOUBLE_OPT_IN = 'double_opt_in';
+    public const SETTING_ENDPOINT      = 'endpoint';
 
     /**
      * Returns a list of additional settings for this integration
@@ -197,7 +197,7 @@ class Dotmailer extends AbstractMailingListIntegration
                     }
                 }
             }
-        } catch (BadResponseException $e) {
+        } catch (BadResponseException) {
         }
 
         throw new IntegrationException('Could not get an API endpoint');
@@ -208,7 +208,7 @@ class Dotmailer extends AbstractMailingListIntegration
      * Builds ListObject objects based on the results
      * And returns them
      *
-     * @return \Solspace\Addons\FreeformNext\Library\Integrations\MailingLists\DataObjects\ListObject[]
+     * @return ListObject[]
      * @throws IntegrationException
      */
     protected function fetchLists()
@@ -293,24 +293,12 @@ class Dotmailer extends AbstractMailingListIntegration
         if ($json) {
             $fieldList = [];
             foreach ($json as $field) {
-                switch ($field->type) {
-                    case 'String':
-                    case 'Date':
-                        $type = FieldObject::TYPE_STRING;
-                        break;
-
-                    case 'Boolean':
-                        $type = FieldObject::TYPE_BOOLEAN;
-                        break;
-
-                    case 'Numeric':
-                        $type = FieldObject::TYPE_NUMERIC;
-                        break;
-
-                    default:
-                        $type = null;
-                        break;
-                }
+                $type = match ($field->type) {
+                    'String', 'Date' => FieldObject::TYPE_STRING,
+                    'Boolean' => FieldObject::TYPE_BOOLEAN,
+                    'Numeric' => FieldObject::TYPE_NUMERIC,
+                    default => null,
+                };
 
                 if (null === $type) {
                     continue;

@@ -11,6 +11,7 @@
 
 namespace Solspace\Addons\FreeformNext\Model;
 
+use JsonSerializable;
 use EllisLab\ExpressionEngine\Service\Model\Model;
 use Solspace\Addons\FreeformNext\Library\DataObjects\EmailTemplate;
 
@@ -30,12 +31,12 @@ use Solspace\Addons\FreeformNext\Library\DataObjects\EmailTemplate;
  * @property int    $sortOrder
  * @property int    $legacyId
  */
-class NotificationModel extends Model implements \JsonSerializable
+class NotificationModel extends Model implements JsonSerializable
 {
     use TimestampableTrait;
 
-    const MODEL = 'freeform_next:NotificationModel';
-    const TABLE = 'freeform_next_notifications';
+    public const MODEL = 'freeform_next:NotificationModel';
+    public const TABLE = 'freeform_next_notifications';
 
     protected static $_primary_key = 'id';
     protected static $_table_name  = self::TABLE;

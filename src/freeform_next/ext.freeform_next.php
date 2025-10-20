@@ -35,9 +35,6 @@ class Freeform_next_ext
         $this->version = AddonInfo::getInstance()->getVersion();
     }
 
-    /**
-     * @param AbstractField $field
-     */
     public function validateRecaptchaFields(AbstractField $field)
     {
         $settingsModel = $this->getSettingsService()->getSettingsModel();
@@ -95,44 +92,26 @@ class Freeform_next_ext
         }
     }
 
-    /**
-     * @param Form $form
-     */
     public function validateRecaptcha(Form $form)
     {
         $this->getRecaptchaService()->validateFormRecaptcha($form);
     }
 
-    /**
-     * @param Form             $form
-     * @param FormRenderObject $renderObject
-     */
     public function addRecaptchaInputToForm(Form $form, FormRenderObject $renderObject)
     {
         $this->getRecaptchaService()->addRecaptchaInputToForm($renderObject);
     }
 
-    /**
-     * @param Form             $form
-     * @param FormRenderObject $renderObject
-     */
     public function addRecaptchaJavascriptToForm(Form $form, FormRenderObject $renderObject)
     {
         $this->getRecaptchaService()->addRecaptchaJavascriptToForm($renderObject);
     }
 
-    /**
-     * @param Form $form
-     */
     public function validateHoneypot(Form $form)
     {
         $this->getHoneypotService()->validateFormHoneypot($form);
     }
 
-    /**
-     * @param Form             $form
-     * @param FormRenderObject $renderObject
-     */
     public function addHoneypotInputToForm(Form $form, FormRenderObject $renderObject)
     {
     	if($this->getSettingsService()->getSettingsModel()->isSpamProtectionEnabled())
@@ -141,19 +120,11 @@ class Freeform_next_ext
 		}
     }
 
-    /**
-     * @param Form             $form
-     * @param FormRenderObject $renderObject
-     */
     public function addHoneypotJavascriptToForm(Form $form, FormRenderObject $renderObject)
     {
         $this->getHoneypotService()->addFormJavascript($renderObject);
     }
 
-    /**
-     * @param Form             $form
-     * @param FormRenderObject $renderObject
-     */
     public function addDateTimeJavascript(Form $form, FormRenderObject $renderObject)
     {
         if ($form->getLayout()->hasDatepickerEnabledFields()) {
@@ -175,10 +146,6 @@ class Freeform_next_ext
         }
     }
 
-    /**
-     * @param Form             $form
-     * @param FormRenderObject $renderObject
-     */
     public function addTableJavascript(Form $form, FormRenderObject $renderObject)
     {
         if ($form->getLayout()->hasTableFields()) {
@@ -193,10 +160,6 @@ class Freeform_next_ext
         }
     }
 
-    /**
-     * @param Form             $form
-     * @param FormRenderObject $renderObject
-     */
     public function addFormDisabledJavascript(Form $form, FormRenderObject $renderObject)
     {
         if ($this->getSettingsService()->isFormSubmitDisable()) {
@@ -212,10 +175,6 @@ class Freeform_next_ext
         }
     }
 
-    /**
-     * @param Form             $form
-     * @param FormRenderObject $renderObject
-     */
     public function addFormAnchorJavascript(Form $form, FormRenderObject $renderObject)
     {
         $autoScroll = $this->getSettingsService()->getSettingsModel()->isAutoScrollToErrors();

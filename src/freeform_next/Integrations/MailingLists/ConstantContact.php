@@ -22,11 +22,11 @@ use Solspace\Addons\FreeformNext\Library\Integrations\SettingBlueprint;
 
 class ConstantContact extends AbstractMailingListIntegration
 {
-    const TITLE        = 'Constant Contact';
-    const LOG_CATEGORY = 'ConstantContact';
+    public const TITLE        = 'Constant Contact';
+    public const LOG_CATEGORY = 'ConstantContact';
 
-    const SETTING_API_KEY      = 'api_key';
-    const SETTING_ACCESS_TOKEN = 'access_token';
+    public const SETTING_API_KEY      = 'api_key';
+    public const SETTING_ACCESS_TOKEN = 'access_token';
 
     /**
      * Returns a list of additional settings for this integration
@@ -195,7 +195,7 @@ class ConstantContact extends AbstractMailingListIntegration
      * Builds ListObject objects based on the results
      * And returns them
      *
-     * @return \Solspace\Addons\FreeformNext\Library\Integrations\MailingLists\DataObjects\ListObject[]
+     * @return ListObject[]
      * @throws IntegrationException
      */
     protected function fetchLists()

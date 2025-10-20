@@ -5,9 +5,6 @@ namespace Solspace\Addons\FreeformNext\Utilities\ControlPanel\Extras;
 class ConfirmRemoveModal extends Modal
 {
     /** @var string */
-    private $url;
-
-    /** @var string */
     private $name;
 
     /** @var string */
@@ -19,17 +16,15 @@ class ConfirmRemoveModal extends Modal
     /** @var string */
     private $plural;
 
-    /** @var array */
-    private $variables;
+    private array $variables;
 
     /**
      * ConfirmRemoveModal constructor.
      *
      * @param string $url
      */
-    public function __construct($url)
+    public function __construct(private $url)
     {
-        $this->url       = $url;
         $this->variables = [];
     }
 
@@ -91,11 +86,10 @@ class ConfirmRemoveModal extends Modal
 
     /**
      * @param string $key
-     * @param mixed  $value
      *
      * @return $this
      */
-    public function addVariable($key, $value)
+    public function addVariable($key, mixed $value)
     {
         $this->variables[$key] = $value;
 

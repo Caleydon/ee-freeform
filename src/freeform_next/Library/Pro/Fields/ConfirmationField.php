@@ -42,7 +42,7 @@ class ConfirmationField extends TextField implements NoStorageInterface
 
             $value = $field->getValue();
             if ($field instanceof EmailField) {
-                if (count($value) >= 1) {
+                if ((is_countable($value) ? count($value) : 0) >= 1) {
                     $value = reset($value);
                 } else {
                     $value = '';
@@ -55,7 +55,7 @@ class ConfirmationField extends TextField implements NoStorageInterface
                     ['targetFieldLabel' => $field->getLabel()]
                 );
             }
-        } catch (FreeformException $exception) {
+        } catch (FreeformException) {
         }
 
         return $errors;
@@ -93,7 +93,7 @@ class ConfirmationField extends TextField implements NoStorageInterface
             $output .= ' />';
 
             return $output;
-        } catch (FreeformException $exception) {
+        } catch (FreeformException) {
             return parent::getInputHtml();
         }
     }
@@ -101,12 +101,10 @@ class ConfirmationField extends TextField implements NoStorageInterface
     /**
      * @param string $string
      * @param string $name
-     * @param mixed  $value
      * @param bool   $escapeValue
-     *
      * @return string
      */
-    private function injectAttribute($string, $name, $value, $escapeValue = true)
+    private function injectAttribute($string, $name, mixed $value, $escapeValue = true)
     {
         if (preg_match('/' . $name . '=[\'"][^\'"]*[\'"]/', $string)) {
             $string = preg_replace(

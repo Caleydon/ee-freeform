@@ -11,6 +11,7 @@
 
 namespace Solspace\Addons\FreeformNext\Library\Migrations\Helpers;
 
+use Exception;
 use Solspace\Addons\FreeformNext\Library\Composer\Attributes\FormAttributes;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\AbstractField;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\FieldInterface;
@@ -47,7 +48,7 @@ use Solspace\Addons\FreeformNext\Services\SubmissionsService;
 
 class NextSubmissionHelper
 {
-    const STRICT_MODE = true;
+    public const STRICT_MODE = true;
 
     /** @var array */
     public $errors;
@@ -79,7 +80,7 @@ class NextSubmissionHelper
                 }
 
                  if (!array_key_exists($fieldName, $legacySubmission)) {
-                    throw new \Exception('Cannot find field "' . $fieldName . '"" in legacy submission ' . print_r($legacySubmission, true));
+                    throw new Exception('Cannot find field "' . $fieldName . '"" in legacy submission ' . print_r($legacySubmission, true));
                 }
 
                 $value = $this->formatValue($field, $legacySubmission[$fieldName]);
@@ -98,7 +99,7 @@ class NextSubmissionHelper
         $formattedValue = $value;
 
         if ($field instanceof SelectField || $field instanceof RadioGroupField) {
-            if (strpos($value, '|~|') !== false) {
+            if (str_contains($value, '|~|')) {
                 $formattedValue = substr($value, 0, strpos($value, '|~|'));
             }
         }

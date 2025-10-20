@@ -11,6 +11,10 @@
 
 namespace Solspace\Addons\FreeformNext\Library\Composer\Components;
 
+use JsonSerializable;
+use Stringable;
+use ReflectionClass;
+use ReturnTypeWillChange;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Attributes\CustomFieldAttributes;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\CheckboxField;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\FileUploadField;
@@ -29,45 +33,28 @@ use Stringy\Stringy;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-abstract class AbstractField implements FieldInterface, \JsonSerializable
+abstract class AbstractField implements FieldInterface, JsonSerializable, Stringable
 {
-    /** @var Form */
-    private $form;
-
     /** @var string */
     protected $hash;
-
     /** @var int */
     protected $id;
-
     /** @var string */
     protected $handle;
-
     /** @var string */
     protected $label;
-
     /** @var string */
     protected $instructions;
-
     /** @var bool */
     protected $required = false;
-
     /** @var CustomFieldAttributes */
     protected $customAttributes;
-
     /** @var int */
     protected $pageIndex;
-
     /** @var array */
     protected $errors;
-
-    /** @var array */
-    private $inputClasses;
-
+    private array $inputClasses;
     /**
-     * @param Form             $form
-     * @param FieldProperties  $properties
-     * @param FormValueContext $formValueContext
      * @param int              $pageIndex
      *
      * @return AbstractField
@@ -78,7 +65,7 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
         FormValueContext $formValueContext,
         $pageIndex
     ) {
-        $calledClass = get_called_class();
+        $calledClass = static::class;
 
         $objectProperties = get_class_vars($calledClass);
         $accessor         = PropertyAccess::createPropertyAccessor();
@@ -92,7 +79,7 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
             }
             try {
                 $field->{$fieldName} = $accessor->getValue($properties, $fieldName);
-            } catch (NoSuchPropertyException $e) {
+            } catch (NoSuchPropertyException) {
                 // Pass along
             }
         }
@@ -111,7 +98,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $field;
     }
-
     /**
      * @return array
      */
@@ -138,7 +124,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
             self::TYPE_CONFIRMATION       => 'Confirmation',
         ];
     }
-
     /**
      * @return string
      */
@@ -146,39 +131,32 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return (string) Stringy::create(static::getFieldType())->humanize();
     }
-
     /**
      * @return string
      */
     public static function getFieldType()
     {
-        $name = (new \ReflectionClass(get_called_class()))->getShortName();
+        $name = (new ReflectionClass(static::class))->getShortName();
         $name = str_replace('Field', '', $name);
 
         return (string) Stringy::create($name)->underscored();
     }
-
     /**
      * AbstractField constructor.
-     *
-     * @param Form $form
      */
-    final public function __construct(Form $form)
+    final public function __construct(private Form $form)
     {
-        $this->form             = $form;
         $this->customAttributes = new CustomFieldAttributes($this, [], $this->getForm()->getCustomAttributes());
         $this->inputClasses     = [];
         $this->errors           = [];
     }
-
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getValueAsString();
     }
-
     /**
      * Render the complete set of HTML for this field
      * That includes the Label, Input and Error messages
@@ -216,7 +194,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $this->renderRaw($output);
     }
-
     /**
      * Render the Label HTML
      *
@@ -230,7 +207,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $this->renderRaw($this->getLabelHtml());
     }
-
     /**
      * @param array|null $customAttributes
      *
@@ -242,7 +218,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $this->renderRaw($this->getInstructionsHtml());
     }
-
     /**
      * Render the Input HTML
      *
@@ -256,7 +231,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $this->renderRaw($this->getInputHtml());
     }
-
     /**
      * Outputs the HTML of errors
      *
@@ -270,7 +244,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $this->renderRaw($this->getErrorHtml());
     }
-
     /**
      * @return bool
      */
@@ -278,7 +251,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return (!$this instanceof NoRenderInterface);
     }
-
     /**
      * @return bool
      */
@@ -286,7 +258,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return (!$this instanceof NoStorageInterface);
     }
-
     /**
      * @return bool
      */
@@ -294,7 +265,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return $this instanceof InputOnlyInterface;
     }
-
     /**
      * Validates the Field value
      *
@@ -308,7 +278,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $isEmpty;
     }
-
     /**
      * @return bool
      */
@@ -316,7 +285,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return $this instanceof MultipleValueInterface;
     }
-
     /**
      * Returns an array of error messages
      *
@@ -330,7 +298,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $this->errors;
     }
-
     /**
      * @return bool
      */
@@ -340,7 +307,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return !empty($errors);
     }
-
     /**
      * @param array|null $errors
      *
@@ -361,7 +327,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $this;
     }
-
     /**
      * @param string $error
      *
@@ -373,14 +338,12 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $this;
     }
-
     /**
      * Return the field TYPE
      *
      * @return string
      */
     abstract public function getType();
-
     /**
      * @return string
      */
@@ -388,7 +351,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return $this->hash;
     }
-
     /**
      * @return int
      */
@@ -396,7 +358,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return (int) $this->id;
     }
-
     /**
      * @return string
      */
@@ -404,7 +365,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return $this->handle;
     }
-
     /**
      * @return string
      */
@@ -412,7 +372,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return $this->translate($this->label);
     }
-
     /**
      * @return string
      */
@@ -420,7 +379,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return $this->translate($this->instructions);
     }
-
     /**
      * @return boolean
      */
@@ -428,7 +386,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return (bool) $this->required;
     }
-
     /**
      * @return int
      */
@@ -436,7 +393,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return $this->pageIndex;
     }
-
     /**
      * Gets whatever value is set and returns its string representation
      *
@@ -458,7 +414,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $value;
     }
-
     /**
      * Either gets the ID attribute specified in custom attributes
      * or generates a new one: "form-input-{handle}"
@@ -481,7 +436,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $attribute;
     }
-
     /**
      * Gets the overriden value if any present
      *
@@ -491,7 +445,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return $this->getCustomAttributes()->getOverrideValue();
     }
-
     /**
      * An alias for ::setCustomAttributes()
      *
@@ -501,7 +454,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         $this->setCustomAttributes($attributes);
     }
-
     /**
      * @return ConstraintInterface[]
      */
@@ -509,7 +461,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return [];
     }
-
     /**
      * @return string
      */
@@ -517,7 +468,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return implode(' ', $this->inputClasses);
     }
-
     /**
      * @param string $class
      *
@@ -529,7 +479,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $this;
     }
-
     /**
      * Assemble the Label HTML string
      *
@@ -549,7 +498,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $output;
     }
-
     /**
      * Assemble the Instructions HTML string
      *
@@ -571,7 +519,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $output;
     }
-
     /**
      * Assemble the Error HTML output string
      *
@@ -597,7 +544,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $output;
     }
-
     /**
      * @return CustomFieldAttributes
      */
@@ -605,20 +551,17 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return $this->customAttributes;
     }
-
     /**
      * Outputs ' $name="$value"' where the $value is escaped
      * using htmlspecialchars() if $escapeValue is TRUE
      *
      * @param string $name
-     * @param mixed  $value
      * @param bool   $escapeValue
      *
      * @param bool   $insertEmpty
-     *
      * @return string
      */
-    protected function getAttributeString($name, $value, $escapeValue = true, $insertEmpty = false)
+    protected function getAttributeString($name, mixed $value, $escapeValue = true, $insertEmpty = false)
     {
         $notEmpty = null !== $value && '' !== $value;
         if ($notEmpty || $insertEmpty) {
@@ -631,7 +574,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return '';
     }
-
     /**
      * Outputs ' $name' if $enabled is true
      *
@@ -644,7 +586,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return $enabled ? sprintf(' %s', $name) : '';
     }
-
     /**
      * Outputs ' $name="$value"' where the $value is a number
      *
@@ -661,7 +602,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return '';
     }
-
     /**
      * @return string
      */
@@ -675,14 +615,12 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $attribute;
     }
-
     /**
      * Assemble the Input HTML string
      *
      * @return string
      */
     abstract protected function getInputHtml();
-
     /**
      * Output something before an input HTML is output
      *
@@ -692,7 +630,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return '';
     }
-
     /**
      * Output something after an input HTML is output
      *
@@ -702,7 +639,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return '';
     }
-
     /**
      * Validate the field and add error messages if any
      *
@@ -748,7 +684,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
 
         return $errors;
     }
-
     /**
      * @return Form
      */
@@ -756,12 +691,10 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return $this->form;
     }
-
     /**
      * An alias method for translator
      *
      * @param string $string
-     * @param array  $variables
      *
      * @return string
      */
@@ -769,7 +702,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return null === $string ? '' : $this->getForm()->getTranslator()->translate($string, $variables);
     }
-
     /**
      * @param string $output
      *
@@ -779,7 +711,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
     {
         return $output;
     }
-
     /**
      * Sets the custom field attributes
      *
@@ -791,7 +722,6 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
             $this->customAttributes->mergeAttributes($attributes);
         }
     }
-
     /**
      * Specify data which should be serialized to JSON
      *
@@ -800,9 +730,9 @@ abstract class AbstractField implements FieldInterface, \JsonSerializable
      *        which is a value of any type other than a resource.
      * @since 5.4.0
      */
-	#[\ReturnTypeWillChange]
-    public function jsonSerialize()
-    {
-        return $this->hash;
-    }
+    #[ReturnTypeWillChange]
+       public function jsonSerialize()
+       {
+           return $this->hash;
+       }
 }

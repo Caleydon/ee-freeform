@@ -11,6 +11,8 @@
 
 namespace Solspace\Addons\FreeformNext\Controllers;
 
+use Exception;
+use stdClass;
 use EllisLab\ExpressionEngine\Library\CP\Table;
 use Solspace\Addons\FreeformNext\Library\Composer\Attributes\FormAttributes;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\Interfaces\ExternalOptionsInterface;
@@ -113,11 +115,11 @@ class FormController extends Controller
                 ],
                 $form->handle,
                 [
-                    'content' => isset($submissionTotals[$form->id]) ? $submissionTotals[$form->id] : 0,
+                    'content' => $submissionTotals[$form->id] ?? 0,
                     'href'    => ($canAccessSubmissions ? $this->getLink('submissions/' . $form->handle) : null ),
                 ],
                 [
-                    'content' => isset($spamTotals[$form->id]) ? $spamTotals[$form->id] : 0,
+                    'content' => $spamTotals[$form->id] ?? 0,
                     'href'    => ($canAccessSubmissions ? $this->getLink('spam/' . $form->handle) : null ),
                 ],
                 $toolbar,
@@ -150,10 +152,7 @@ class FormController extends Controller
             $template['form_right_links'] = FreeformHelper::get('right_links', $this);
         }
 
-		$template['footer'] = array(
-			'submit_lang' => lang('submit'),
-			'type'        => 'bulk_action_form',
-		);
+		$template['footer'] = ['submit_lang' => lang('submit'), 'type'        => 'bulk_action_form'];
 
         $view = new CpView('form/listing', $template);
 
@@ -166,8 +165,6 @@ class FormController extends Controller
     }
 
     /**
-     * @param FormModel $form
-     *
      * @return CpView
      */
     public function edit(FormModel $form)
@@ -220,7 +217,7 @@ class FormController extends Controller
 
     /**
      * @return AjaxView
-     * @throws \Exception
+     * @throws Exception
      */
     public function save()
     {
@@ -250,7 +247,7 @@ class FormController extends Controller
             $oldHandle = $composerState['composer']['properties']['form']['handle'];
 
             if (preg_match('/^([a-zA-Z0-9]*[a-zA-Z]+)(\d+)$/', $oldHandle, $matches)) {
-                list($string, $mainPart, $iterator) = $matches;
+                [$string, $mainPart, $iterator] = $matches;
 
                 $newHandle = $mainPart . ((int) $iterator + 1);
             } else {
@@ -267,8 +264,6 @@ class FormController extends Controller
 
             $formAttributes = new FormAttributes($formId, $sessionImplementation, new EERequest());
             $composer       = new Composer(
-                $composerState,
-                $formAttributes,
                 $formsService,
                 new FieldsService(),
                 new SubmissionsService(),
@@ -277,7 +272,9 @@ class FormController extends Controller
                 new MailingListsService(),
                 new CrmService(),
                 new StatusesService(),
-                new EETranslator()
+                new EETranslator(),
+                $composerState,
+                $formAttributes,
             );
         } catch (ComposerException $exception) {
             $view->addError($exception->getMessage());
@@ -306,7 +303,7 @@ class FormController extends Controller
 
                 $view->addVariable('id', $form->id);
                 $view->addVariable('handle', $form->handle);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $view->addError($e->getMessage());
             }
         }
@@ -347,9 +344,7 @@ class FormController extends Controller
     }
 
     /**
-     * @param Form $form
-     *
-     * @return array|\stdClass
+     * @return array|stdClass
      */
     private function getGeneratedOptionsList(Form $form)
     {
@@ -367,7 +362,7 @@ class FormController extends Controller
         }
 
         if (empty($options)) {
-            return new \stdClass();
+            return new stdClass();
         }
 
         return $options;

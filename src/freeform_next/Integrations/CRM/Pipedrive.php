@@ -11,6 +11,8 @@
 
 namespace Solspace\Addons\FreeformNext\Integrations\CRM;
 
+use Exception;
+use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use Solspace\Addons\FreeformNext\Library\Exceptions\Integrations\IntegrationException;
@@ -22,9 +24,9 @@ use Solspace\Addons\FreeformNext\Library\Logging\LoggerInterface;
 
 class Pipedrive extends AbstractCRMIntegration
 {
-    const SETTING_API_TOKEN = 'api_token';
-    const TITLE             = 'Pipedrive';
-    const LOG_CATEGORY      = 'Pipedrive';
+    public const SETTING_API_TOKEN = 'api_token';
+    public const TITLE             = 'Pipedrive';
+    public const LOG_CATEGORY      = 'Pipedrive';
 
     /**
      * Returns a list of additional settings for this integration
@@ -92,7 +94,7 @@ class Pipedrive extends AbstractCRMIntegration
 
                 $this->getLogger()->log(LoggerInterface::LEVEL_ERROR, $responseBody, self::LOG_CATEGORY);
                 $this->getLogger()->log(LoggerInterface::LEVEL_ERROR, $e->getMessage(), self::LOG_CATEGORY);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->getLogger()->log(LoggerInterface::LEVEL_WARNING, $e->getMessage(), self::LOG_CATEGORY);
             }
         }
@@ -118,7 +120,7 @@ class Pipedrive extends AbstractCRMIntegration
 
                 $this->getLogger()->log(LoggerInterface::LEVEL_ERROR, $responseBody, self::LOG_CATEGORY);
                 $this->getLogger()->log(LoggerInterface::LEVEL_ERROR, $e->getMessage(), self::LOG_CATEGORY);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->getLogger()->log(LoggerInterface::LEVEL_WARNING, $e->getMessage(), self::LOG_CATEGORY);
             }
         }
@@ -145,7 +147,7 @@ class Pipedrive extends AbstractCRMIntegration
 
             $this->getLogger()->log(LoggerInterface::LEVEL_ERROR, $responseBody, self::LOG_CATEGORY);
             $this->getLogger()->log(LoggerInterface::LEVEL_ERROR, $e->getMessage(), self::LOG_CATEGORY);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->getLogger()->log(LoggerInterface::LEVEL_WARNING, $e->getMessage(), self::LOG_CATEGORY);
         }
 
@@ -199,7 +201,7 @@ class Pipedrive extends AbstractCRMIntegration
 
             $this->getLogger()->log(LoggerInterface::LEVEL_ERROR, $responseBody, self::LOG_CATEGORY);
             $this->getLogger()->log(LoggerInterface::LEVEL_ERROR, $e->getMessage(), self::LOG_CATEGORY);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->getLogger()->log(LoggerInterface::LEVEL_WARNING, $e->getMessage(), self::LOG_CATEGORY);
         }
 
@@ -352,10 +354,9 @@ class Pipedrive extends AbstractCRMIntegration
 
     /**
      * @param       $endpoint
-     * @param array $queryOptions
      *
-     * @return \Psr\Http\Message\ResponseInterface
-	 */
+     * @return ResponseInterface
+     */
     private function getResponse($endpoint, array $queryOptions = [])
     {
         $client = new Client();

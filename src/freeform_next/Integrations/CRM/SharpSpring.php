@@ -11,6 +11,7 @@
 
 namespace Solspace\Addons\FreeformNext\Integrations\CRM;
 
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ClientException;
@@ -24,10 +25,10 @@ use Solspace\Addons\FreeformNext\Library\Logging\LoggerInterface;
 
 class SharpSpring extends AbstractCRMIntegration {
 
-	const SETTING_SECRET_KEY = 'secret_key';
-	const SETTING_ACCOUNT_ID = 'account_id';
-	const TITLE = 'SharpSpring';
-	const LOG_CATEGORY = 'SharpSpring';
+	public const SETTING_SECRET_KEY = 'secret_key';
+	public const SETTING_ACCOUNT_ID = 'account_id';
+	public const TITLE = 'SharpSpring';
+	public const LOG_CATEGORY = 'SharpSpring';
 
 	/**
 	 * Returns a list of additional settings for this integration
@@ -73,7 +74,7 @@ class SharpSpring extends AbstractCRMIntegration {
 		{
 			preg_match('/^(\w+)___(.+)$/', $key, $matches);
 
-			list ($all, $target, $propName) = $matches;
+			[$all, $target, $propName] = $matches;
 
 			switch ($target)
 			{
@@ -97,7 +98,7 @@ class SharpSpring extends AbstractCRMIntegration {
 
 				$this->getLogger()->log(LoggerInterface::LEVEL_INFO, $response->getBody(true), self::LOG_CATEGORY);
 
-				return (isset($data['result']['error']) && (count($data['result']['error']) === 0));
+				return (isset($data['result']['error']) && ((is_countable($data['result']['error']) ? count($data['result']['error']) : 0) === 0));
 			} catch (BadResponseException $e)
 			{
 				if($e->getResponse())
@@ -106,7 +107,7 @@ class SharpSpring extends AbstractCRMIntegration {
 					$this->getLogger()->log(LoggerInterface::LEVEL_ERROR, $json, self::LOG_CATEGORY);
 					$this->getLogger()->log(LoggerInterface::LEVEL_ERROR, $e->getMessage(), self::LOG_CATEGORY);
 				}
-			} catch (\Exception $e)
+			} catch (Exception $e)
 			{
 				$this->getLogger()->log(LoggerInterface::LEVEL_WARNING, $e->getMessage(), self::LOG_CATEGORY);
 			}
@@ -293,15 +294,13 @@ class SharpSpring extends AbstractCRMIntegration {
 	}
 
 	/**
-	 * Generate a properly formatted payload for SharpSpring API
-	 *
-	 * @param        $method
-	 * @param array  $params
-	 * @param string $id
-	 *
-	 * @return string
-	 */
-	private function generatePayload($method, array $params = ['where' => []], $id = 'freeform')
+  * Generate a properly formatted payload for SharpSpring API
+  *
+  * @param        $method
+  * @param string $id
+  * @return string
+  */
+ private function generatePayload($method, array $params = ['where' => []], $id = 'freeform')
 	{
 		return json_encode(
 			[

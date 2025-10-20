@@ -53,7 +53,7 @@ class ExportService
                             $label = $field->getLabel();
 
                             $storedFieldIds[] = $field->getId();
-                        } catch (FreeformException $e) {
+                        } catch (FreeformException) {
                             continue;
                         }
                     }

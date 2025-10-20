@@ -23,11 +23,11 @@ use Solspace\Addons\FreeformNext\Library\Logging\LoggerInterface;
 
 class CampaignMonitor extends AbstractMailingListIntegration
 {
-    const TITLE        = 'Campaign Monitor';
-    const LOG_CATEGORY = 'CampaignMonitor';
+    public const TITLE        = 'Campaign Monitor';
+    public const LOG_CATEGORY = 'CampaignMonitor';
 
-    const SETTING_API_KEY   = 'api_key';
-    const SETTING_CLIENT_ID = 'client_id';
+    public const SETTING_API_KEY   = 'api_key';
+    public const SETTING_CLIENT_ID = 'client_id';
 
     /**
      * Returns a list of additional settings for this integration
@@ -133,7 +133,7 @@ class CampaignMonitor extends AbstractMailingListIntegration
             foreach ($emails as $email) {
                 $data = [
                     'EmailAddress'                           => $email,
-                    'Name'                                   => isset($mappedValues['Name']) ? $mappedValues['Name'] : '',
+                    'Name'                                   => $mappedValues['Name'] ?? '',
                     'CustomFields'                           => $customFields,
                     'Resubscribe'                            => true,
                     'RestartSubscriptionBasedAutoresponders' => true,
@@ -286,24 +286,12 @@ class CampaignMonitor extends AbstractMailingListIntegration
 
         if (is_array($json)) {
             foreach ($json as $field) {
-                switch ($field->DataType) {
-                    case 'Text':
-                    case 'MultiSelectOne':
-                        $type = FieldObject::TYPE_STRING;
-                        break;
-
-                    case 'Number':
-                        $type = FieldObject::TYPE_NUMERIC;
-                        break;
-
-                    case 'MultiSelectMany':
-                        $type = FieldObject::TYPE_ARRAY;
-                        break;
-
-                    default:
-                        $type = null;
-                        break;
-                }
+                $type = match ($field->DataType) {
+                    'Text', 'MultiSelectOne' => FieldObject::TYPE_STRING,
+                    'Number' => FieldObject::TYPE_NUMERIC,
+                    'MultiSelectMany' => FieldObject::TYPE_ARRAY,
+                    default => null,
+                };
 
                 if (null === $type) {
                     continue;

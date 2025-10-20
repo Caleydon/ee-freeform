@@ -18,19 +18,15 @@ use Solspace\Addons\FreeformNext\Utilities\AddonInfo;
 class NavigationLink
 {
     /** @var string */
-    private $title;
-
-    /** @var string */
     private $link;
 
     /** @var string */
     private $method;
 
     /** @var NavigationLink[] */
-    private $subNav;
+    private array $subNav;
 
-    /** @var NavigationLink */
-    private $buttonLink;
+    private ?\Solspace\Addons\FreeformNext\Utilities\ControlPanel\Navigation\NavigationLink $buttonLink = null;
 
     /**
      * NavigationLink constructor.
@@ -38,9 +34,8 @@ class NavigationLink
      * @param string $title
      * @param string $method
      */
-    public function __construct($title, $method = null)
+    public function __construct(private $title, $method = null)
     {
-        $this->title  = $title;
         $this->subNav = [];
 
         if (null !== $method) {
@@ -124,8 +119,6 @@ class NavigationLink
     }
 
     /**
-     * @param NavigationLink $link
-     *
      * @return $this
      */
     public function addSubNavItem(NavigationLink $link)

@@ -11,15 +11,12 @@
 
 namespace Solspace\Addons\FreeformNext\Library\DataObjects;
 
+use JsonSerializable;
 use Solspace\Addons\FreeformNext\Library\Helpers\StringHelper;
 
-class FormTemplate implements \JsonSerializable
+class FormTemplate implements JsonSerializable
 {
-    /** @var string */
-    private $filePath;
-
-    /** @var string */
-    private $fileName;
+    private string|array $fileName;
 
     /** @var string */
     private $name;
@@ -29,9 +26,8 @@ class FormTemplate implements \JsonSerializable
      *
      * @param string $filePath
      */
-    public function __construct($filePath)
+    public function __construct(private $filePath)
     {
-        $this->filePath = $filePath;
         $this->fileName = pathinfo($filePath, PATHINFO_BASENAME);
         $this->name     = StringHelper::camelize(StringHelper::humanize(pathinfo($filePath, PATHINFO_FILENAME)));
     }

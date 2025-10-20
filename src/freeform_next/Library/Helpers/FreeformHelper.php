@@ -2,6 +2,7 @@
 
 namespace Solspace\Addons\FreeformNext\Library\Helpers;
 
+use Exception;
 use Solspace\Addons\FreeformNext\Controllers\FieldController;
 use Solspace\Addons\FreeformNext\Controllers\FormController;
 use Solspace\Addons\FreeformNext\Controllers\StatusController;
@@ -46,7 +47,7 @@ class FreeformHelper
                         ->total;
 
                     if (!$item->id && $count > 0) {
-                        throw new \Exception('Form limit reached');
+                        throw new Exception('Form limit reached');
                     }
                 } elseif ($item instanceof FieldModel) {
                     $count = (int) ee()->db
@@ -56,7 +57,7 @@ class FreeformHelper
                         ->total;
 
                     if (!$item->id && $count >= 15) {
-                        throw new \Exception('Maximum limit of 15 fields reached.');
+                        throw new Exception('Maximum limit of 15 fields reached.');
                     }
                 }
             }
@@ -113,7 +114,7 @@ class FreeformHelper
             $columns = $args[1];
 
             if ($version === FREEFORM_EXPRESS) {
-                $columns = array_slice($columns, 0, count($columns) - 2, true);
+                $columns = array_slice($columns, 0, (is_countable($columns) ? count($columns) : 0) - 2, true);
             }
 
             $return = $columns;
@@ -125,7 +126,7 @@ class FreeformHelper
                 $newColumns = [];
 
                 foreach ($columns as $column) {
-                    $data = array_slice($column, 0, count($column) - 2, true);
+                    $data = array_slice($column, 0, (is_countable($column) ? count($column) : 0) - 2, true);
                     $data[1]['content'] = strip_tags($data[1]['content'], '<span>');
 
                     $newColumns[] = $data;

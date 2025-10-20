@@ -11,6 +11,11 @@
 
 namespace Solspace\Addons\FreeformNext\Library\Composer\Components;
 
+use JsonSerializable;
+use Iterator;
+use Solspace\Addons\FreeformNext\Library\Pro\Fields\DatetimeField;
+use Solspace\Addons\FreeformNext\Library\Pro\Fields\TableField;
+use ReturnTypeWillChange;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\CheckboxGroupField;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\Interfaces\FileUploadInterface;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\Interfaces\MailingListInterface;
@@ -24,76 +29,54 @@ use Solspace\Addons\FreeformNext\Library\Factories\ComposerFieldFactory;
 use Solspace\Addons\FreeformNext\Library\Session\FormValueContext;
 use Solspace\Addons\FreeformNext\Library\Translations\TranslatorInterface;
 
-class Layout implements \JsonSerializable, \Iterator
+class Layout implements JsonSerializable, Iterator
 {
-    /** @var Form */
-    private $form;
-
     /** @var Page[] */
-    private $pages;
+    private array $pages;
 
     /** @var Row[] */
-    private $rows;
+    private array $rows;
 
     /** @var AbstractField[]|TextField[]|CheckboxGroupField[] */
-    private $fields;
+    private array $fields;
 
     /** @var AbstractField[] */
-    private $fieldsById;
+    private ?array $fieldsById = null;
 
     /** @var AbstractField[] */
-    private $fieldsByHandle;
+    private ?array $fieldsByHandle = null;
 
     /** @var AbstractField[] */
-    private $fieldsByHash;
+    private ?array $fieldsByHash = null;
 
     /** @var AbstractField[]|RecipientInterface[] */
-    private $recipientFields;
+    private array $recipientFields;
 
     /** @var NoRenderInterface[]|AbstractField[] */
-    private $hiddenFields;
+    private array $hiddenFields;
 
     /** @var AbstractField[]|FileUploadInterface[] */
-    private $fileUploadFields;
+    private array $fileUploadFields;
 
     /** @var AbstractField[]|MailingListInterface[] */
-    private $mailingListFields;
+    private array $mailingListFields;
 
-    /** @var Properties */
-    private $properties;
+    private bool $hasDatepickerEnabledFields;
 
-    /** @var array */
-    private $layoutData;
-
-    /** @var TranslatorInterface */
-    private $translator;
-
-    /** @var bool */
-    private $hasDatepickerEnabledFields;
-
-    /** @var bool */
-    private $hasTableFields;
+    private bool $hasTableFields;
 
     /**
      * Layout constructor.
      *
-     * @param Form                $form
-     * @param array               $layoutData
      * @param Properties          $properties
-     * @param FormValueContext    $formValueContext
-     * @param TranslatorInterface $translator
      */
     public function __construct(
-        Form $form,
-        array $layoutData,
-        Properties $properties = null,
+        private Form $form,
+        private array $layoutData,
         FormValueContext $formValueContext,
-        TranslatorInterface $translator
+        private TranslatorInterface $translator,
+        private ?Properties $properties = null
     ) {
-        $this->form       = $form;
-        $this->properties = $properties;
-        $this->layoutData = $layoutData;
-        $this->translator = $translator;
         $this->buildLayout($formValueContext);
     }
 
@@ -209,8 +192,6 @@ class Layout implements \JsonSerializable, \Iterator
      * Removes a given field form the layoutData if it's present
      * ** DOES NOT REMOVE IT FROM LAYOUT OBJECT **
      * !!This is meant only for cleaning up the export JSON data!!
-     *
-     * @param AbstractField $field
      */
     public function removeFieldFromData(AbstractField $field)
     {
@@ -230,7 +211,7 @@ class Layout implements \JsonSerializable, \Iterator
 
         foreach ($this->layoutData as $pageIndex => $page) {
             foreach ($page as $rowIndex => $row) {
-                if (count($row['columns']) === 0) {
+                if ((is_countable($row['columns']) ? count($row['columns']) : 0) === 0) {
                     unset($this->layoutData[$pageIndex][$rowIndex]);
                     $this->layoutData[$pageIndex] = array_values($this->layoutData[$pageIndex]);
                 }
@@ -294,16 +275,15 @@ class Layout implements \JsonSerializable, \Iterator
     /**
      * Builds all page, row and field objects and inflates them
      *
-     * @param FormValueContext $formValueContext
      *
      * @throws ComposerException
      */
     private function buildLayout(FormValueContext $formValueContext)
     {
-        $datetimeClass  = 'Solspace\Addons\FreeformNext\Library\Pro\Fields\DatetimeField';
+        $datetimeClass  = DatetimeField::class;
         $datetimeExists = class_exists($datetimeClass);
 
-        $tableClass  = 'Solspace\Addons\FreeformNext\Library\Pro\Fields\TableField';
+        $tableClass  = TableField::class;
         $tableExists = class_exists($tableClass);
 
         $hasDatepickerEnabledFields = $hasTableFields = false;
@@ -376,13 +356,13 @@ class Layout implements \JsonSerializable, \Iterator
                         $recipientFields[] = $field;
                     }
 
-                    if ($datetimeExists && get_class($field) === $datetimeClass) {
+                    if ($datetimeExists && $field::class === $datetimeClass) {
                         if ($field->isUseDatepicker()) {
                             $hasDatepickerEnabledFields = true;
                         }
                     }
 
-                    if ($tableExists && get_class($field) === $tableClass) {
+                    if ($tableExists && $field::class === $tableClass) {
                         if ($field->isUseScript()) {
                             $hasTableFields = true;
                         }
@@ -422,7 +402,6 @@ class Layout implements \JsonSerializable, \Iterator
 
     /**
      * @param string $string
-     * @param array  $variables
      *
      * @return string
      */
@@ -451,7 +430,7 @@ class Layout implements \JsonSerializable, \Iterator
      * @return mixed Can return any type.
      * @since 5.0.0
      */
-	#[\ReturnTypeWillChange]
+	#[ReturnTypeWillChange]
     public function current()
     {
         return current($this->pages);
@@ -464,7 +443,7 @@ class Layout implements \JsonSerializable, \Iterator
      * @return void Any returned value is ignored.
      * @since 5.0.0
      */
-	#[\ReturnTypeWillChange]
+	#[ReturnTypeWillChange]
     public function next()
     {
         next($this->pages);
@@ -477,7 +456,7 @@ class Layout implements \JsonSerializable, \Iterator
      * @return mixed scalar on success, or null on failure.
      * @since 5.0.0
      */
-	#[\ReturnTypeWillChange]
+	#[ReturnTypeWillChange]
     public function key()
     {
         return key($this->pages);
@@ -503,7 +482,7 @@ class Layout implements \JsonSerializable, \Iterator
      * @return void Any returned value is ignored.
      * @since 5.0.0
      */
-	#[\ReturnTypeWillChange]
+	#[ReturnTypeWillChange]
     public function rewind()
     {
         reset($this->pages);

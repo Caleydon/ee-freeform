@@ -21,13 +21,10 @@ use Stringy\Stringy;
 
 class ComposerFieldFactory
 {
-    private static $defaultFieldNamespace = 'Solspace\Addons\FreeformNext\Library\Composer\Components\Fields';
-    private static $proFieldNamespace     = 'Solspace\Addons\FreeformNext\Library\Pro\Fields';
+    private static string $defaultFieldNamespace = 'Solspace\Addons\FreeformNext\Library\Composer\Components\Fields';
+    private static string $proFieldNamespace     = 'Solspace\Addons\FreeformNext\Library\Pro\Fields';
 
     /**
-     * @param Form             $form
-     * @param FieldProperties  $properties
-     * @param FormValueContext $formValueContext
      * @param int              $pageIndex
      *
      * @return AbstractField

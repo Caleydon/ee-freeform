@@ -2,6 +2,8 @@
 
 namespace Solspace\Addons\FreeformNext\Controllers;
 
+use Exception;
+use ReflectionClass;
 use Solspace\Addons\FreeformNext\Library\DataObjects\SubmissionAttributes;
 use Solspace\Addons\FreeformNext\Library\DataObjects\SubmissionPreferenceSetting;
 use Solspace\Addons\FreeformNext\Library\Exceptions\FreeformException;
@@ -23,12 +25,12 @@ use Stringy\Stringy;
 
 class ApiController extends Controller
 {
-    const TYPE_FIELDS            = 'fields';
-    const TYPE_NOTIFICATIONS     = 'notifications';
-    const TYPE_RESET_SPAM        = 'reset_spam';
-    const TYPE_DUPLICATE         = 'duplicate';
-    const TYPE_SUBMISSION_LAYOUT = 'submission_layout';
-    const TYPE_SUBMISSION_EXPORT = 'submission_export';
+    public const TYPE_FIELDS            = 'fields';
+    public const TYPE_NOTIFICATIONS     = 'notifications';
+    public const TYPE_RESET_SPAM        = 'reset_spam';
+    public const TYPE_DUPLICATE         = 'duplicate';
+    public const TYPE_SUBMISSION_LAYOUT = 'submission_layout';
+    public const TYPE_SUBMISSION_EXPORT = 'submission_export';
 
     /**
      * @param string $type
@@ -39,27 +41,15 @@ class ApiController extends Controller
      */
     public function handle($type, $args = [])
     {
-        switch ($type) {
-            case self::TYPE_FIELDS:
-                return $this->fields();
-
-            case self::TYPE_NOTIFICATIONS:
-                return $this->notifications($args);
-
-            case self::TYPE_RESET_SPAM:
-                return $this->resetSpam();
-
-            case self::TYPE_SUBMISSION_LAYOUT:
-                return $this->submissionLayout();
-
-            case self::TYPE_DUPLICATE:
-                return $this->duplicate();
-
-            case self::TYPE_SUBMISSION_EXPORT:
-                return $this->submissionExport($args);
-        }
-
-        throw new FreeformException(sprintf('"%s" action is not present in the API controller', $type));
+        return match ($type) {
+            self::TYPE_FIELDS => $this->fields(),
+            self::TYPE_NOTIFICATIONS => $this->notifications($args),
+            self::TYPE_RESET_SPAM => $this->resetSpam(),
+            self::TYPE_SUBMISSION_LAYOUT => $this->submissionLayout(),
+            self::TYPE_DUPLICATE => $this->duplicate(),
+            self::TYPE_SUBMISSION_EXPORT => $this->submissionExport($args),
+            default => throw new FreeformException(sprintf('"%s" action is not present in the API controller', $type)),
+        };
     }
 
     /**
@@ -75,7 +65,7 @@ class ApiController extends Controller
                 FreeformHelper::get('validate', $model);
 
                 $view->addVariable('success', true);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $view->addError($e->getMessage());
             }
 
@@ -88,8 +78,6 @@ class ApiController extends Controller
     }
 
     /**
-     * @param array $args
-     *
      * @return View
      */
     public function notifications(array $args = [])
@@ -191,7 +179,7 @@ class ApiController extends Controller
             }
 
             $view->addVariable('success', true);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $view->addError($e->getMessage());
         }
 
@@ -251,7 +239,6 @@ class ApiController extends Controller
     }
 
     /**
-     * @param array $args
      *
      * @return View
      * @throws FreeformException
@@ -354,7 +341,7 @@ class ApiController extends Controller
     {
         $newHandleBase = $newForm->handle;
 
-        if (strpos($newForm->handle, '_copy_') !== false) {
+        if (str_contains($newForm->handle, '_copy_')) {
             $newHandleBase = substr($newForm->handle, 0, strpos($newForm->handle, "_copy"));
         }
 
@@ -372,7 +359,7 @@ class ApiController extends Controller
 
     private function createNewForm($form)
     {
-        $reflectionClass = new \ReflectionClass(FormModel::class);
+        $reflectionClass = new ReflectionClass(FormModel::class);
         $properties = $reflectionClass->getProperties();
         $newForm = FormModel::create();
 
@@ -402,7 +389,7 @@ class ApiController extends Controller
 
     private function getProtectedProperty($property, $object)
     {
-        $reflectionClass = new \ReflectionClass(get_class($object));
+        $reflectionClass = new ReflectionClass($object::class);
         $reflectionProperty = $reflectionClass->getProperty($property);
         $reflectionProperty->setAccessible(true);
 

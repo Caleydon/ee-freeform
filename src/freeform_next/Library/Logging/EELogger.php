@@ -11,13 +11,13 @@
 
 namespace Solspace\Addons\FreeformNext\Library\Logging;
 
+use Logger;
 class EELogger implements LoggerInterface
 {
     /** @var \Logger[] */
-    private static $loggers = [];
+    private static array $loggers = [];
 
-    /** @var bool */
-    private static $loggerInitiated;
+    private static ?bool $loggerInitiated = null;
 
 	public function __construct()
 	{
@@ -34,12 +34,12 @@ class EELogger implements LoggerInterface
         if (!isset(self::$loggers[$category])) {
             if (null === self::$loggerInitiated) {
                 $config = include __DIR__ . '/logger_config.php';
-                \Logger::configure($config);
+                Logger::configure($config);
 
                 self::$loggerInitiated = true;
             }
 
-            self::$loggers[$category] = \Logger::getLogger($category);
+            self::$loggers[$category] = Logger::getLogger($category);
         }
 
         return self::$loggers[$category];
@@ -107,21 +107,12 @@ class EELogger implements LoggerInterface
 	 */
     private function getLevel($level)
     {
-        switch ($level) {
-            case self::LEVEL_DEBUG:
-                return self::LEVEL_DEBUG;
-
-            case self::LEVEL_FATAL:
-                return self::LEVEL_FATAL;
-
-            case self::LEVEL_INFO:
-                return self::LEVEL_INFO;
-
-            case self::LEVEL_WARNING:
-                return self::LEVEL_WARNING;
-
-            default:
-                return self::LEVEL_ERROR;
-        }
+        return match ($level) {
+            self::LEVEL_DEBUG => self::LEVEL_DEBUG,
+            self::LEVEL_FATAL => self::LEVEL_FATAL,
+            self::LEVEL_INFO => self::LEVEL_INFO,
+            self::LEVEL_WARNING => self::LEVEL_WARNING,
+            default => self::LEVEL_ERROR,
+        };
     }
 }

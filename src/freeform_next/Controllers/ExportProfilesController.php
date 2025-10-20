@@ -2,6 +2,7 @@
 
 namespace Solspace\Addons\FreeformNext\Controllers;
 
+use Exception;
 use ExpressionEngine\Library\CP\Table;
 use ExpressionEngine\Service\Validation\Result;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\Interfaces\MultipleValueInterface;
@@ -318,14 +319,14 @@ class ExportProfilesController extends Controller
      * @param int    $profileId
      * @param string $type
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function export($profileId, $type)
     {
         $profile = ExportProfilesRepository::getInstance()->getProfileById($profileId);
 
         if (!$profile) {
-            throw new \Exception(sprintf('Profile with ID %d not found', $profileId));
+            throw new Exception(sprintf('Profile with ID %d not found', $profileId));
         }
 
         $form = $profile->getFormModel()->getForm();
@@ -359,8 +360,6 @@ class ExportProfilesController extends Controller
     }
 
     /**
-     * @param ExportProfileModel $profile
-     *
      * @return string
      */
     private function getFieldExportTemplate(ExportProfileModel $profile)
@@ -372,8 +371,6 @@ class ExportProfilesController extends Controller
     }
 
     /**
-     * @param ExportProfileModel $profile
-     *
      * @return string
      */
     private function getFiltersTemplate(ExportProfileModel $profile)
@@ -386,7 +383,6 @@ class ExportProfilesController extends Controller
 
     /**
      * @param int  $id
-     * @param Form $form
      *
      * @return ExportProfileModel
      */

@@ -248,7 +248,7 @@ class Freeform_next_upd extends AddonUpdater
                         ee()->db->query("ALTER TABLE exp_$table DROP INDEX $old, ADD INDEX $index");
                     }
                 }
-            } catch (\Exception $exception) {
+            } catch (Exception) {
             }
         }
 

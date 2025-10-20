@@ -11,6 +11,8 @@
 
 namespace Solspace\Addons\FreeformNext\Model;
 
+use Stringable;
+use DateTime;
 use EllisLab\ExpressionEngine\Service\Model\Model;
 use Solspace\Addons\FreeformNext\Library\Composer\Attributes\FormAttributes;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Form;
@@ -41,10 +43,10 @@ use Solspace\Addons\FreeformNext\Services\SubmissionsService;
  * @property string $defaultStatus
  * @property int    $legacyId
  */
-class FormModel extends Model
+class FormModel extends Model implements Stringable
 {
-    const MODEL = 'freeform_next:FormModel';
-    const TABLE = 'freeform_next_forms';
+    public const MODEL = 'freeform_next:FormModel';
+    public const TABLE = 'freeform_next_forms';
 
     protected static $_primary_key = 'id';
     protected static $_table_name  = self::TABLE;
@@ -64,8 +66,7 @@ class FormModel extends Model
     protected $dateCreated;
     protected $dateUpdated;
 
-    /** @var Composer */
-    private $composer;
+    private ?Composer $composer = null;
 
     /**
      * Creates a Form object with default settings
@@ -93,7 +94,7 @@ class FormModel extends Model
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->name;
     }
@@ -101,8 +102,6 @@ class FormModel extends Model
     /**
      * Sets names, handles, descriptions
      * And updates the layout JSON
-     *
-     * @param Composer $composer
      */
     public function setLayout(Composer $composer)
     {
@@ -131,8 +130,6 @@ class FormModel extends Model
             $formAttributes = $this->getFormAttributes();
 
             $this->composer = new Composer(
-                $composerState,
-                $formAttributes,
                 new FormsService(),
                 new FieldsService(),
                 new SubmissionsService(),
@@ -141,7 +138,9 @@ class FormModel extends Model
                 new MailingListsService(),
                 new CrmService(),
                 new StatusesService(),
-                new EETranslator()
+                new EETranslator(),
+                $composerState,
+                $formAttributes,
             );
         }
 
@@ -220,7 +219,7 @@ class FormModel extends Model
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     private function getTimestampableDate()
     {

@@ -13,14 +13,11 @@ namespace Solspace\Addons\FreeformNext\Utilities\ControlPanel;
 
 class AjaxView extends View
 {
-    /** @var array */
-    private $variables;
+    private array $variables;
 
-    /** @var array */
-    private $errors;
+    private array $errors;
 
-    /** @var bool */
-    private $showErrorsIfEmpty;
+    private bool $showErrorsIfEmpty;
 
     /**
      * AjaxView constructor.
@@ -54,9 +51,6 @@ class AjaxView extends View
         return !empty($this->errors);
     }
 
-    /**
-     * @param array $variables
-     */
     public function setVariables(array $variables)
     {
         $this->variables = $variables;
@@ -64,11 +58,10 @@ class AjaxView extends View
 
     /**
      * @param string $key
-     * @param mixed  $value
      *
      * @return $this
      */
-    public function addVariable($key, $value)
+    public function addVariable($key, mixed $value)
     {
         $this->variables[$key] = $value;
 
@@ -76,8 +69,6 @@ class AjaxView extends View
     }
 
     /**
-     * @param array $variables
-     *
      * @return $this
      */
     public function addVariables(array $variables)
@@ -108,8 +99,6 @@ class AjaxView extends View
     }
 
     /**
-     * @param array $messages
-     *
      * @return $this
      */
     public function addErrors(array $messages)

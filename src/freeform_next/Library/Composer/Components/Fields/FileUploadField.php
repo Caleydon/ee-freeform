@@ -20,8 +20,8 @@ use Solspace\Addons\FreeformNext\Library\Exceptions\FieldExceptions\FileUploadEx
 
 class FileUploadField extends AbstractField implements MultipleValueInterface, FileUploadInterface
 {
-    const DEFAULT_MAX_FILESIZE_KB = 2048;
-    const DEFAULT_FILE_COUNT      = 1;
+    public const DEFAULT_MAX_FILESIZE_KB = 2048;
+    public const DEFAULT_FILE_COUNT      = 1;
 
     use MultipleValueTrait;
     use FileUploadTrait;
@@ -38,17 +38,13 @@ class FileUploadField extends AbstractField implements MultipleValueInterface, F
     /**
      * Cache for handles meant for preventing duplicate file uploads when calling ::validate() and ::uploadFile()
      * Stores the assetID once as value for handle key
-     *
-     * @var array
      */
-    private static $filesUploaded = [];
+    private static array $filesUploaded = [];
 
     /**
      * Contains any errors for a given upload field
-     *
-     * @var array
      */
-    private static $filesUploadedErrors = [];
+    private static array $filesUploadedErrors = [];
 
     /**
      * @param bool $optionsAsValues
@@ -134,7 +130,7 @@ class FileUploadField extends AbstractField implements MultipleValueInterface, F
         if (!array_key_exists($this->handle, self::$filesUploaded)) {
             $exists = isset($_FILES[$this->handle]) && !empty($_FILES[$this->handle]['name']);
             if ($exists && $_FILES[$this->handle]['name'][0]) {
-                $fileCount = count($_FILES[$this->handle]['name']);
+                $fileCount = is_countable($_FILES[$this->handle]['name']) ? count($_FILES[$this->handle]['name']) : 0;
 
                 if ($fileCount > $this->getFileCount()) {
                     $uploadErrors[] = $this->translate(

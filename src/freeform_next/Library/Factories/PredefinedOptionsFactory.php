@@ -9,21 +9,13 @@ use Solspace\Addons\FreeformNext\Library\Configuration\ExternalOptionsConfigurat
 
 class PredefinedOptionsFactory
 {
-    const TYPE_INT              = 'int';
-    const TYPE_INT_LEADING_ZERO = 'int_w_zero';
-    const TYPE_FULL             = 'full';
-    const TYPE_ABBREVIATED      = 'abbreviated';
-
-    /** @var ExternalOptionsConfiguration */
-    private $configuration;
-
-    /** @var array */
-    private $selectedValues;
+    public const TYPE_INT              = 'int';
+    public const TYPE_INT_LEADING_ZERO = 'int_w_zero';
+    public const TYPE_FULL             = 'full';
+    public const TYPE_ABBREVIATED      = 'abbreviated';
 
     /**
      * @param string                       $type
-     * @param ExternalOptionsConfiguration $configuration
-     * @param array                        $selectedValues
      *
      * @return Option[]
      */
@@ -31,51 +23,19 @@ class PredefinedOptionsFactory
     {
         $instance = new self($configuration, $selectedValues);
 
-        switch ($type) {
-            case ExternalOptionsInterface::PREDEFINED_NUMBERS:
-                $options = $instance->getNumberOptions();
-                break;
-
-            case ExternalOptionsInterface::PREDEFINED_YEARS:
-                $options = $instance->getYearOptions();
-                break;
-
-            case ExternalOptionsInterface::PREDEFINED_MONTHS:
-                $options = $instance->getMonthOptions();
-                break;
-
-            case ExternalOptionsInterface::PREDEFINED_DAYS:
-                $options = $instance->getDayOptions();
-                break;
-
-            case ExternalOptionsInterface::PREDEFINED_DAYS_OF_WEEK:
-                $options = $instance->getDaysOfWeekOptions();
-                break;
-
-            case ExternalOptionsInterface::PREDEFINED_COUNTRIES:
-                $options = $instance->getCountryOptions();
-                break;
-
-            case ExternalOptionsInterface::PREDEFINED_LANGUAGES:
-                $options = $instance->getLanguageOptions();
-                break;
-
-            case ExternalOptionsInterface::PREDEFINED_PROVINCES:
-                $options = $instance->getProvinceOptions();
-                break;
-
-            case ExternalOptionsInterface::PREDEFINED_STATES:
-                $options = $instance->getStateOptions();
-                break;
-
-            case ExternalOptionsInterface::PREDEFINED_STATES_TERRITORIES:
-                $options = $instance->getStateTerritoryOptions();
-                break;
-
-            default:
-                $options = [];
-                break;
-        }
+        $options = match ($type) {
+            ExternalOptionsInterface::PREDEFINED_NUMBERS => $instance->getNumberOptions(),
+            ExternalOptionsInterface::PREDEFINED_YEARS => $instance->getYearOptions(),
+            ExternalOptionsInterface::PREDEFINED_MONTHS => $instance->getMonthOptions(),
+            ExternalOptionsInterface::PREDEFINED_DAYS => $instance->getDayOptions(),
+            ExternalOptionsInterface::PREDEFINED_DAYS_OF_WEEK => $instance->getDaysOfWeekOptions(),
+            ExternalOptionsInterface::PREDEFINED_COUNTRIES => $instance->getCountryOptions(),
+            ExternalOptionsInterface::PREDEFINED_LANGUAGES => $instance->getLanguageOptions(),
+            ExternalOptionsInterface::PREDEFINED_PROVINCES => $instance->getProvinceOptions(),
+            ExternalOptionsInterface::PREDEFINED_STATES => $instance->getStateOptions(),
+            ExternalOptionsInterface::PREDEFINED_STATES_TERRITORIES => $instance->getStateTerritoryOptions(),
+            default => [],
+        };
 
         if ($configuration->getEmptyOption()) {
             array_unshift($options, new Option(lang($configuration->getEmptyOption()), ''));
@@ -86,14 +46,9 @@ class PredefinedOptionsFactory
 
     /**
      * PredefinedOptionsFactory constructor.
-     *
-     * @param ExternalOptionsConfiguration $configuration
-     * @param array                        $selectedValues
      */
-    private function __construct(ExternalOptionsConfiguration $configuration, array $selectedValues)
+    private function __construct(private ExternalOptionsConfiguration $configuration, private array $selectedValues)
     {
-        $this->configuration  = $configuration;
-        $this->selectedValues = $selectedValues;
     }
 
     /**
@@ -315,11 +270,9 @@ class PredefinedOptionsFactory
 
 
     /**
-     * @param mixed $value
-     *
      * @return bool
      */
-    private function isChecked($value)
+    private function isChecked(mixed $value)
     {
         return \in_array((string) $value, $this->selectedValues, true);
     }
@@ -340,19 +293,12 @@ class PredefinedOptionsFactory
     private static function getMonthFormatFromType($type = null)
     {
         $format = 'F';
-        switch ($type) {
-            case self::TYPE_INT:
-                $format = 'n';
-                break;
-
-            case self::TYPE_INT_LEADING_ZERO:
-                $format = 'm';
-                break;
-
-            case self::TYPE_ABBREVIATED:
-                $format = 'M';
-                break;
-        }
+        $format = match ($type) {
+            self::TYPE_INT => 'n',
+            self::TYPE_INT_LEADING_ZERO => 'm',
+            self::TYPE_ABBREVIATED => 'M',
+            default => $format,
+        };
 
         return $format;
     }
@@ -365,12 +311,10 @@ class PredefinedOptionsFactory
     private static function getDayFormatFromType($type = null)
     {
         $format = 'd';
-        switch ($type) {
-            case self::TYPE_INT:
-            case self::TYPE_ABBREVIATED:
-                $format = 'j';
-                break;
-        }
+        $format = match ($type) {
+            self::TYPE_INT, self::TYPE_ABBREVIATED => 'j',
+            default => $format,
+        };
 
         return $format;
     }
@@ -383,15 +327,11 @@ class PredefinedOptionsFactory
     private static function getDayOfTheWeekFormatFromType($type = null)
     {
         $format = 'l';
-        switch ($type) {
-            case self::TYPE_INT:
-                $format = 'N';
-                break;
-
-            case self::TYPE_ABBREVIATED:
-                $format = 'D';
-                break;
-        }
+        $format = match ($type) {
+            self::TYPE_INT => 'N',
+            self::TYPE_ABBREVIATED => 'D',
+            default => $format,
+        };
 
         return $format;
     }

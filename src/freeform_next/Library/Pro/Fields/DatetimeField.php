@@ -2,6 +2,8 @@
 
 namespace Solspace\Addons\FreeformNext\Library\Pro\Fields;
 
+use DateTime;
+use Exception;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\Interfaces\InitialValueInterface;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\TextField;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\Traits\InitialValueTrait;
@@ -9,9 +11,9 @@ use Solspace\Addons\FreeformNext\Library\Composer\Components\Validation\Constrai
 
 class DatetimeField extends TextField implements InitialValueInterface
 {
-    const DATETIME_TYPE_BOTH = 'both';
-    const DATETIME_TYPE_DATE = 'date';
-    const DATETIME_TYPE_TIME = 'time';
+    public const DATETIME_TYPE_BOTH = 'both';
+    public const DATETIME_TYPE_DATE = 'date';
+    public const DATETIME_TYPE_TIME = 'time';
 
     use InitialValueTrait;
 
@@ -183,13 +185,13 @@ class DatetimeField extends TextField implements InitialValueInterface
             if ($value) {
                 try {
                     if (stripos(strtolower($value), 'today') !== false) {
-                        $date = new \DateTime($value);
+                        $date = new DateTime($value);
                     } else {
-                        $date = new \DateTime($value);
+                        $date = new DateTime($value);
                     }
 
                     return $date->format($this->getFormat());
-                } catch (\Exception $e) {
+                } catch (Exception) {
                 }
             }
         }

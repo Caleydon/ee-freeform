@@ -11,17 +11,9 @@
 
 namespace Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\DataContainers;
 
-class Option implements \JsonSerializable
+use JsonSerializable;
+class Option implements JsonSerializable
 {
-    /** @var string */
-    private $label;
-
-    /** @var string */
-    private $value;
-
-    /** @var bool */
-    private $checked;
-
     /**
      * Option constructor.
      *
@@ -29,11 +21,8 @@ class Option implements \JsonSerializable
      * @param string $value
      * @param bool   $checked
      */
-    public function __construct($label, $value, $checked = false)
+    public function __construct(private $label, private $value, private $checked = false)
     {
-        $this->label   = $label;
-        $this->value   = $value;
-        $this->checked = $checked;
     }
 
     /**

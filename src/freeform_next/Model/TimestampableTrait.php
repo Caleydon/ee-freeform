@@ -2,21 +2,22 @@
 
 namespace Solspace\Addons\FreeformNext\Model;
 
+use DateTime;
 /**
  * Trait TimestampableTrait
  *
- * @property \DateTime $dateCreated
- * @property \DateTime $dateUpdated
+ * @property DateTime $dateCreated
+ * @property DateTime $dateUpdated
  */
 trait TimestampableTrait
 {
     /** @var array */
     protected static $_events = ['beforeInsert', 'beforeUpdate'];
 
-    /** @var \DateTime */
+    /** @var DateTime */
     protected $dateCreated;
 
-    /** @var \DateTime */
+    /** @var DateTime */
     protected $dateUpdated;
 
     /**
@@ -41,7 +42,7 @@ trait TimestampableTrait
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     private function getTimestampableDate()
     {

@@ -18,42 +18,31 @@ use Solspace\Addons\FreeformNext\Utilities\ControlPanel\Navigation\NavigationLin
 class CpView extends View
 {
     /** @var string */
-    private $template;
-
-    /** @var array */
-    private $templateVariables;
-
-    /** @var string */
     private $heading;
 
-    /** @var array */
-    private $cssList;
+    private array $cssList;
 
-    /** @var array */
-    private $javascriptList;
+    private array $javascriptList;
 
-    /** @var bool */
-    private $sidebarDisabled;
+    private ?bool $sidebarDisabled = null;
 
     /** @var array */
     private $sections;
 
     /** @var Modal[] */
-    private $modals;
+    private array $modals;
 
     /** @var NavigationLink[] */
-    private $breadcrumbs;
+    private array $breadcrumbs;
 
     /**
      * CpView constructor.
      *
      * @param       $template
-     * @param array $templateVariables
+     * @param string $template
      */
-    public function __construct($template, array $templateVariables = [])
+    public function __construct(private $template, private array $templateVariables = [])
     {
-        $this->template          = $template;
-        $this->templateVariables = $templateVariables;
         $this->cssList           = [];
         $this->javascriptList    = [];
         $this->modals            = [];
@@ -123,8 +112,6 @@ class CpView extends View
     }
 
     /**
-     * @param array $templateVariables
-     *
      * @return $this
      */
     public function addTemplateVariables(array $templateVariables)
@@ -221,8 +208,6 @@ class CpView extends View
     }
 
     /**
-     * @param Modal $modal
-     *
      * @return $this
      */
     public function addModal(Modal $modal)
@@ -233,8 +218,6 @@ class CpView extends View
     }
 
     /**
-     * @param NavigationLink $link
-     *
      * @return $this
      */
     public function addBreadcrumb(NavigationLink $link)

@@ -4,11 +4,9 @@ namespace Solspace\Addons\FreeformNext\Library\DataObjects;
 
 class ConnectionResult
 {
-    /** @var array */
-    private $formErrors;
+    private array $formErrors;
 
-    /** @var array */
-    private $fieldErrors;
+    private array $fieldErrors;
 
     /**
      * ConnectionResult constructor.
@@ -71,8 +69,6 @@ class ConnectionResult
     }
 
     /**
-     * @param array $errors
-     *
      * @return $this
      */
     public function addFormErrors(array $errors)
@@ -102,8 +98,6 @@ class ConnectionResult
     }
 
     /**
-     * @param array $errors
-     *
      * @return ConnectionResult
      */
     public function addFieldErrors(array $errors)

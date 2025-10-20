@@ -22,12 +22,12 @@ use Solspace\Addons\FreeformNext\Library\Integrations\SettingBlueprint;
 
 class MailChimp extends AbstractMailingListIntegration
 {
-    const TITLE        = 'MailChimp';
-    const LOG_CATEGORY = 'MailChimp';
+    public const TITLE        = 'MailChimp';
+    public const LOG_CATEGORY = 'MailChimp';
 
-    const SETTING_API_KEY       = 'api_key';
-    const SETTING_DOUBLE_OPT_IN = 'double_opt_in';
-    const SETTING_DATA_CENTER   = 'data_center';
+    public const SETTING_API_KEY       = 'api_key';
+    public const SETTING_DOUBLE_OPT_IN = 'double_opt_in';
+    public const SETTING_DATA_CENTER   = 'data_center';
 
     /**
      * Returns a list of additional settings for this integration
@@ -199,7 +199,7 @@ class MailChimp extends AbstractMailingListIntegration
      * Builds ListObject objects based on the results
      * And returns them
      *
-     * @return \Solspace\Addons\FreeformNext\Library\Integrations\MailingLists\DataObjects\ListObject[]
+     * @return ListObject[]
      * @throws IntegrationException
      */
     protected function fetchLists()
@@ -294,26 +294,11 @@ class MailChimp extends AbstractMailingListIntegration
         if (isset($json->merge_fields)) {
             $fieldList = [];
             foreach ($json->merge_fields as $field) {
-                switch ($field->type) {
-                    case 'text':
-                    case 'website':
-                    case 'url':
-                    case 'dropdown':
-                    case 'radio':
-                    case 'date':
-                    case 'zip':
-                        $type = FieldObject::TYPE_STRING;
-                        break;
-
-                    case 'number':
-                    case 'phone':
-                        $type = FieldObject::TYPE_NUMERIC;
-                        break;
-
-                    default:
-                        $type = null;
-                        break;
-                }
+                $type = match ($field->type) {
+                    'text', 'website', 'url', 'dropdown', 'radio', 'date', 'zip' => FieldObject::TYPE_STRING,
+                    'number', 'phone' => FieldObject::TYPE_NUMERIC,
+                    default => null,
+                };
 
                 if (null === $type) {
                     continue;

@@ -11,6 +11,7 @@
 
 namespace Solspace\Addons\FreeformNext\Integrations\CRM;
 
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Solspace\Addons\FreeformNext\Library\Exceptions\Integrations\IntegrationException;
@@ -22,13 +23,13 @@ use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\CheckboxGrou
 
 class HubSpotV1 extends AbstractCRMIntegration
 {
-    const SETTING_API_KEY = 'api_key';
-    const SETTING_IP_FIELD = 'ip_field';
-    const SETTING_APPEND_COMPANY_DATA = 'append_company_data';
-    const SETTING_APPEND_CONTACT_DATA = 'append_contact_data';
+    public const SETTING_API_KEY = 'api_key';
+    public const SETTING_IP_FIELD = 'ip_field';
+    public const SETTING_APPEND_COMPANY_DATA = 'append_company_data';
+    public const SETTING_APPEND_CONTACT_DATA = 'append_contact_data';
 
-    const TITLE           = 'HubSpot (v1)';
-    const LOG_CATEGORY    = 'HubSpot_v1';
+    public const TITLE           = 'HubSpot (v1)';
+    public const LOG_CATEGORY    = 'HubSpot_v1';
 
     /**
      * Returns a list of additional settings for this integration
@@ -92,7 +93,7 @@ class HubSpotV1 extends AbstractCRMIntegration
         foreach ($keyValueList as $key => $value) {
             preg_match('/^(\w+)___(.+)$/', $key, $matches);
 
-            list($all, $target, $propName) = $matches;
+            [$all, $target, $propName] = $matches;
 
             $value = $this->formatValue($value, $formFields[$key]);
 
@@ -166,7 +167,7 @@ class HubSpotV1 extends AbstractCRMIntegration
                     $json = json_decode((string) $response->getBody());
 
                     // If we've found a company based on the domain name
-                    if (\count($json->results) > 0) {
+                    if ((is_countable($json->results) ? \count($json->results) : 0) > 0) {
                         $company = $json->results[0];
 
                         if (isset($company->companyId)) {
@@ -207,7 +208,7 @@ class HubSpotV1 extends AbstractCRMIntegration
                 $responseBody = (string) $e->getResponse()->getBody();
 
                 $this->getLogger()->error($responseBody, ['exception' => $e->getMessage()]);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->getLogger()->error($e->getMessage());
             }
         }
@@ -292,7 +293,7 @@ class HubSpotV1 extends AbstractCRMIntegration
                         $this->getLogger()->error($responseBody, ['exception' => $e->getMessage()]);
                     }
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->getLogger()->error($e->getMessage());
             }
         }
@@ -413,11 +414,6 @@ class HubSpotV1 extends AbstractCRMIntegration
     }
 
 
-    /**
-     * @param string $endpoint
-     * @param string $dataType
-     * @param array  $fieldList
-     */
     private function extractCustomFields(string $endpoint, string $dataType, array &$fieldList)
     {
         $client = $this->generateAuthorizedClient();

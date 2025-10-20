@@ -20,8 +20,6 @@ class Freeform_next_ft extends EE_Fieldtype
      */
     public function __construct()
     {
-        parent::__construct();
-
         ee()->lang->loadfile('freeform_next');
 
         if (REQ !== 'CP' && !session_id()) {
@@ -30,13 +28,9 @@ class Freeform_next_ft extends EE_Fieldtype
 
         $this->info = include __DIR__ . '/addon.setup.php';
 
-        $this->field_id = isset($this->settings['field_id']) ?
-            $this->settings['field_id'] :
-            $this->field_id;
+        $this->field_id = $this->settings['field_id'] ?? $this->field_id;
 
-        $this->field_name = isset($this->settings['field_name']) ?
-            $this->settings['field_name'] :
-            $this->field_name;
+        $this->field_name = $this->settings['field_name'] ?? $this->field_name;
     }
 
     /**
@@ -74,7 +68,7 @@ class Freeform_next_ft extends EE_Fieldtype
     /**
      * @inheritdoc
      */
-    public function replace_tag($data, $params = array(), $tagdata = FALSE)
+    public function replace_tag($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -116,7 +110,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->render();
     }
 
-    public function replace_id($data, $params = array(), $tagdata = FALSE)
+    public function replace_id($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -126,7 +120,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->getId();
     }
 
-    public function replace_name($data, $params = array(), $tagdata = FALSE)
+    public function replace_name($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -136,7 +130,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->getName();
     }
 
-    public function replace_handle($data, $params = array(), $tagdata = FALSE)
+    public function replace_handle($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -146,7 +140,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->getHandle();
     }
 
-    public function replace_color($data, $params = array(), $tagdata = FALSE)
+    public function replace_color($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -156,7 +150,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->getColor();
     }
 
-    public function replace_hash($data, $params = array(), $tagdata = FALSE)
+    public function replace_hash($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -166,7 +160,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->getHash();
     }
 
-    public function replace_submission_title_format($data, $params = array(), $tagdata = FALSE)
+    public function replace_submission_title_format($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -176,7 +170,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->getSubmissionTitleFormat();
     }
 
-    public function replace_description($data, $params = array(), $tagdata = FALSE)
+    public function replace_description($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -186,7 +180,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->getDescription();
     }
 
-    public function replace_current_page($data, $params = array(), $tagdata = FALSE)
+    public function replace_current_page($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -196,7 +190,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->getCurrentPage();
     }
 
-    public function replace_return_url($data, $params = array(), $tagdata = FALSE)
+    public function replace_return_url($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -206,7 +200,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->getReturnUrl();
     }
 
-    public function replace_anchor($data, $params = array(), $tagdata = FALSE)
+    public function replace_anchor($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -216,7 +210,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->getAnchor();
     }
 
-    public function replace_default_status($data, $params = array(), $tagdata = FALSE)
+    public function replace_default_status($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -226,7 +220,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->getDefaultStatus();
     }
 
-    public function replace_ip_collecting_enabled($data, $params = array(), $tagdata = FALSE)
+    public function replace_ip_collecting_enabled($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -236,7 +230,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->isIpCollectingEnabled();
     }
 
-    public function replace_pages($data, $params = array(), $tagdata = FALSE)
+    public function replace_pages($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -246,7 +240,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->getPages();
     }
 
-    public function replace_layout($data, $params = array(), $tagdata = FALSE)
+    public function replace_layout($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -256,7 +250,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->getLayout();
     }
 
-    public function replace_has_errors($data, $params = array(), $tagdata = FALSE)
+    public function replace_has_errors($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -266,7 +260,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->hasErrors();
     }
 
-    public function replace_errors($data, $params = array(), $tagdata = FALSE)
+    public function replace_errors($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -276,7 +270,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->getErrors();
     }
 
-    public function replace_marked_as_spam($data, $params = array(), $tagdata = FALSE)
+    public function replace_marked_as_spam($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -286,7 +280,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->isMarkedAsSpam();
     }
 
-    public function replace_valid($data, $params = array(), $tagdata = FALSE)
+    public function replace_valid($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -296,7 +290,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->isValid();
     }
 
-    public function replace_page_posted($data, $params = array(), $tagdata = FALSE)
+    public function replace_page_posted($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -306,7 +300,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->isPagePosted();
     }
 
-    public function replace_form_posted($data, $params = array(), $tagdata = FALSE)
+    public function replace_form_posted($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -316,7 +310,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->isFormPosted();
     }
 
-    public function replace_submission_title_format_blank($data, $params = array(), $tagdata = FALSE)
+    public function replace_submission_title_format_blank($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -326,7 +320,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->isSubmissionTitleFormatBlank();
     }
 
-    public function replace_submitted_successfully($data, $params = array(), $tagdata = FALSE)
+    public function replace_submitted_successfully($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -336,7 +330,7 @@ class Freeform_next_ft extends EE_Fieldtype
         return $form->isSubmittedSuccessfully();
     }
 
-    public function replace_render($data, $params = array(), $tagdata = FALSE)
+    public function replace_render($data, $params = [], $tagdata = FALSE)
     {
         $form = $this->getForm($data);
         if (!$form) {
@@ -357,11 +351,9 @@ class Freeform_next_ft extends EE_Fieldtype
     }
 
     /**
-     * @param mixed $data
-     *
      * @return string
      */
-    public function save($data)
+    public function save(mixed $data)
     {
         if ((int) $data === 0) {
             return parent::save(null);

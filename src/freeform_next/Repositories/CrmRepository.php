@@ -73,8 +73,6 @@ class CrmRepository extends Repository
     }
 
     /**
-     * @param array $ids
-     *
      * @return IntegrationModel[]
      */
     public function getIntegrationsByIdList(array $ids)

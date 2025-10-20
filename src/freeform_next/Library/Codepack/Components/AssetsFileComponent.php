@@ -15,21 +15,9 @@ use Solspace\Addons\FreeformNext\Library\Codepack\Exceptions\FileObject\FileNotF
 
 class AssetsFileComponent extends AbstractFileComponent
 {
-    private static $modifiableFileExtensions = array(
-        'css',
-        'scss',
-        'sass',
-        'less',
-        'js',
-        'coffee',
-    );
+    private static array $modifiableFileExtensions = ['css', 'scss', 'sass', 'less', 'js', 'coffee'];
 
-    private static $modifiableCssFiles = array(
-        'css',
-        'scss',
-        'sass',
-        'less',
-    );
+    private static array $modifiableCssFiles = ['css', 'scss', 'sass', 'less'];
 
     /**
      * @return string

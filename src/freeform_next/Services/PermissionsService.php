@@ -15,24 +15,24 @@ use Solspace\Addons\FreeformNext\Repositories\PermissionsRepository;
 
 class PermissionsService
 {
-    const PERMISSION__MANAGE_FORMS         = 'forms';
-    const PERMISSION__ACCESS_SUBMISSIONS   = 'submissions';
-    const PERMISSION__MANAGE_SUBMISSIONS   = 'manageSubmissions';
-    const PERMISSION__ACCESS_FIELDS        = 'fields';
-    const PERMISSION__ACCESS_EXPORT        = 'export';
-    const PERMISSION__ACCESS_NOTIFICATIONS = 'notifications';
-    const PERMISSION__ACCESS_SETTINGS      = 'settings';
-    const PERMISSION__ACCESS_INTEGRATIONS  = 'integrations';
-    const PERMISSION__ACCESS_RESOURCES     = 'resources';
-    const PERMISSION__ACCESS_LOGS          = 'logs';
+    public const PERMISSION__MANAGE_FORMS         = 'forms';
+    public const PERMISSION__ACCESS_SUBMISSIONS   = 'submissions';
+    public const PERMISSION__MANAGE_SUBMISSIONS   = 'manageSubmissions';
+    public const PERMISSION__ACCESS_FIELDS        = 'fields';
+    public const PERMISSION__ACCESS_EXPORT        = 'export';
+    public const PERMISSION__ACCESS_NOTIFICATIONS = 'notifications';
+    public const PERMISSION__ACCESS_SETTINGS      = 'settings';
+    public const PERMISSION__ACCESS_INTEGRATIONS  = 'integrations';
+    public const PERMISSION__ACCESS_RESOURCES     = 'resources';
+    public const PERMISSION__ACCESS_LOGS          = 'logs';
 
-    const PERMISSION__ACCESS_SETTINGS__LICENSE             = 'settings/license';
-    const PERMISSION__ACCESS_SETTINGS__GENERAL             = 'settings/general';
-    const PERMISSION__ACCESS_SETTINGS__PERMISSIONS         = 'settings/permissions';
-    const PERMISSION__ACCESS_SETTINGS__FORMATING_TEMPLATES = 'settings/formatting_templates';
-    const PERMISSION__ACCESS_SETTINGS__EMAIL_TEMPLATES     = 'settings/email_templates';
-    const PERMISSION__ACCESS_SETTINGS__STATUSES            = 'settings/statuses';
-    const PERMISSION__ACCESS_SETTINGS__DEMO_TEMPLATES      = 'settings/demo_templates';
+    public const PERMISSION__ACCESS_SETTINGS__LICENSE             = 'settings/license';
+    public const PERMISSION__ACCESS_SETTINGS__GENERAL             = 'settings/general';
+    public const PERMISSION__ACCESS_SETTINGS__PERMISSIONS         = 'settings/permissions';
+    public const PERMISSION__ACCESS_SETTINGS__FORMATING_TEMPLATES = 'settings/formatting_templates';
+    public const PERMISSION__ACCESS_SETTINGS__EMAIL_TEMPLATES     = 'settings/email_templates';
+    public const PERMISSION__ACCESS_SETTINGS__STATUSES            = 'settings/statuses';
+    public const PERMISSION__ACCESS_SETTINGS__DEMO_TEMPLATES      = 'settings/demo_templates';
 
     /**
      * Check if user is allowed in the section

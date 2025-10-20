@@ -8,7 +8,7 @@
  * @link          https://docs.solspace.com/expressionengine/freeform/v3/
  * @license       https://docs.solspace.com/license-agreement/
  */
-
+use Stringy\Stringy;
 use Solspace\Addons\FreeformNext\Controllers\ApiController;
 use Solspace\Addons\FreeformNext\Controllers\CrmController;
 use Solspace\Addons\FreeformNext\Controllers\ExportController;
@@ -61,7 +61,7 @@ class Freeform_next_mcp extends ControlPanelView
      * @param int|string|null $formId
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      * @throws FreeformException
      */
     public function forms($formId = null)
@@ -346,7 +346,7 @@ class Freeform_next_mcp extends ControlPanelView
             $settings = SettingsRepository::getInstance()->getOrCreate();
             if ($settings->getFormattingTemplatePath()) {
                 $templateName = ee()->input->post('templateName');
-                $templateName = (string) \Stringy\Stringy::create($templateName)->underscored()->toAscii();
+                $templateName = (string) Stringy::create($templateName)->underscored()->toAscii();
                 $templateName .= '.html';
 
                 $filePath = $settings->getAbsoluteFormTemplateDirectory() . '/' . $templateName;
@@ -456,16 +456,11 @@ class Freeform_next_mcp extends ControlPanelView
         if (!($this->getPermissionsService()->canUserAccessSection(__FUNCTION__, ee()->session->userdata('group_id')))) {
             return $this->renderView(new RedirectView($this->getLink('denied')));
         }
-
-        switch (strtolower($type)) {
-            case 'mailing_lists':
-                return $this->renderView($this->getMailingListsController()->handle($id));
-
-            case 'crm':
-                return $this->renderView($this->getCrmController()->handle($id));
-        }
-
-        return null;
+        return match (strtolower($type)) {
+            'mailing_lists' => $this->renderView($this->getMailingListsController()->handle($id)),
+            'crm' => $this->renderView($this->getCrmController()->handle($id)),
+            default => null,
+        };
     }
 
     /**

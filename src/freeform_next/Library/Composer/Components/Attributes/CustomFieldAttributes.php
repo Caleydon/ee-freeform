@@ -66,12 +66,6 @@ class CustomFieldAttributes extends AbstractAttributes
     /** @var string */
     protected $tableSelectInputClass;
 
-    /** @var AbstractField */
-    private $field;
-
-    /** @var CustomFormAttributes */
-    private $formAttributes;
-
     /**
      * CustomFieldAttributes constructor.
      *
@@ -80,14 +74,11 @@ class CustomFieldAttributes extends AbstractAttributes
      * @param CustomFormAttributes|null $formAttributes
      */
     public function __construct(
-        AbstractField $field,
+        private AbstractField $field,
         array $attributes = null,
-        CustomFormAttributes $formAttributes = null
+        private ?CustomFormAttributes $formAttributes = null
     ) {
         parent::__construct($attributes);
-
-        $this->field          = $field;
-        $this->formAttributes = $formAttributes;
     }
 
     /**

@@ -27,9 +27,9 @@ class ClassicFormHelper extends AddonBuilder
             //	check for composer for each form
             // -------------------------------------
 
-            $form_ids = array();
+            $form_ids = [];
 
-            $potential_composer_ids = array();
+            $potential_composer_ids = [];
 
             foreach ($rows as $row)
             {
@@ -41,7 +41,7 @@ class ClassicFormHelper extends AddonBuilder
                 }
             }
 
-            $has_composer = array();
+            $has_composer = [];
 
             if (!empty($potential_composer_ids))
             {

@@ -122,8 +122,6 @@ class StatusRepository extends Repository
     }
 
     /**
-     * @param array $ids
-     *
      * @return StatusModel[]
      */
     public function getStatusesByIdList(array $ids)

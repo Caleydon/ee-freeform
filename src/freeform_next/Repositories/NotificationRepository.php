@@ -18,8 +18,8 @@ use Solspace\Addons\FreeformNext\Model\NotificationModel;
 class NotificationRepository extends Repository
 {
     /** @var NotificationModel[] */
-    private static $notificationCache;
-    private static $allNotificationsLoaded;
+    private static ?array $notificationCache = null;
+    private static ?bool $allNotificationsLoaded = null;
 
     /**
      * @return NotificationRepository
@@ -163,8 +163,6 @@ class NotificationRepository extends Repository
     }
 
     /**
-     * @param array $ids
-     *
      * @return NotificationModel[]
      */
     public function getNotificationsByIdList(array $ids)

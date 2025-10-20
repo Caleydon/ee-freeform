@@ -11,6 +11,11 @@
 
 namespace Solspace\Addons\FreeformNext\Library\Composer\Components;
 
+use JsonSerializable;
+use Iterator;
+use ArrayAccess;
+use Stringable;
+use ReturnTypeWillChange;
 use Solspace\Addons\FreeformNext\Library\Composer\Attributes\FormAttributes;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Attributes\CustomFormAttributes;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Fields\Interfaces\FileUploadInterface;
@@ -34,151 +39,69 @@ use Solspace\Addons\FreeformNext\Model\SpamReasonModel;
 use Solspace\Addons\FreeformNext\Model\SubmissionModel;
 use Solspace\Addons\FreeformNext\Repositories\SubmissionRepository;
 
-class Form implements \JsonSerializable, \Iterator, \ArrayAccess
+class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
 {
-    const SUBMISSION_FLASH_KEY = 'freeform_submission_flash';
-
-    const PAGE_INDEX_KEY     = 'page_index';
-    const RETURN_URI_KEY     = 'formReturnUrl';
-    const DEFAULT_PAGE_INDEX = 0;
-
+    public const SUBMISSION_FLASH_KEY = 'freeform_submission_flash';
+    public const PAGE_INDEX_KEY     = 'page_index';
+    public const RETURN_URI_KEY     = 'formReturnUrl';
+    public const DEFAULT_PAGE_INDEX = 0;
     /** @var int */
     private $id;
-
     /** @var string */
     private $name;
-
     /** @var string */
     private $handle;
-
     /** @var string */
     private $color;
-
     /** @var string */
     private $submissionTitleFormat;
-
     /** @var string */
     private $description;
-
     /** @var string */
     private $returnUrl;
-
     /** @var bool */
     private $storeData;
-
-    /** @var bool */
-    private $ipCollectingEnabled;
-
+    private bool $ipCollectingEnabled;
     /** @var int */
     private $defaultStatus;
-
     /** @var string */
     private $formTemplate;
-
-    /** @var Layout */
-    private $layout;
-
+    private Layout $layout;
     /** @var Row[] */
     private $currentPageRows;
-
     /** @var string */
     private $optInDataStorageTargetHash;
-
-    /** @var FormAttributes */
-    private $formAttributes;
-
-    /** @var Properties */
-    private $properties;
-
+    private FormAttributes $formAttributes;
     /** @var string[] */
-    private $errors;
-
-    /** @var bool */
-    private $formSaved;
-
-    /** @var bool */
-    private $valid;
-
-    /** @var bool */
-    private $markedAsSpam;
-
-    /** @var SubmissionHandlerInterface */
-    private $submissionHandler;
-
-    /** @var FormHandlerInterface */
-    private $formHandler;
-
-    /** @var MailHandlerInterface */
-    private $mailHandler;
-
-    /** @var FileUploadHandlerInterface */
-    private $fileUploadHandler;
-
-    /** @var FieldHandlerInterface */
-    private $fieldHandler;
-
-    /** @var MailingListHandlerInterface */
-    private $mailingListHandler;
-
-    /** @var CRMHandlerInterface */
-    private $crmHandler;
-
-    /** @var TranslatorInterface */
-    private $translator;
-
-    /** @var CustomFormAttributes */
-    private $customAttributes;
-
+    private array $errors;
+    private ?bool $formSaved = null;
+    private ?bool $valid = null;
+    private bool $markedAsSpam;
+    private CustomFormAttributes $customAttributes;
     /** @var int */
     private $cachedPageIndex;
-
-    /** @var bool */
-    private $submitted;
-
-    /** @var mixed */
-    private $submitResult;
-
+    private bool $submitted;
+    private null|bool|SubmissionModel $submitResult = null;
     private array $spamReasons = [];
-
     /**
      * Form constructor.
      *
-     * @param Properties                  $properties
-     * @param FormAttributes              $formAttributes
-     * @param array                       $layoutData
-     * @param FormHandlerInterface        $formHandler
-     * @param FieldHandlerInterface       $fieldHandler
-     * @param SubmissionHandlerInterface  $submissionHandler
-     * @param MailHandlerInterface        $mailHandler
-     * @param FileUploadHandlerInterface  $fileUploadHandler
-     * @param MailingListHandlerInterface $mailingListHandler
-     * @param CRMHandlerInterface         $crmHandler
-     * @param TranslatorInterface         $translator
      *
      * @throws FreeformException
      */
     public function __construct(
-        Properties $properties,
+        private Properties $properties,
         FormAttributes $formAttributes,
         array $layoutData,
-        FormHandlerInterface $formHandler,
-        FieldHandlerInterface $fieldHandler,
-        SubmissionHandlerInterface $submissionHandler,
-        MailHandlerInterface $mailHandler,
-        FileUploadHandlerInterface $fileUploadHandler,
-        MailingListHandlerInterface $mailingListHandler,
-        CRMHandlerInterface $crmHandler,
-        TranslatorInterface $translator
+        private FormHandlerInterface $formHandler,
+        private FieldHandlerInterface $fieldHandler,
+        private SubmissionHandlerInterface $submissionHandler,
+        private MailHandlerInterface $mailHandler,
+        private FileUploadHandlerInterface $fileUploadHandler,
+        private MailingListHandlerInterface $mailingListHandler,
+        private CRMHandlerInterface $crmHandler,
+        private TranslatorInterface $translator
     ) {
-        $this->properties          = $properties;
-        $this->formHandler         = $formHandler;
-        $this->fieldHandler        = $fieldHandler;
-        $this->submissionHandler   = $submissionHandler;
-        $this->mailHandler         = $mailHandler;
-        $this->fileUploadHandler   = $fileUploadHandler;
-        $this->mailingListHandler  = $mailingListHandler;
-        $this->crmHandler          = $crmHandler;
-        $this->translator          = $translator;
         $this->storeData           = true;
         $this->ipCollectingEnabled = true;
         $this->storeData           = true;
@@ -191,9 +114,9 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
         $this->layout = new Layout(
             $this,
             $layoutData,
-            $properties,
             $formAttributes->getFormValueContext(),
-            $translator
+            $translator,
+            $properties
         );
         $this->buildFromData($properties->getFormProperties());
 
@@ -202,15 +125,13 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         $this->getCurrentPage();
     }
-
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getName();
     }
-
     /**
      * @param string $fieldHandle
      *
@@ -220,15 +141,14 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         try {
             return $this->getLayout()->getFieldByHandle($fieldHandle);
-        } catch (FreeformException $e) {
+        } catch (FreeformException) {
             try {
                 return $this->getLayout()->getFieldByHash($fieldHandle);
-            } catch (FreeformException $e) {
+            } catch (FreeformException) {
                 return null;
             }
         }
     }
-
     /**
      * @return int
      */
@@ -236,7 +156,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return (int) $this->id;
     }
-
     /**
      * @return string
      */
@@ -244,7 +163,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->name;
     }
-
     /**
      * @return string
      */
@@ -252,7 +170,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->handle;
     }
-
     /**
      * @return string
      */
@@ -260,7 +177,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->color;
     }
-
     /**
      * @return string|null
      */
@@ -268,7 +184,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->optInDataStorageTargetHash;
     }
-
     /**
      * @return string
      */
@@ -276,7 +191,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->getFormValueContext()->getLastHash();
     }
-
     /**
      * @return string
      */
@@ -284,7 +198,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->submissionTitleFormat;
     }
-
     /**
      * @return string
      */
@@ -292,7 +205,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->description;
     }
-
     /**
      * @return Page
      */
@@ -320,7 +232,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         return $page;
     }
-
     /**
      * @return string
      */
@@ -328,7 +239,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->returnUrl ?: '';
     }
-
     /**
      * @return string
      */
@@ -340,7 +250,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         return "$hashedId-form-$hash";
     }
-
     /**
      * @return int
      */
@@ -348,7 +257,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->defaultStatus;
     }
-
     /**
      * @return int
      */
@@ -356,7 +264,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return (bool) $this->ipCollectingEnabled;
     }
-
     /**
      * @return bool
      */
@@ -364,7 +271,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return (bool) $this->formSaved;
     }
-
     /**
      * @return Page[]
      */
@@ -372,7 +278,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->layout->getPages();
     }
-
     /**
      * @return Layout
      */
@@ -380,7 +285,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->layout;
     }
-
     /**
      * @return array
      */
@@ -388,7 +292,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->errors;
     }
-
     /**
      * @param string $message
      *
@@ -400,10 +303,7 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         return $this;
     }
-
     /**
-     * @param array $messages
-     *
      * @return Form
      */
     public function addErrors(array $messages)
@@ -412,12 +312,10 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         return $this;
     }
-
     public function getSpamReasons(): array
     {
         return $this->spamReasons;
     }
-
     /**
      * @return bool
      */
@@ -425,10 +323,7 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return !empty($this->getSpamReasons());
     }
-
     /**
-     * @param string $type
-     * @param string $message
      * @param string|null $value
      * @return Form
      */
@@ -448,7 +343,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         return $this;
     }
-
     /**
      * @return bool
      */
@@ -504,7 +398,7 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
             if ($field instanceof FileUploadInterface) {
                 try {
                     $field->uploadFile();
-                } catch (FileUploadException $e) {
+                } catch (FileUploadException) {
                     $isFormValid = false;
                 }
 
@@ -518,7 +412,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         return $this->valid;
     }
-
     /**
      * @return bool
      */
@@ -526,7 +419,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->getFormValueContext()->hasPageBeenPosted();
     }
-
     /**
      * @return bool
      */
@@ -534,7 +426,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->getFormValueContext()->hasFormBeenPosted();
     }
-
     /**
      * @return bool
      */
@@ -542,7 +433,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->isLastPage();
     }
-
     /**
      * @return bool
      */
@@ -550,7 +440,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return ($this->isPagePosted() && !$this->isValid()) || count($this->getErrors()) != 0;
     }
-
     /**
      * @return bool
      */
@@ -564,7 +453,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         return false;
     }
-
     /**
      * @return bool
      */
@@ -572,7 +460,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->getSubmissionHandler()->wasFormFlashSubmitted($this);
     }
-
     /**
      * Submit and store the form values in either session or database
      * depending on the current form page
@@ -638,11 +525,9 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         return $submission;
     }
-
     /**
      * Render a predefined template
      *
-     * @param array $customFormAttributes
      *
      * @return string
      * @throws FreeformException
@@ -653,9 +538,7 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         return $this->formHandler->renderFormTemplate($this, $this->formTemplate);
     }
-
     /**
-     * @param array $customFormAttributes
      *
      * @return string
      * @throws FreeformException
@@ -745,7 +628,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         return $output;
     }
-
     /**
      * @return string
      */
@@ -756,7 +638,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         return $output;
     }
-
     /**
      * @return FieldHandlerInterface
      */
@@ -764,7 +645,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->fieldHandler;
     }
-
     /**
      * @return SubmissionHandlerInterface
      */
@@ -772,7 +652,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->submissionHandler;
     }
-
     /**
      * @return MailHandlerInterface
      */
@@ -780,7 +659,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->mailHandler;
     }
-
     /**
      * @return FileUploadHandlerInterface
      */
@@ -788,7 +666,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->fileUploadHandler;
     }
-
     /**
      * @return MailingListHandlerInterface
      */
@@ -796,7 +673,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->mailingListHandler;
     }
-
     /**
      * @return CustomFormAttributes
      */
@@ -804,7 +680,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->customAttributes;
     }
-
     /**
      * @return null|string
      */
@@ -816,7 +691,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         return $this->getFormValueContext()->getFieldPrefix();
     }
-
     /**
      * @param array|null $attributes
      *
@@ -833,7 +707,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         return $this;
     }
-
     /**
      * @param SubmissionModel|int|string|null $token
      *
@@ -852,14 +725,13 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
                     if ($submission->getFieldValue($field->getHandle())) {
                         $field->setValue($submission->{$field->getHandle()});
                     }
-                } catch (FreeformException $e) {
+                } catch (FreeformException) {
                 }
             }
         }
 
         return $this;
     }
-
     /**
      * @return TranslatorInterface
      */
@@ -867,11 +739,8 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->translator;
     }
-
     /**
      * Builds the form object based on $formData
-     *
-     * @param FormProperties $formProperties
      */
     private function buildFromData(FormProperties $formProperties)
     {
@@ -885,7 +754,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
         $this->defaultStatus         = $formProperties->getDefaultStatus();
         $this->formTemplate          = $formProperties->getFormTemplate();
     }
-
     /**
      * Adds any custom form data items to the form value context session
      *
@@ -914,7 +782,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         return $this;
     }
-
     /**
      * Returns the assigned submission token
      *
@@ -924,7 +791,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->getFormValueContext()->getSubmissionIdentificator();
     }
-
     /**
      * @return FormValueContext
      */
@@ -932,7 +798,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return $this->formAttributes->getFormValueContext();
     }
-
     /**
      * Set the form to advance to next page and flush cached data
      */
@@ -945,7 +810,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         $this->cachedPageIndex = null;
     }
-
     /**
      * Set the form to retreat to previous page and flush cached data
      */
@@ -958,7 +822,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         $this->cachedPageIndex = null;
     }
-
     /**
      * Store the submitted state in the database
      *
@@ -974,11 +837,9 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         return $submission;
     }
-
     /**
      * Send out any email notifications
      *
-     * @param SubmissionModel $submission
      *
      * @throws ComposerException
      */
@@ -1021,7 +882,6 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
             );
         }
     }
-
     /**
      * Pushes all emails to their respective mailing lists, if applicable
      * Does nothing otherwise
@@ -1072,12 +932,11 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
                     $mailingListHandler->flagMailingListIntegrationForUpdating($integration);
                 }
 
-            } catch (FreeformException $exception) {
+            } catch (FreeformException) {
                 continue;
             }
         }
     }
-
     /**
      * Push the submitted data to the mapped fields of a CRM integration
      *
@@ -1089,11 +948,9 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
 
         $this->crmHandler->pushObject($integrationProperties, $this->getLayout());
     }
-
     // ==========================
     // INTERFACE IMPLEMENTATIONS
     // ==========================
-
     /**
      * Specify data which should be serialized to JSON
      *
@@ -1112,40 +969,36 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
             'formTemplate'  => $this->formTemplate,
         ];
     }
-
     /**
      * Return the current element
      *
      * @return mixed Can return any type.
      */
-	#[\ReturnTypeWillChange]
-    public function current()
-    {
-        return current($this->currentPageRows);
-    }
-
+    #[ReturnTypeWillChange]
+       public function current()
+       {
+           return current($this->currentPageRows);
+       }
     /**
      * Move forward to next element
      *
      * @return void Any returned value is ignored.
      */
-	#[\ReturnTypeWillChange]
-    public function next()
-    {
-        next($this->currentPageRows);
-    }
-
+    #[ReturnTypeWillChange]
+       public function next()
+       {
+           next($this->currentPageRows);
+       }
     /**
      * Return the key of the current element
      *
      * @return mixed scalar on success, or null on failure.
      */
-	#[\ReturnTypeWillChange]
-    public function key()
-    {
-        return key($this->currentPageRows);
-    }
-
+    #[ReturnTypeWillChange]
+       public function key()
+       {
+           return key($this->currentPageRows);
+       }
     /**
      * Checks if current position is valid
      *
@@ -1155,72 +1008,61 @@ class Form implements \JsonSerializable, \Iterator, \ArrayAccess
     {
         return null !== $this->key() && $this->key() !== false;
     }
-
     /**
      * Rewind the Iterator to the first element
      *
      * @return void Any returned value is ignored.
      */
-	#[\ReturnTypeWillChange]
-    public function rewind()
-    {
-        reset($this->currentPageRows);
-    }
-
+    #[ReturnTypeWillChange]
+       public function rewind()
+       {
+           reset($this->currentPageRows);
+       }
     /**
      * Whether a offset exists
      *
-     * @param mixed $offset
      *
      * @return bool
      */
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->currentPageRows[$offset]);
     }
-
     /**
      * Offset to retrieve
      *
-     * @param mixed $offset
      *
      * @return mixed
      */
-	#[\ReturnTypeWillChange]
-    public function offsetGet($offset)
-    {
-        return $this->offsetExists($offset) ? $this->currentPageRows[$offset] : null;
-    }
-
+    #[ReturnTypeWillChange]
+       public function offsetGet(mixed $offset)
+       {
+           return $this->offsetExists($offset) ? $this->currentPageRows[$offset] : null;
+       }
     /**
      * Offset to set
      *
-     * @param mixed $offset
-     * @param mixed $value
      *
      * @return void
      * @throws FreeformException
      */
-	#[\ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
-    {
-        throw new FreeformException('Form ArrayAccess does not allow for setting values');
-    }
-
+    #[ReturnTypeWillChange]
+       public function offsetSet(mixed $offset, mixed $value)
+       {
+           throw new FreeformException('Form ArrayAccess does not allow for setting values');
+       }
     /**
      * Offset to unset
      *
-     * @param mixed $offset
      *
      * @return void
      * @throws FreeformException
      */
-	#[\ReturnTypeWillChange]
-    public function offsetUnset($offset)
-    {
-        throw new FreeformException('Form ArrayAccess does not allow unsetting values');
-    }
-
+    #[ReturnTypeWillChange]
+       public function offsetUnset(mixed $offset)
+       {
+           throw new FreeformException('Form ArrayAccess does not allow unsetting values');
+       }
     /**
      * @return bool
      */

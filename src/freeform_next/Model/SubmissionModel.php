@@ -42,10 +42,10 @@ class SubmissionModel extends Model
 {
     use TimestampableTrait;
 
-    const MODEL = 'freeform_next:SubmissionModel';
-    const TABLE = 'freeform_next_submissions';
+    public const MODEL = 'freeform_next:SubmissionModel';
+    public const TABLE = 'freeform_next_submissions';
 
-    const FIELD_COLUMN_PREFIX = 'field_';
+    public const FIELD_COLUMN_PREFIX = 'field_';
 
     /** @var AbstractField[] */
     private static $fieldMetadata = [];
@@ -88,8 +88,6 @@ class SubmissionModel extends Model
     /**
      * Creates a Field object with default settings
      *
-     * @param Form  $form
-     * @param array $fetchedValues
      *
      * @return SubmissionModel
      */
@@ -117,7 +115,7 @@ class SubmissionModel extends Model
         }
 
         foreach ($fetchedValues as $key => $value) {
-            if (property_exists(__CLASS__, $key)) {
+            if (property_exists(self::class, $key)) {
                 $submission->{$key} = $value;
             } else if (preg_match('/^' . SubmissionModel::FIELD_COLUMN_PREFIX . '(\d+)$/', $key, $matches)) {
                 $fieldId = (int) $matches[1];
@@ -135,8 +133,6 @@ class SubmissionModel extends Model
     /**
      * Creates a Field object with default settings
      *
-     * @param Form  $form
-     * @param array $fetchedValues
      *
      * @return SubmissionModel
      */
@@ -214,7 +210,7 @@ class SubmissionModel extends Model
     {
         $metadata = self::getFieldMetadataByFormId($formId);
 
-        return isset($metadata[$fieldId]) ? $metadata[$fieldId] : null;
+        return $metadata[$fieldId] ?? null;
     }
 
     /**
@@ -224,11 +220,7 @@ class SubmissionModel extends Model
      */
     public function __get($key)
     {
-        if (isset($this->fieldValues[$key])) {
-            return $this->fieldValues[$key];
-        }
-
-        return parent::__get($key);
+        return $this->fieldValues[$key] ?? parent::__get($key);
     }
 
     /**
@@ -285,11 +277,10 @@ class SubmissionModel extends Model
 
     /**
      * @param string $handle
-     * @param mixed  $value
      *
      * @return $this
      */
-    public function setFieldValue($handle, $value)
+    public function setFieldValue($handle, mixed $value)
     {
         $this->fieldValues[$handle] = $value;
 
@@ -360,9 +351,7 @@ class SubmissionModel extends Model
     }
 
     /**
-     * @param Form $form
      * @param      $savableFields
-     *
      * @return $this
      */
     public function setTitle(Form $form, $savableFields)
@@ -383,11 +372,10 @@ class SubmissionModel extends Model
 
     /**
      * @param int   $fieldId
-     * @param mixed $value
      *
      * @return $this
      */
-    private function setFieldColumnValue($fieldId, $value)
+    private function setFieldColumnValue($fieldId, mixed $value)
     {
         $field = self::getFieldMetadataById($this->formId, $fieldId);
 

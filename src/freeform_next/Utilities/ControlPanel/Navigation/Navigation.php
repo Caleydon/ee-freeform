@@ -19,11 +19,9 @@ use Solspace\Addons\FreeformNext\Services\PermissionsService;
 class Navigation
 {
     /** @var NavigationLink[] */
-    private $stack;
+    private ?array $stack = null;
 
     /**
-     * @param NavigationLink $link
-     *
      * @return $this
      */
     public function addLink(NavigationLink $link = null)
@@ -143,7 +141,7 @@ class Navigation
      */
     private function isUrlActive($url)
     {
-        return strpos($this->getCurrentUrl(), $this->getTrimLink($url)) === 0;
+        return str_starts_with($this->getCurrentUrl(), $this->getTrimLink($url));
     }
 
     /**

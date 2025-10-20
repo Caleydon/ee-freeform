@@ -183,8 +183,6 @@ class MigrationsController extends Controller
     }
 
     /**
-     * @param IntegrationModel $model
-     *
      * @return bool
      */
     public function save(IntegrationModel $model)
@@ -210,7 +208,7 @@ class MigrationsController extends Controller
 
         $postedSettings = [];
         foreach ($_POST as $key => $value) {
-            if (strpos($key, $hash) === 0) {
+            if (str_starts_with($key, $hash)) {
                 $postedSettings[str_replace($hash . '-', '', $key)] = $value;
             }
         }

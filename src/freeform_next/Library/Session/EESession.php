@@ -21,7 +21,7 @@ class EESession implements SessionInterface
      */
     public function get($key, $defaultValue = null)
     {
-        return isset($_SESSION[$key]) ? $_SESSION[$key] : $defaultValue;
+        return $_SESSION[$key] ?? $defaultValue;
     }
 
     /**

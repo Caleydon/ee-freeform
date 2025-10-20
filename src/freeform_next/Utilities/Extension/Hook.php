@@ -4,27 +4,6 @@ namespace Solspace\Addons\FreeformNext\Utilities\Extension;
 
 class Hook
 {
-    /** @var string */
-    private $class;
-
-    /** @var string */
-    private $method;
-
-    /** @var string */
-    private $hook;
-
-    /** @var array */
-    private $settings;
-
-    /** @var int */
-    private $priority;
-
-    /** @var string */
-    private $version;
-
-    /** @var bool */
-    private $enabled;
-
     /**
      * Hook constructor.
      *
@@ -32,26 +11,11 @@ class Hook
      * @param string $method
      * @param string $hook
      * @param string $version
-     * @param array  $settings
      * @param int    $priority
      * @param bool   $enabled
      */
-    public function __construct(
-        $class,
-        $method,
-        $hook = null,
-        $version = '1.0.0',
-        array $settings = [],
-        $priority = 10,
-        $enabled = true
-    ) {
-        $this->class    = $class;
-        $this->method   = $method;
-        $this->hook     = $hook;
-        $this->settings = $settings;
-        $this->priority = $priority;
-        $this->version  = $version;
-        $this->enabled  = $enabled;
+    public function __construct(private $class, private $method, private $hook = null, private $version = '1.0.0', private array $settings = [], private $priority = 10, private $enabled = true)
+    {
     }
 
     /**

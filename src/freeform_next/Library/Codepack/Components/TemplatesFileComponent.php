@@ -15,10 +15,7 @@ use Solspace\Addons\FreeformNext\Library\Codepack\Exceptions\FileObject\FileNotF
 
 class TemplatesFileComponent extends AbstractFileComponent
 {
-    private $modifiableFileExtensions = array(
-        'html',
-        'twig',
-    );
+    private array $modifiableFileExtensions = ['html', 'twig'];
 
     /**
      * @return string
