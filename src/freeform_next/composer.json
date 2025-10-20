@@ -21,16 +21,27 @@
     "rector/rector": "^0.17.12",
     "nikic/php-parser": "^4.15.5"
   },
-  "exclude-from-classmap": [
-    "vendor/"
-  ],
-  "config": {
-    "allow-plugins": {
-      "dealerdirect/phpcodesniffer-composer-installer": true
+  "autoload": {
+    "psr-4": {
+      "Solspace\\Addons\\FreeformNext\\": ""
     },
+    "classmap": [
+      "mcp.freeform_next.php",
+      "upd.freeform_next.php",
+      "jump.freeform_next.php",
+      "mod.freeform_next.php",
+      "ext.freeform_next.php",
+      "ft.freeform_next.php"
+    ],
+    "exclude-from-classmap": [
+      "vendor/"
+    ]
+  },
+  "config": {
     "platform": {
       "php": "8.0.30"
-    }
+    },
+    "allow-plugins": {}
   },
   "scripts": {
     "rector": "rector process",

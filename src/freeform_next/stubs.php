@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * -------- GLOBAL NAMESPACE: EE helper functions used all over --------
  */
