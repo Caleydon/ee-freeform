@@ -25,7 +25,7 @@ use Solspace\Addons\FreeformNext\Repositories\SubmissionRepository;
 use Solspace\Addons\FreeformNext\Services\HoneypotService;
 use Solspace\Addons\FreeformNext\Utilities\Plugin;
 
-require_once version_compare(PHP_VERSION, '8.0.0') < 0 ? __DIR__ . '/php7/vendor/autoload.php' : __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 class Freeform_Next extends Plugin
 {

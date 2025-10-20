@@ -15,7 +15,7 @@ use Solspace\Addons\FreeformNext\Services\RecaptchaService;
 use Solspace\Addons\FreeformNext\Services\SettingsService;
 use Solspace\Addons\FreeformNext\Utilities\AddonInfo;
 
-require_once version_compare(PHP_VERSION, '8.0.0') < 0 ? __DIR__ . '/php7/vendor/autoload.php' : __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 /**
  * Freeform for ExpressionEngine
