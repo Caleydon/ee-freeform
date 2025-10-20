@@ -452,7 +452,7 @@ class SubmissionController extends Controller
                     'name'  => 'id_list[]',
                     'value' => $submission->id,
                     'data'  => [
-                        'confirm' => lang('Submission') . ': <b>' . htmlentities($submission->title, ENT_QUOTES) . '</b>',
+                        'confirm' => lang('Submission') . ': <b>' . htmlentities($submission->title, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8') . '</b>',
                     ],
                 ];
             }
@@ -970,7 +970,7 @@ class SubmissionController extends Controller
                     'name'  => 'id_list[]',
                     'value' => $submission->id,
                     'data'  => [
-                        'confirm' => lang('Submission') . ': <b>' . htmlentities($submission->title, ENT_QUOTES) . '</b>',
+                        'confirm' => lang('Submission') . ': <b>' . htmlentities($submission->title, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8') . '</b>',
                     ],
                 ];
             }

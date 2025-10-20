@@ -231,7 +231,7 @@ class TableField extends AbstractField implements MultipleValueInterface, MultiD
         foreach ($layout as $column) {
             $label = $column['label'] ?? '';
 
-            $output .= '<th>' . htmlentities($label) . '</th>';
+            $output .= '<th>' . htmlentities($label, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8') . '</th>';
         }
         $output .= '<th>&nbsp;</th></tr>';
         $output .= '</thead>';
@@ -244,7 +244,7 @@ class TableField extends AbstractField implements MultipleValueInterface, MultiD
                 $type         = $column['type'] ?? self::COLUMN_TYPE_STRING;
                 $defaultValue = $column['value'] ?? '';
                 $value        = $row[$index] ?? $defaultValue;
-                $value        = htmlentities($value);
+                $value        = htmlentities($value, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
 
                 $output .= '<td>';
 

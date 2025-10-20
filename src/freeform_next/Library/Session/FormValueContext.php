@@ -171,7 +171,7 @@ class FormValueContext implements JsonSerializable
 
         $default = $field->getValue();
         if (\is_string($default)) {
-            $default = htmlspecialchars($default);
+            $default = htmlspecialchars($default, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
         }
 
         return $default;
@@ -417,7 +417,7 @@ class FormValueContext implements JsonSerializable
             self::FORM_HASH_DELIMITER,
             $payload
         );
-        $hash = htmlentities($hash, ENT_QUOTES, 'UTF-8');
+        $hash = htmlentities($hash, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
 
         return $hash;
     }

@@ -93,8 +93,8 @@ final class Crap4j
                     $methodNode->appendChild($document->createElement('package', $namespace));
                     $methodNode->appendChild($document->createElement('className', $className));
                     $methodNode->appendChild($document->createElement('methodName', $methodName));
-                    $methodNode->appendChild($document->createElement('methodSignature', htmlspecialchars($method['signature'])));
-                    $methodNode->appendChild($document->createElement('fullMethod', htmlspecialchars($method['signature'])));
+                    $methodNode->appendChild($document->createElement('methodSignature', htmlspecialchars($method['signature'], ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8')));
+                    $methodNode->appendChild($document->createElement('fullMethod', htmlspecialchars($method['signature'], ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8')));
                     $methodNode->appendChild($document->createElement('crap', (string) $this->roundValue((float) $method['crap'])));
                     $methodNode->appendChild($document->createElement('complexity', (string) $method['ccn']));
                     $methodNode->appendChild($document->createElement('coverage', (string) $this->roundValue($method['coverage'])));

@@ -98,7 +98,7 @@ class MailingListsController extends Controller
                     "data"  => [
                         "confirm" => lang("Integration") . ": <b>" . htmlentities(
                                 $integration->name,
-                                ENT_QUOTES
+                                ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8'
                             ) . "</b>",
                     ],
                 ],

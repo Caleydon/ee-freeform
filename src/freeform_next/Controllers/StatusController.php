@@ -42,7 +42,7 @@ class StatusController extends Controller
                 'name'  => 'id_list[]',
                 'value' => $status->id,
                 'data'  => [
-                    'confirm' => lang('status') . ': <b>' . htmlentities('test', ENT_QUOTES) . '</b>',
+                    'confirm' => lang('status') . ': <b>' . htmlentities('test', ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8') . '</b>',
                 ],
             ];
 

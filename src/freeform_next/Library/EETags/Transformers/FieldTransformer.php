@@ -57,7 +57,7 @@ class FieldTransformer
         }
 
         if ($value) {
-            $value = htmlentities($value, ENT_QUOTES, 'UTF-8');
+            $value = htmlentities($value, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
             if ($field instanceof TextareaField) {
                 $value = str_replace(['&lt;br /&gt;', '&lt;br&gt;'], '<br />', $value);
                 $value = nl2br($value);
@@ -223,7 +223,7 @@ class FieldTransformer
                 $label        = $column['label'] ?? '';
                 $defaultValue = $column['value'] ?? '';
                 $value        = $row[$index] ?? $defaultValue;
-                $value        = htmlentities($value);
+                $value        = htmlentities($value, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
                 $templateOptions = [];
 
                 switch ($type) {

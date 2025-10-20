@@ -536,7 +536,7 @@ abstract class AbstractField implements FieldInterface, JsonSerializable, String
         $output = '<ul class="' . $class . '">';
 
         foreach ($errors as $error) {
-            $output .= '<li>' . htmlentities($error) . '</li>';
+            $output .= '<li>' . htmlentities($error, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8') . '</li>';
         }
 
         $output .= '</ul>';
@@ -567,7 +567,7 @@ abstract class AbstractField implements FieldInterface, JsonSerializable, String
             return sprintf(
                 ' %s="%s"',
                 $name,
-                $escapeValue ? htmlentities($value) : $value
+                $escapeValue ? htmlentities($value, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8') : $value
             );
         }
 

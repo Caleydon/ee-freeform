@@ -94,7 +94,7 @@ class ExportProfilesService
                 if (is_null($value)) {
                     $value = '';
                 }
-                $node = $submission->addChild($label, htmlspecialchars($value));
+                $node = $submission->addChild($label, htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8'));
                 $node->addAttribute('label', $this->getLabelFromIdentificator($form, $id));
             }
         }

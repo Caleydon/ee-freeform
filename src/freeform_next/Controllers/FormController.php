@@ -132,7 +132,7 @@ class FormController extends Controller
                     'data'  => [
                         'confirm' => lang('Form') . ': <b>' . htmlentities(
                                 $form->getForm()->getName(),
-                                ENT_QUOTES
+                                ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8'
                             ) . '</b>',
                     ],
                 ];

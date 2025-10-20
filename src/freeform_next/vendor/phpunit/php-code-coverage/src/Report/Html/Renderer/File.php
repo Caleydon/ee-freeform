@@ -122,7 +122,7 @@ final class File extends Renderer
     /**
      * @var int
      */
-    private $htmlSpecialCharsFlags = ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE;
+    private $htmlSpecialCharsFlags = ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401;
 
     public function render(FileNode $node, string $file): void
     {
@@ -388,7 +388,7 @@ final class File extends Renderer
                     '%s<a href="#%d"><abbr title="%s">%s</abbr></a>',
                     $indent,
                     $item['startLine'],
-                    htmlspecialchars($item['signature'], $this->htmlSpecialCharsFlags),
+                    htmlspecialchars($item['signature'], $this->htmlSpecialCharsFlags, 'UTF-8'),
                     $item['functionName'] ?? $item['methodName']
                 ),
                 'numMethods'                      => $numMethods,
@@ -466,7 +466,7 @@ final class File extends Renderer
                 $popover = sprintf(
                     ' data-title="%s" data-content="%s" data-placement="top" data-html="true"',
                     $popoverTitle,
-                    htmlspecialchars($popoverContent, $this->htmlSpecialCharsFlags)
+                    htmlspecialchars($popoverContent, $this->htmlSpecialCharsFlags, 'UTF-8')
                 );
             }
 
@@ -553,7 +553,7 @@ final class File extends Renderer
                 $popover = sprintf(
                     ' data-title="%s" data-content="%s" data-placement="top" data-html="true"',
                     $popoverTitle,
-                    htmlspecialchars($popoverContent, $this->htmlSpecialCharsFlags)
+                    htmlspecialchars($popoverContent, $this->htmlSpecialCharsFlags, 'UTF-8')
                 );
             }
 
@@ -643,7 +643,7 @@ final class File extends Renderer
                 $popover = sprintf(
                     ' data-title="%s" data-content="%s" data-placement="top" data-html="true"',
                     $popoverTitle,
-                    htmlspecialchars($popoverContent, $this->htmlSpecialCharsFlags)
+                    htmlspecialchars($popoverContent, $this->htmlSpecialCharsFlags, 'UTF-8')
                 );
             }
 
@@ -680,7 +680,7 @@ final class File extends Renderer
             }
 
             if ($branchStructure !== '') { // don't show empty branches
-                $branches .= '<h5 class="structure-heading"><a name="' . htmlspecialchars($methodName, $this->htmlSpecialCharsFlags) . '">' . $this->abbreviateMethodName($methodName) . '</a></h5>' . "\n";
+                $branches .= '<h5 class="structure-heading"><a name="' . htmlspecialchars($methodName, $this->htmlSpecialCharsFlags, 'UTF-8') . '">' . $this->abbreviateMethodName($methodName) . '</a></h5>' . "\n";
                 $branches .= $branchStructure;
             }
         }
@@ -741,7 +741,7 @@ final class File extends Renderer
                 $popover = sprintf(
                     ' data-title="%s" data-content="%s" data-placement="top" data-html="true"',
                     $popoverTitle,
-                    htmlspecialchars($popoverContent, $this->htmlSpecialCharsFlags)
+                    htmlspecialchars($popoverContent, $this->htmlSpecialCharsFlags, 'UTF-8')
                 );
             }
 
@@ -786,7 +786,7 @@ final class File extends Renderer
             }
 
             if ($pathStructure !== '') {
-                $paths .= '<h5 class="structure-heading"><a name="' . htmlspecialchars($methodName, $this->htmlSpecialCharsFlags) . '">' . $this->abbreviateMethodName($methodName) . '</a></h5>' . "\n";
+                $paths .= '<h5 class="structure-heading"><a name="' . htmlspecialchars($methodName, $this->htmlSpecialCharsFlags, 'UTF-8') . '">' . $this->abbreviateMethodName($methodName) . '</a></h5>' . "\n";
                 $paths .= $pathStructure;
             }
         }
@@ -856,7 +856,7 @@ final class File extends Renderer
                     $popover = sprintf(
                         ' data-title="%s" data-content="%s" data-placement="top" data-html="true"',
                         $popoverTitle,
-                        htmlspecialchars($popoverContent, $this->htmlSpecialCharsFlags)
+                        htmlspecialchars($popoverContent, $this->htmlSpecialCharsFlags, 'UTF-8')
                     );
                 }
 
@@ -907,14 +907,14 @@ final class File extends Renderer
                 if ($token === '"' && $tokens[$j - 1] !== '\\') {
                     $result[$i] .= sprintf(
                         '<span class="string">%s</span>',
-                        htmlspecialchars($token, $this->htmlSpecialCharsFlags)
+                        htmlspecialchars($token, $this->htmlSpecialCharsFlags, 'UTF-8')
                     );
 
                     $stringFlag = !$stringFlag;
                 } else {
                     $result[$i] .= sprintf(
                         '<span class="keyword">%s</span>',
-                        htmlspecialchars($token, $this->htmlSpecialCharsFlags)
+                        htmlspecialchars($token, $this->htmlSpecialCharsFlags, 'UTF-8')
                     );
                 }
 
@@ -926,7 +926,7 @@ final class File extends Renderer
             $value = str_replace(
                 ["\t", ' '],
                 ['&nbsp;&nbsp;&nbsp;&nbsp;', '&nbsp;'],
-                htmlspecialchars($value, $this->htmlSpecialCharsFlags)
+                htmlspecialchars($value, $this->htmlSpecialCharsFlags, 'UTF-8')
             );
 
             if ($value === "\n") {
@@ -1046,7 +1046,7 @@ final class File extends Renderer
         return sprintf(
             '<li%s>%s</li>',
             $testCSS,
-            htmlspecialchars($test, $this->htmlSpecialCharsFlags)
+            htmlspecialchars($test, $this->htmlSpecialCharsFlags, 'UTF-8')
         );
     }
 

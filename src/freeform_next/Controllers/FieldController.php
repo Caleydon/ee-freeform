@@ -78,7 +78,7 @@ class FieldController extends Controller
                     'name'  => 'id_list[]',
                     'value' => $field->id,
                     'data'  => [
-                        'confirm' => lang('Field') . ': <b>' . htmlentities($field->label, ENT_QUOTES) . '</b>',
+                        'confirm' => lang('Field') . ': <b>' . htmlentities($field->label, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8') . '</b>',
                     ],
                 ],
             ];

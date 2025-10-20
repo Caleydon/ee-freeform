@@ -46,7 +46,7 @@ class ExportDataExcel extends ExportData {
         $output .= "</Styles>\n";
 
         // worksheet header
-        $output .= sprintf("<Worksheet ss:Name=\"%s\">\n    <Table>\n", htmlentities($this->title));
+        $output .= sprintf("<Worksheet ss:Name=\"%s\">\n    <Table>\n", htmlentities($this->title, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8'));
 
         return $output;
     }
@@ -100,7 +100,7 @@ class ExportDataExcel extends ExportData {
             $type = 'String';
         }
 
-        $item = str_replace('&#039;', '&apos;', htmlspecialchars($item, ENT_QUOTES));
+        $item = str_replace('&#039;', '&apos;', htmlspecialchars($item, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8'));
         $output .= "            ";
         $output .= $style ? "<Cell ss:StyleID=\"$style\">" : "<Cell>";
         $output .= sprintf("<Data ss:Type=\"%s\">%s</Data>", $type, $item);
