@@ -40,17 +40,15 @@ class TemplatesFileComponent extends AbstractFileComponent
      * @param string      $content
      * @param string|null $prefix
      *
-     * @return string
+     * @return ?string
      */
-    public function fileContentModification($content, $prefix = null): void
+    public function fileContentModification($content, $prefix = null): ?string
     {
         $content = $this->updateSrcAndHref($content, $prefix);
         $content = $this->updateLinks($content, $prefix);
         $content = $this->updateTemplateCalls($content, $prefix);
         $content = $this->replaceCustomPrefixCalls($content, $prefix);
-        $content = $this->offsetSegments($content, $prefix);
-
-        return $content;
+        return $this->offsetSegments($content, $prefix);
     }
 
     /**

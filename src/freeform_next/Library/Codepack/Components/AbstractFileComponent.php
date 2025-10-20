@@ -156,10 +156,11 @@ abstract class AbstractFileComponent implements ComponentInterface
      * @param string      $content
      * @param string|null $prefix
      *
-     * @return string
+     * @return ?string
      */
-    public function fileContentModification($content, $prefix = null): void
+    public function fileContentModification($content, $prefix = null): ?string
     {
+        return null;
     }
 
     /**

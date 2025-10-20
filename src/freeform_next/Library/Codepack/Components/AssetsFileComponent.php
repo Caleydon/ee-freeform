@@ -44,7 +44,7 @@ class AssetsFileComponent extends AbstractFileComponent
      *
      * @throws FileNotFoundException
      */
-    public function fileContentModification($content, $prefix = null): void
+    public function fileContentModification($content, $prefix = null): ?string
     {
         if (!file_exists($content)) {
             throw new FileNotFoundException(
