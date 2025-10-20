@@ -13,7 +13,7 @@ class SubmissionPreferenceSetting implements JsonSerializable
      * @param bool          $checked
      * @return SubmissionPreferenceSetting
      */
-    public static function createFromField(AbstractField $field, $checked)
+    public static function createFromField(AbstractField $field, $checked): \Solspace\Addons\FreeformNext\Library\DataObjects\SubmissionPreferenceSetting
     {
         return new SubmissionPreferenceSetting(
             $field->getId(),
@@ -26,7 +26,7 @@ class SubmissionPreferenceSetting implements JsonSerializable
     /**
      * @return SubmissionPreferenceSetting
      */
-    public static function createFromArray(array $data)
+    public static function createFromArray(array $data): \Solspace\Addons\FreeformNext\Library\DataObjects\SubmissionPreferenceSetting
     {
         return new SubmissionPreferenceSetting(
             $data['id'],
@@ -76,7 +76,7 @@ class SubmissionPreferenceSetting implements JsonSerializable
     /**
      * @return bool
      */
-    public function isChecked()
+    public function isChecked(): bool
     {
         return $this->checked;
     }

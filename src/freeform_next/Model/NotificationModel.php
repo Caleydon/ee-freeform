@@ -59,7 +59,7 @@ class NotificationModel extends Model implements JsonSerializable
     /**
      * @return array
      */
-    public static function createValidationRules()
+    public static function createValidationRules(): array
     {
         return [
             'name'      => 'required',
@@ -133,7 +133,7 @@ EOT;
     /**
      * @return bool
      */
-    public function isFileTemplate()
+    public function isFileTemplate(): bool
     {
         return !is_numeric($this->id);
     }
@@ -141,7 +141,7 @@ EOT;
     /**
      * @param int $id
      */
-    public function setLegacyId($id)
+    public function setLegacyId($id): void
     {
         $this->set(['legacyId' => $id]);
     }

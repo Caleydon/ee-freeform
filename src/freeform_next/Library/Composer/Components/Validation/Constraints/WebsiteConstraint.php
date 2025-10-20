@@ -20,7 +20,7 @@ class WebsiteConstraint implements ConstraintInterface
     /**
      * @inheritDoc
      */
-    public function validate($value)
+    public function validate($value): ConstraintViolationList
     {
         $violationList = new ConstraintViolationList();
 

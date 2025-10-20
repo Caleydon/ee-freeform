@@ -58,7 +58,7 @@ abstract class CRMOAuthConnector extends AbstractCRMIntegration
     /**
      * A method that initiates the authentication
      */
-    public function initiateAuthentication()
+    public function initiateAuthentication(): void
     {
         $data = [
             "response_type" => "code",

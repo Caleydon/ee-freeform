@@ -52,7 +52,7 @@ class Freeform_next_mcp extends ControlPanelView
     /**
      * @return array
      */
-    public function index()
+    public function index(): array
     {
         return $this->renderView(new RedirectView($this->getLink('forms')));
     }
@@ -64,7 +64,7 @@ class Freeform_next_mcp extends ControlPanelView
      * @throws Exception
      * @throws FreeformException
      */
-    public function forms($formId = null)
+    public function forms($formId = null): array
     {
         if (isset($_POST['composerState'])) {
             $this->renderView($this->getFormController()->save());
@@ -94,7 +94,7 @@ class Freeform_next_mcp extends ControlPanelView
      *
      * @return array
      */
-    public function api($type)
+    public function api($type): array
     {
         $apiController = new ApiController();
         $args          = func_get_args();
@@ -107,7 +107,7 @@ class Freeform_next_mcp extends ControlPanelView
      *
      * @return array
      */
-    public function fields($id = null)
+    public function fields($id = null): array
     {
         if (!($this->getPermissionsService()->canUserAccessSection(__FUNCTION__, ee()->session->userdata('group_id')))) {
             return $this->renderView(new RedirectView($this->getLink('denied')));
@@ -144,7 +144,7 @@ class Freeform_next_mcp extends ControlPanelView
      * @return array
      * @throws FreeformException
      */
-    public function notifications($notificationId = null)
+    public function notifications($notificationId = null): array
     {
         if (!($this->getPermissionsService()->canUserAccessSection(__FUNCTION__, ee()->session->userdata('group_id')))) {
             return $this->renderView(new RedirectView($this->getLink('denied')));
@@ -220,7 +220,7 @@ class Freeform_next_mcp extends ControlPanelView
      *
      * @return array
      */
-    public function export($id = null)
+    public function export($id = null): array
     {
         if (!($this->getPermissionsService()->canUserAccessSection(__FUNCTION__, ee()->session->userdata('group_id')))) {
             return $this->renderView(new RedirectView($this->getLink('denied')));
@@ -291,7 +291,7 @@ class Freeform_next_mcp extends ControlPanelView
      * @return array
      * @throws FreeformException
      */
-    public function spam(null|string $formHandle = null, null|int|string $submissionId = null)
+    public function spam(null|string $formHandle = null, null|int|string $submissionId = null): array
     {
         $form = FALSE;
         if ($formHandle) {
@@ -337,7 +337,7 @@ class Freeform_next_mcp extends ControlPanelView
     /**
      * @return array
      */
-    public function templates()
+    public function templates(): array
     {
         $ajaxView = new AjaxView();
         $ajaxView->addVariable('success', true);
@@ -379,7 +379,7 @@ class Freeform_next_mcp extends ControlPanelView
     /**
      * @return array
      */
-    public function formTemplates()
+    public function formTemplates(): array
     {
         $settings = new SettingsService();
         $ajaxView = new AjaxView();
@@ -391,7 +391,7 @@ class Freeform_next_mcp extends ControlPanelView
     /**
      * @return array
      */
-    public function optionsFromSource()
+    public function optionsFromSource(): array
     {
         $source        = ee()->input->post('source');
         $target        = ee()->input->post('target');
@@ -413,7 +413,7 @@ class Freeform_next_mcp extends ControlPanelView
     /**
      * @return array
      */
-    public function finish_tutorial()
+    public function finish_tutorial(): array
     {
         $service = new SettingsService();
         $service->finishTutorial();
@@ -425,12 +425,10 @@ class Freeform_next_mcp extends ControlPanelView
     }
 
     /**
-     * @param string          $type
      * @param null|string|int $id
-     *
      * @return array
      */
-    public function settings($type, $id = null)
+    public function settings(string $type, $id = null): array
     {
         return $this->renderView($this->getSettingsController()->index($type, $id));
     }
@@ -438,7 +436,7 @@ class Freeform_next_mcp extends ControlPanelView
     /**
      * @return array
      */
-    public function updates()
+    public function updates(): array
     {
         $updateController = new UpdateController();
 
@@ -451,7 +449,7 @@ class Freeform_next_mcp extends ControlPanelView
      *
      * @return array
      */
-    public function integrations($type, $id = null)
+    public function integrations($type, $id = null): ?array
     {
         if (!($this->getPermissionsService()->canUserAccessSection(__FUNCTION__, ee()->session->userdata('group_id')))) {
             return $this->renderView(new RedirectView($this->getLink('denied')));
@@ -478,12 +476,10 @@ class Freeform_next_mcp extends ControlPanelView
     }
 
     /**
-     * @param string      $logName
      * @param string|null $action
-     *
      * @return array
      */
-    public function logs($logName, $action = null)
+    public function logs(string $logName, $action = null): array
     {
         if (!($this->getPermissionsService()->canUserAccessSection(__FUNCTION__, ee()->session->userdata('group_id')))) {
             return $this->renderView(new RedirectView($this->getLink('denied')));
@@ -494,7 +490,7 @@ class Freeform_next_mcp extends ControlPanelView
         return $this->renderView($controller->view($logName, $action));
     }
 
-    public function denied()
+    public function denied(): array
     {
         return $this->renderView($this->getSettingsController()->permissionDenied());
     }
@@ -502,7 +498,7 @@ class Freeform_next_mcp extends ControlPanelView
     /**
      * @return Navigation
      */
-    protected function buildNavigation()
+    protected function buildNavigation(): Navigation
     {
         $allForms = FormRepository::getInstance()->getAllForms();
 

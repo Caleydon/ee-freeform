@@ -23,7 +23,7 @@ trait TimestampableTrait
     /**
      * Event beforeInsert sets the $dateCreated and $dateUpdated properties
      */
-    public function onBeforeInsert()
+    public function onBeforeInsert(): void
     {
         $this->set(
             [
@@ -36,7 +36,7 @@ trait TimestampableTrait
     /**
      * Event beforeUpdate sets the $dateUpdated property
      */
-    public function onBeforeUpdate()
+    public function onBeforeUpdate(): void
     {
         $this->set(['dateUpdated' => $this->getTimestampableDate()]);
     }
@@ -44,7 +44,7 @@ trait TimestampableTrait
     /**
      * @return DateTime
      */
-    private function getTimestampableDate()
+    private function getTimestampableDate(): string
     {
         return date('Y-m-d H:i:s');
     }

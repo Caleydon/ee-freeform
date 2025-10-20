@@ -94,17 +94,15 @@ class CpView extends View
     /**
      * @return array
      */
-    public function getTemplateVariables()
+    public function getTemplateVariables(): array
     {
         return $this->templateVariables ?: [];
     }
 
     /**
-     * @param array $templateVariables
-     *
      * @return $this
      */
-    public function setTemplateVariables($templateVariables)
+    public function setTemplateVariables(array $templateVariables)
     {
         $this->templateVariables = $templateVariables;
 
@@ -150,7 +148,7 @@ class CpView extends View
     /**
      * @return bool
      */
-    public function isSidebarDisabled()
+    public function isSidebarDisabled(): bool
     {
         return (bool) $this->sidebarDisabled;
     }
@@ -202,7 +200,7 @@ class CpView extends View
     /**
      * @param array $sections
      */
-    public function setSections($sections)
+    public function setSections($sections): void
     {
         $this->sections = $sections;
     }
@@ -230,7 +228,7 @@ class CpView extends View
     /**
      * @return NavigationLink[]
      */
-    public function getBreadcrumbs()
+    public function getBreadcrumbs(): array
     {
         return $this->breadcrumbs;
     }

@@ -20,7 +20,7 @@ class PasswordField extends TextField implements NoStorageInterface
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE_PASSWORD;
     }

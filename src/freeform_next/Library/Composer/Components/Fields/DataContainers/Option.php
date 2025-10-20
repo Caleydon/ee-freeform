@@ -28,7 +28,7 @@ class Option implements JsonSerializable
     /**
      * @return string
      */
-    public function getLabel()
+    public function getLabel(): string
     {
         return (string) $this->label;
     }
@@ -36,7 +36,7 @@ class Option implements JsonSerializable
     /**
      * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return (string) $this->value;
     }

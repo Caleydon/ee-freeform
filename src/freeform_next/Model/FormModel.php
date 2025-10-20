@@ -103,7 +103,7 @@ class FormModel extends Model implements Stringable
      * Sets names, handles, descriptions
      * And updates the layout JSON
      */
-    public function setLayout(Composer $composer)
+    public function setLayout(Composer $composer): void
     {
         $form = $composer->getForm();
         $this->set(
@@ -123,7 +123,7 @@ class FormModel extends Model implements Stringable
      *
      * @return Composer
      */
-    public function getComposer()
+    public function getComposer(): ?Composer
     {
         if (null === $this->composer) {
             $composerState  = $this->layoutJson ? json_decode($this->layoutJson, true) : null;
@@ -147,7 +147,7 @@ class FormModel extends Model implements Stringable
         return $this->composer;
     }
 
-    public function setHandle($handle) {
+    public function setHandle($handle): void {
         $this->handle = $handle;
         $composer = $this->getComposer();
 
@@ -175,7 +175,7 @@ class FormModel extends Model implements Stringable
     /**
      * @param int $id
      */
-    public function setLegacyId($id)
+    public function setLegacyId($id): void
     {
         $this->set(['legacyId' => $id]);
     }
@@ -183,7 +183,7 @@ class FormModel extends Model implements Stringable
     /**
      * @return FormAttributes
      */
-    private function getFormAttributes()
+    private function getFormAttributes(): FormAttributes
     {
         $sessionImplementation = (new SettingsService())->getSessionStorageImplementation();
 
@@ -200,7 +200,7 @@ class FormModel extends Model implements Stringable
     /**
      * Event beforeInsert sets the $dateCreated and $dateUpdated properties
      */
-    public function onBeforeInsert()
+    public function onBeforeInsert(): void
     {
         $this->set(
             [
@@ -213,7 +213,7 @@ class FormModel extends Model implements Stringable
     /**
      * Event beforeUpdate sets the $dateUpdated property
      */
-    public function onBeforeUpdate()
+    public function onBeforeUpdate(): void
     {
         $this->set(['dateUpdated' => $this->getTimestampableDate()]);
     }
@@ -221,7 +221,7 @@ class FormModel extends Model implements Stringable
     /**
      * @return DateTime
      */
-    private function getTimestampableDate()
+    private function getTimestampableDate(): string
     {
         return date('Y-m-d H:i:s');
     }
@@ -229,7 +229,7 @@ class FormModel extends Model implements Stringable
     /**
      * Event beforeSave validates the form
      */
-    public function onBeforeSave()
+    public function onBeforeSave(): void
     {
         FreeformHelper::get('validate', $this);
     }
@@ -237,7 +237,7 @@ class FormModel extends Model implements Stringable
     /**
      * Event beforeSave validates the form
      */
-    public function onBeforeDelete()
+    public function onBeforeDelete(): void
     {
         FreeformHelper::get('validate', $this);
     }

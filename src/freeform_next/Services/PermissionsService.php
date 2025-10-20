@@ -42,7 +42,7 @@ class PermissionsService
      *
      * @return bool
      */
-    public function canUserAccessSection($method, $groupId)
+    public function canUserAccessSection(string $method, $groupId): bool
     {
         if ((int) $groupId === 1) {
             return true;
@@ -66,7 +66,7 @@ class PermissionsService
      *
      * @return bool
      */
-    public function canUserSeeSectionInNavigation($method, $groupId)
+    public function canUserSeeSectionInNavigation($method, $groupId): bool
     {
         if ((int) $groupId === 1) {
             return true;
@@ -90,7 +90,7 @@ class PermissionsService
      *
      * @return bool
      */
-    public function canManageForms($groupId)
+    public function canManageForms($groupId): bool
     {
         return $this->canUserAccessSection(self::PERMISSION__MANAGE_FORMS, $groupId);
     }
@@ -100,7 +100,7 @@ class PermissionsService
      *
      * @return bool
      */
-    public function canAccessSubmissions($groupId)
+    public function canAccessSubmissions($groupId): bool
     {
         return $this->canUserAccessSection(self::PERMISSION__ACCESS_SUBMISSIONS, $groupId);
     }
@@ -110,7 +110,7 @@ class PermissionsService
      *
      * @return bool
      */
-    public function canManageSubmissions($groupId)
+    public function canManageSubmissions($groupId): bool
     {
         if (!$this->canAccessSubmissions($groupId)) {
             return false;
@@ -124,7 +124,7 @@ class PermissionsService
      *
      * @return bool
      */
-    public function canAccessFields($groupId)
+    public function canAccessFields($groupId): bool
     {
         return $this->canUserAccessSection(self::PERMISSION__ACCESS_FIELDS, $groupId);
     }
@@ -134,7 +134,7 @@ class PermissionsService
      *
      * @return bool
      */
-    public function canAccessExport($groupId)
+    public function canAccessExport($groupId): bool
     {
         return $this->canUserAccessSection(self::PERMISSION__ACCESS_EXPORT, $groupId);
     }
@@ -144,7 +144,7 @@ class PermissionsService
      *
      * @return bool
      */
-    public function canAccessNotifications($groupId)
+    public function canAccessNotifications($groupId): bool
     {
         return $this->canUserAccessSection(self::PERMISSION__ACCESS_NOTIFICATIONS, $groupId);
     }
@@ -154,7 +154,7 @@ class PermissionsService
      *
      * @return bool
      */
-    public function canAccessSettings($groupId)
+    public function canAccessSettings($groupId): bool
     {
         return $this->canUserAccessSection(self::PERMISSION__ACCESS_SETTINGS, $groupId);
     }
@@ -164,7 +164,7 @@ class PermissionsService
      *
      * @return bool
      */
-    public function canAccessIntegrations($groupId)
+    public function canAccessIntegrations($groupId): bool
     {
         return $this->canUserAccessSection(self::PERMISSION__ACCESS_INTEGRATIONS, $groupId);
     }
@@ -174,7 +174,7 @@ class PermissionsService
      *
      * @return bool
      */
-    public function canAccessResources($groupId)
+    public function canAccessResources($groupId): bool
     {
         return $this->canUserAccessSection(self::PERMISSION__ACCESS_RESOURCES, $groupId);
     }
@@ -184,7 +184,7 @@ class PermissionsService
      *
      * @return bool
      */
-    public function canAccessLogs($groupId)
+    public function canAccessLogs($groupId): bool
     {
         return $this->canUserAccessSection(self::PERMISSION__ACCESS_LOGS, $groupId);
     }
@@ -192,7 +192,7 @@ class PermissionsService
     /**
      * @return array
      */
-    private function getMethodTransformation()
+    private function getMethodTransformation(): array
     {
         return [
             'export_profiles' => 'export',
@@ -202,7 +202,7 @@ class PermissionsService
     /**
      * @return array
      */
-    private function getRestrictedNavigationSections()
+    private function getRestrictedNavigationSections(): array
     {
         return [
             self::PERMISSION__ACCESS_SUBMISSIONS,

@@ -31,7 +31,7 @@ abstract class AbstractIntegrationService
     /**
      * {@inheritDoc}
      */
-    public function onAfterResponse(AbstractIntegration $integration, ResponseInterface $response)
+    public function onAfterResponse(AbstractIntegration $integration, ResponseInterface $response): void
     {
     }
 

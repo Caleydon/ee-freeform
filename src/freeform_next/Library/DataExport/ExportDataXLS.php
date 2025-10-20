@@ -35,7 +35,7 @@ class ExportDataExcel extends ExportData {
 
     public $title = 'Sheet1'; // title for Worksheet
 
-    function generateHeader() {
+    function generateHeader(): string {
 
         // workbook header
         $output = stripslashes(sprintf(self::XmlHeader, $this->encoding)) . "\n";
@@ -63,7 +63,7 @@ class ExportDataExcel extends ExportData {
         return $output;
     }
 
-    function generateRow($row) {
+    function generateRow($row): string {
         $output = '';
         $output .= "        <Row>\n";
         foreach ($row as $k => $v) {
@@ -73,7 +73,7 @@ class ExportDataExcel extends ExportData {
         return $output;
     }
 
-    private function generateCell($item) {
+    private function generateCell($item): string {
         $output = '';
         $style = '';
 
@@ -109,7 +109,7 @@ class ExportDataExcel extends ExportData {
         return $output;
     }
 
-    function sendHttpHeaders() {
+    function sendHttpHeaders(): void {
         header("Content-Type: application/vnd.ms-excel; charset=" . $this->encoding);
         header("Content-Disposition: inline; filename=\"" . basename($this->filename) . "\"");
     }

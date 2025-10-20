@@ -80,7 +80,7 @@ class IntegrationModel extends Model implements IntegrationStorageInterface
      *
      * @param string $accessToken
      */
-    public function updateAccessToken($accessToken)
+    public function updateAccessToken($accessToken): void
     {
         $this->set(['accessToken' => $accessToken]);
     }
@@ -90,7 +90,7 @@ class IntegrationModel extends Model implements IntegrationStorageInterface
      *
      * @param array $settings
      */
-    public function updateSettings(array $settings = [])
+    public function updateSettings(array $settings = []): void
     {
         $this->set(['settings' => json_encode($settings)]);
     }

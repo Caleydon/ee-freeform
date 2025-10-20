@@ -11,6 +11,7 @@
 
 namespace Solspace\Addons\FreeformNext\Model;
 
+use DateTime;
 use EllisLab\ExpressionEngine\Service\Model\Model;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\AbstractField;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\Form;
@@ -80,7 +81,7 @@ class SubmissionModel extends Model
      *
      * @return string
      */
-    public static function getFieldColumnName($fieldId)
+    public static function getFieldColumnName($fieldId): string
     {
         return self::FIELD_COLUMN_PREFIX . $fieldId;
     }
@@ -234,7 +235,7 @@ class SubmissionModel extends Model
     /**
      * @return string
      */
-    public function getHash()
+    public function getHash(): string
     {
         return HashHelper::hash($this->id);
     }
@@ -290,7 +291,7 @@ class SubmissionModel extends Model
     /**
      * Overriding the SAVE method
      */
-    public function save()
+    public function save(): void
     {
         $dateFormat = 'Y-m-d H:i:s';
         $insertData = [
@@ -313,7 +314,7 @@ class SubmissionModel extends Model
                     $insertData
                 );
         } else {
-            if (!empty($this->dateCreated)) {
+            if ($this->dateCreated instanceof DateTime) {
                 if (is_string($this->dateCreated)) {
                     $dateCreated = $this->dateCreated;
                 } else {
@@ -338,7 +339,7 @@ class SubmissionModel extends Model
     /**
      * @return bool
      */
-    public function isTitleBlank()
+    public function isTitleBlank(): bool
     {
         if (
             ctype_space($this->title) ||
@@ -371,11 +372,9 @@ class SubmissionModel extends Model
     }
 
     /**
-     * @param int   $fieldId
-     *
      * @return $this
      */
-    private function setFieldColumnValue($fieldId, mixed $value)
+    private function setFieldColumnValue(int $fieldId, mixed $value)
     {
         $field = self::getFieldMetadataById($this->formId, $fieldId);
 
@@ -396,7 +395,7 @@ class SubmissionModel extends Model
     /**
      * @return array
      */
-    private function assembleInsertData()
+    private function assembleInsertData(): array
     {
         if (!isset(self::$handleToFieldIdMap[$this->formId])) {
             self::getFieldMetadataByFormId($this->formId);

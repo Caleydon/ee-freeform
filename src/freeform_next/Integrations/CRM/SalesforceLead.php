@@ -44,7 +44,7 @@ class SalesforceLead extends AbstractSalesforceIntegration implements TokenRefre
      *
      * @return SettingBlueprint[]
      */
-    public static function getSettingBlueprints()
+    public static function getSettingBlueprints(): array
     {
         return [
             new SettingBlueprint(
@@ -110,7 +110,7 @@ class SalesforceLead extends AbstractSalesforceIntegration implements TokenRefre
     /**
      * A method that initiates the authentication
      */
-    public function initiateAuthentication()
+    public function initiateAuthentication(): void
     {
     }
 
@@ -184,7 +184,7 @@ class SalesforceLead extends AbstractSalesforceIntegration implements TokenRefre
      *
      * @param IntegrationStorageInterface $model
      */
-    public function onBeforeSave(IntegrationStorageInterface $model)
+    public function onBeforeSave(IntegrationStorageInterface $model): void
     {
         $clientId     = $this->getClientId();
         $clientSecret = $this->getClientSecret();
@@ -206,7 +206,7 @@ class SalesforceLead extends AbstractSalesforceIntegration implements TokenRefre
      *
      * @return bool
      */
-    public function checkConnection()
+    public function checkConnection(): bool
     {
         $client   = new Client();
         $endpoint = $this->getEndpoint('/');
@@ -363,7 +363,7 @@ class SalesforceLead extends AbstractSalesforceIntegration implements TokenRefre
      *
      * @return bool
      */
-    public function refreshToken()
+    public function refreshToken(): bool
     {
         return (bool) $this->fetchAccessToken();
     }
@@ -400,7 +400,7 @@ class SalesforceLead extends AbstractSalesforceIntegration implements TokenRefre
      *
      * @return string
      */
-    protected function getAuthorizeUrl()
+    protected function getAuthorizeUrl(): string
     {
         return 'https://' . $this->getLoginUrl() . '.salesforce.com/services/oauth2/authorize';
     }
@@ -410,7 +410,7 @@ class SalesforceLead extends AbstractSalesforceIntegration implements TokenRefre
      *
      * @return string
      */
-    protected function getAccessTokenUrl()
+    protected function getAccessTokenUrl(): string
     {
         return 'https://' . $this->getLoginUrl() . '.salesforce.com/services/oauth2/token';
     }
@@ -418,7 +418,7 @@ class SalesforceLead extends AbstractSalesforceIntegration implements TokenRefre
     /**
      * @return string
      */
-    protected function getApiRootUrl()
+    protected function getApiRootUrl(): string
     {
         $instance        = $this->getSetting(self::SETTING_INSTANCE);
         $usingCustomUrls = $this->getSetting(self::SETTING_CUSTOM_URL);
@@ -442,7 +442,7 @@ class SalesforceLead extends AbstractSalesforceIntegration implements TokenRefre
     /**
      * @return string
      */
-    private function getLoginUrl()
+    private function getLoginUrl(): string
     {
         $isSandboxMode = $this->getSetting(self::SETTING_SANDBOX);
 

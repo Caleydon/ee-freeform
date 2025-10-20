@@ -47,8 +47,7 @@ abstract class AbstractField implements FieldInterface, JsonSerializable, String
     protected $instructions;
     /** @var bool */
     protected $required = false;
-    /** @var CustomFieldAttributes */
-    protected $customAttributes;
+    protected CustomFieldAttributes $customAttributes;
     /** @var int */
     protected $pageIndex;
     /** @var array */
@@ -450,7 +449,7 @@ abstract class AbstractField implements FieldInterface, JsonSerializable, String
      *
      * @param array|null $attributes
      */
-    public function setAttributes(array $attributes = null)
+    public function setAttributes(array $attributes = null): void
     {
         $this->setCustomAttributes($attributes);
     }
@@ -716,7 +715,7 @@ abstract class AbstractField implements FieldInterface, JsonSerializable, String
      *
      * @param array|null $attributes
      */
-    private function setCustomAttributes(array $attributes = null)
+    private function setCustomAttributes(array $attributes = null): void
     {
         if (null !== $attributes) {
             $this->customAttributes->mergeAttributes($attributes);
@@ -731,7 +730,7 @@ abstract class AbstractField implements FieldInterface, JsonSerializable, String
      * @since 5.4.0
      */
     #[ReturnTypeWillChange]
-       public function jsonSerialize()
+       public function jsonSerialize(): mixed
        {
            return $this->hash;
        }

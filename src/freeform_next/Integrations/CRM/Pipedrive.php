@@ -34,7 +34,7 @@ class Pipedrive extends AbstractCRMIntegration
      *
      * @return SettingBlueprint[]
      */
-    public static function getSettingBlueprints()
+    public static function getSettingBlueprints(): array
     {
         return [
             new SettingBlueprint(
@@ -54,7 +54,7 @@ class Pipedrive extends AbstractCRMIntegration
      *
      * @return bool
      */
-    public function pushObject(array $keyValueList, $formFields = NULL)
+    public function pushObject(array $keyValueList, $formFields = NULL): bool
     {
         $client = new Client();
 
@@ -213,7 +213,7 @@ class Pipedrive extends AbstractCRMIntegration
      *
      * @return bool
      */
-    public function checkConnection()
+    public function checkConnection(): bool
     {
 		$response = $this->getResponse(
 			$this->getEndpoint('/v1/deals'),
@@ -338,7 +338,7 @@ class Pipedrive extends AbstractCRMIntegration
     /**
      * A method that initiates the authentication
      */
-    public function initiateAuthentication()
+    public function initiateAuthentication(): void
     {
     }
 
@@ -347,7 +347,7 @@ class Pipedrive extends AbstractCRMIntegration
      *
      * @param IntegrationStorageInterface $model
      */
-    public function onBeforeSave(IntegrationStorageInterface $model)
+    public function onBeforeSave(IntegrationStorageInterface $model): void
     {
         $model->updateAccessToken($this->getSetting(self::SETTING_API_TOKEN));
     }
@@ -357,7 +357,7 @@ class Pipedrive extends AbstractCRMIntegration
      *
      * @return ResponseInterface
      */
-    private function getResponse($endpoint, array $queryOptions = [])
+    private function getResponse($endpoint, array $queryOptions = []): ResponseInterface
     {
         $client = new Client();
 
@@ -372,7 +372,7 @@ class Pipedrive extends AbstractCRMIntegration
     /**
      * @return string
      */
-    protected function getApiRootUrl()
+    protected function getApiRootUrl(): string
     {
         return 'https://api.pipedrive.com/';
     }

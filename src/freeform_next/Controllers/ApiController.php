@@ -34,12 +34,11 @@ class ApiController extends Controller
 
     /**
      * @param string $type
-     * @param array  $args
      *
      * @return View
      * @throws FreeformException
      */
-    public function handle($type, $args = [])
+    public function handle($type, array $args = [])
     {
         return match ($type) {
             self::TYPE_FIELDS => $this->fields(),
@@ -189,7 +188,7 @@ class ApiController extends Controller
     /**
      * @return AjaxView
      */
-    public function resetSpam()
+    public function resetSpam(): AjaxView
     {
         $formId = ee()->input->post('formId');
 
@@ -211,7 +210,7 @@ class ApiController extends Controller
     /**
      * @return AjaxView
      */
-    public function submissionLayout()
+    public function submissionLayout(): AjaxView
     {
         $formId   = ee()->input->post('formId');
         $data     = ee()->input->post('data');
@@ -243,7 +242,7 @@ class ApiController extends Controller
      * @return View
      * @throws FreeformException
      */
-    public function submissionExport(array $args = [])
+    public function submissionExport(array $args = []): FileDownloadView
     {
         $formId = @$args[1];
 

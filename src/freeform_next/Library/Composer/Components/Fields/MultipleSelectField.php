@@ -26,7 +26,7 @@ class MultipleSelectField extends AbstractExternalOptionsField implements Multip
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE_MULTIPLE_SELECT;
     }
@@ -36,7 +36,7 @@ class MultipleSelectField extends AbstractExternalOptionsField implements Multip
      *
      * @return string
      */
-    public function getInputHtml()
+    public function getInputHtml(): string
     {
         $attributes = $this->getCustomAttributes();
 
@@ -65,7 +65,7 @@ class MultipleSelectField extends AbstractExternalOptionsField implements Multip
      *
      * @return string
      */
-    public function getValueAsString($optionsAsValues = true)
+    public function getValueAsString($optionsAsValues = true): string
     {
         if (!$optionsAsValues) {
             return implode(', ', $this->getValue());

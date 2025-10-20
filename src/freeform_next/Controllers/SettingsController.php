@@ -44,13 +44,12 @@ class SettingsController extends Controller
     ];
 
     /**
-     * @param string $type
      * @param int    $id
      *
      * @return View
      * @throws FreeformException
      */
-    public function index($type, $id)
+    public function index(string $type, $id)
     {
         $canAccessSettings = $this->getPermissionsService()->canAccessSettings(ee()->session->userdata('group_id'));
 
@@ -123,7 +122,7 @@ class SettingsController extends Controller
     /**
      * @return CpView
      */
-    private function licenseAction()
+    private function licenseAction(): RedirectView|CpView
     {
         $canAccessSettings = $this->getPermissionsService()->canAccessSettings(ee()->session->userdata('group_id'));
 
@@ -166,7 +165,7 @@ class SettingsController extends Controller
     /**
      * @return View
      */
-    public function permissionDenied()
+    public function permissionDenied(): CpView
     {
         $pageTitle = lang('Permission Denied');
 
@@ -185,7 +184,7 @@ class SettingsController extends Controller
     /**
      * @return CpView
      */
-    private function generalAction()
+    private function generalAction(): CpView
     {
         $settings = $this->getSettings();
 
@@ -290,7 +289,7 @@ class SettingsController extends Controller
 	/**
 	 * @return CpView
 	 */
-	private function spamProtectionAction()
+	private function spamProtectionAction(): CpView
 	{
 		$settings = $this->getSettings();
 
@@ -346,7 +345,7 @@ class SettingsController extends Controller
     /**
      * @return CpView
      */
-    private function permissionsAction()
+    private function permissionsAction(): CpView
     {
         $version = FreeformHelper::get('version');
 
@@ -512,7 +511,7 @@ class SettingsController extends Controller
     /**
      * @return CpView
      */
-    private function formattingTemplatesAction()
+    private function formattingTemplatesAction(): CpView
     {
         $settings = $this->getSettings();
 
@@ -573,7 +572,7 @@ class SettingsController extends Controller
     /**
      * @return CpView
      */
-    private function emailTemplatesAction()
+    private function emailTemplatesAction(): CpView
     {
         $settings = $this->getSettings();
 
@@ -647,7 +646,7 @@ class SettingsController extends Controller
     /**
      * @return View
      */
-    private function demoTemplatesAction()
+    private function demoTemplatesAction(): RedirectView|CpView
     {
         $controller = new DemoTemplatesController();
 
@@ -657,7 +656,7 @@ class SettingsController extends Controller
     /**
      * @return View
      */
-    private function recaptchaAction()
+    private function recaptchaAction(): CpView
     {
         $settings = $this->getSettings();
 
@@ -757,7 +756,7 @@ class SettingsController extends Controller
      *
      * @return bool
      */
-    private function handlePost($type)
+    private function handlePost(string $type): ?bool
     {
         if ($type == self::TYPE_PERMISSIONS) {
             $settings = $this->getPermissionsModel();
@@ -804,11 +803,9 @@ class SettingsController extends Controller
     }
 
     /**
-     * @param string $method
-     *
      * @return string
      */
-    private function getActionUrl($method)
+    private function getActionUrl(string $method): string
     {
         $target = (string) Stringy::create($method)->underscored();
         $target = str_replace('_action', '', $target);

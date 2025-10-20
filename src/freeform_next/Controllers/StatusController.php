@@ -20,7 +20,7 @@ class StatusController extends Controller
     /**
      * @return CpView
      */
-    public function index()
+    public function index(): CpView
     {
         $statuses = StatusRepository::getInstance()->getAllStatuses();
 
@@ -106,7 +106,7 @@ class StatusController extends Controller
      * @return View
      * @throws FreeformException
      */
-    public function edit($id)
+    public function edit($id): CpView
     {
         if ('new' === $id) {
             $status = StatusModel::create();
@@ -258,7 +258,7 @@ class StatusController extends Controller
     /**
      * @return RedirectView
      */
-    public function batchDelete()
+    public function batchDelete(): RedirectView
     {
         if (isset($_POST['id_list'])) {
             $ids = [];
@@ -287,7 +287,7 @@ class StatusController extends Controller
     /**
      * Sets the isDefault to TRUE for the first entry found if no isDefault is set
      */
-    private function updateDefaults()
+    private function updateDefaults(): void
     {
         $hasDefault = ee()
             ->db

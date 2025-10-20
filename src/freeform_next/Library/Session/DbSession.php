@@ -89,7 +89,7 @@ class DbSession implements SessionInterface
      *
      * @return bool
      */
-    public function remove($key)
+    public function remove($key): bool
     {
         ee()->db
             ->delete(
@@ -125,7 +125,7 @@ class DbSession implements SessionInterface
     /**
      * @return string
      */
-    private function getSessionId()
+    private function getSessionId(): string|bool
     {
         return session_id();
     }

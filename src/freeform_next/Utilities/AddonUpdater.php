@@ -40,7 +40,7 @@ abstract class AddonUpdater
     /**
      * @return bool
      */
-    final public function install()
+    final public function install(): bool
     {
         $this->onBeforeInstall();
 
@@ -59,7 +59,7 @@ abstract class AddonUpdater
      *
      * @return bool
      */
-    final public function update($previousVersion = null)
+    final public function update($previousVersion = null): bool
     {
         $this->runMigrations($previousVersion);
         $this->checkAndInstallActions();
@@ -71,7 +71,7 @@ abstract class AddonUpdater
     /**
      * @return bool
      */
-    final public function uninstall()
+    final public function uninstall(): bool
     {
         $this->onBeforeUninstall();
 
@@ -101,11 +101,9 @@ abstract class AddonUpdater
     }
 
     /**
-     * @param bool $hasBackend
-     *
      * @return $this
      */
-    public function setHasBackend($hasBackend)
+    public function setHasBackend(bool $hasBackend)
     {
         $this->hasBackend = $hasBackend;
 
@@ -121,11 +119,9 @@ abstract class AddonUpdater
     }
 
     /**
-     * @param bool $hasPublishFields
-     *
      * @return $this
      */
-    public function setHasPublishFields($hasPublishFields)
+    public function setHasPublishFields(bool $hasPublishFields)
     {
         $this->hasPublishFields = $hasPublishFields;
 
@@ -190,7 +186,7 @@ abstract class AddonUpdater
     /**
      * Installs the module
      */
-    private function installModule()
+    private function installModule(): void
     {
         $addonInfo = $this->getAddonInfo();
 
@@ -207,7 +203,7 @@ abstract class AddonUpdater
     /**
      * Check all actions if they should be updated or installed
      */
-    private function checkAndInstallActions()
+    private function checkAndInstallActions(): void
     {
         foreach ($this->getInstallableActions() as $action) {
             $data = [
@@ -238,7 +234,7 @@ abstract class AddonUpdater
     /**
      * Check all extensions if they should be updated or installed
      */
-    private function checkAndInstallExtensions()
+    private function checkAndInstallExtensions(): void
     {
         $className = $this->getAddonInfo()->getModuleName() . '_ext';
         $version   = $this->getAddonInfo()->getVersion();
@@ -276,7 +272,7 @@ abstract class AddonUpdater
         }
     }
 
-    private function deleteExtensions()
+    private function deleteExtensions(): void
     {
         $className = $this->getAddonInfo()->getModuleName() . '_ext';
 
@@ -301,7 +297,7 @@ abstract class AddonUpdater
      * Iterates through all statements found in db.__module__.sql file
      * And executes them
      */
-    private function insertSqlTables()
+    private function insertSqlTables(): void
     {
         $addonInfo = $this->getAddonInfo();
 
@@ -354,7 +350,7 @@ abstract class AddonUpdater
      * Iterates through all table names found in db.__module__.sql file
      * And drops them
      */
-    private function deleteSqlTables()
+    private function deleteSqlTables(): void
     {
         // Only for MySQL/MariaDB: running without this is fine too
         if ($this->isMySqlLike()) {
@@ -397,7 +393,7 @@ abstract class AddonUpdater
     /**
      * Uninstall any actions that were installed with this plugin
      */
-    private function deleteActions()
+    private function deleteActions(): void
     {
         foreach ($this->getInstallableActions() as $action) {
             ee()->db->delete(
@@ -484,7 +480,7 @@ abstract class AddonUpdater
         }
         if (trim($buf) !== '') { $stmts[] = $buf; }
 
-        return array_values(array_filter($stmts, fn($s) => trim($s) !== ''));
+        return array_values(array_filter($stmts, fn($s): bool => trim($s) !== ''));
     }
 
     /**
@@ -562,9 +558,9 @@ abstract class AddonUpdater
         if (preg_match_all($reNamed, $bodyNorm, $m, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
             foreach ($m as $row) {
                 $constraint = $row[1][0];
-                $cols       = array_map('trim', array_map(fn($s) => trim($s, "` \t\n\r\0\x0B"), explode(',', $row[2][0])));
+                $cols       = array_map('trim', array_map(fn($s): string => trim($s, "` \t\n\r\0\x0B"), explode(',', $row[2][0])));
                 $refTable   = $row[3][0];
-                $refCols    = array_map('trim', array_map(fn($s) => trim($s, "` \t\n\r\0\x0B"), explode(',', $row[4][0])));
+                $refCols    = array_map('trim', array_map(fn($s): string => trim($s, "` \t\n\r\0\x0B"), explode(',', $row[4][0])));
 
                 $fks[] = [
                     'constraint' => $constraint,
@@ -590,9 +586,9 @@ abstract class AddonUpdater
         $reUnnamed = '/FOREIGN\s+KEY\s*\(\s*`?([^)`]+)`?\s*\)\s*REFERENCES\s+`?([a-zA-Z0-9_]+)`?\s*\(\s*`?([^)`]+)`?\s*\)/i';
         if (preg_match_all($reUnnamed, $work, $m2, PREG_SET_ORDER)) {
             foreach ($m2 as $row) {
-                $cols     = array_map('trim', array_map(fn($s) => trim($s, "` \t\n\r\0\x0B"), explode(',', $row[1])));
+                $cols     = array_map('trim', array_map(fn($s): string => trim($s, "` \t\n\r\0\x0B"), explode(',', $row[1])));
                 $refTable = $row[2];
-                $refCols  = array_map('trim', array_map(fn($s) => trim($s, "` \t\n\r\0\x0B"), explode(',', $row[3])));
+                $refCols  = array_map('trim', array_map(fn($s): string => trim($s, "` \t\n\r\0\x0B"), explode(',', $row[3])));
 
                 $fks[] = [
                     'constraint' => null,
@@ -653,7 +649,7 @@ abstract class AddonUpdater
         }
 
         // If there’s a cycle, append any remaining nodes in any order
-        $unprocessed = array_keys(array_filter($inDegree, fn($d) => $d > 0));
+        $unprocessed = array_keys(array_filter($inDegree, fn($d): bool => $d > 0));
         if (!empty($unprocessed)) {
             // Put cyclical nodes first in DROP order (safe when combined with SET FOREIGN_KEY_CHECKS=0)
             $dropOrder = array_merge($unprocessed, array_reverse($topo));

@@ -42,7 +42,7 @@ class EESession implements SessionInterface
      *
      * @return bool
      */
-    public function remove($key)
+    public function remove($key): void
     {
         if (isset($_SESSION[$key])) {
             unset($_SESSION[$key]);

@@ -143,7 +143,7 @@ class Freeform_next_jump extends AbstractJumpMenu
 	 *
 	 * @return array
 	 */
-	public function searchForms($searchKeywords = [])
+	public function searchForms($searchKeywords = []): array
 	{
 		$items = [];
 
@@ -171,7 +171,7 @@ class Freeform_next_jump extends AbstractJumpMenu
 	 *
 	 * @return array
 	 */
-	public function searchFields($searchKeywords = [])
+	public function searchFields($searchKeywords = []): array
 	{
 		$items = [];
 
@@ -199,7 +199,7 @@ class Freeform_next_jump extends AbstractJumpMenu
 	 *
 	 * @return array
 	 */
-	public function submissionsByForm($searchKeywords = [])
+	public function submissionsByForm($searchKeywords = []): array
 	{
 		$items = [];
 

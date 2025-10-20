@@ -54,7 +54,7 @@ class PredefinedOptionsFactory
     /**
      * @return Option[]
      */
-    private function getNumberOptions()
+    private function getNumberOptions(): array
     {
         $options = [];
 
@@ -70,7 +70,7 @@ class PredefinedOptionsFactory
     /**
      * @return Option[]
      */
-    private function getYearOptions()
+    private function getYearOptions(): array
     {
         $options = [];
 
@@ -151,7 +151,7 @@ class PredefinedOptionsFactory
     /**
      * @return Option[]
      */
-    private function getCountryOptions()
+    private function getCountryOptions(): array
     {
         /** @var array $countries */
         static $countries;
@@ -175,7 +175,7 @@ class PredefinedOptionsFactory
     /**
      * @return Option[]
      */
-    private function getLanguageOptions()
+    private function getLanguageOptions(): array
     {
         /** @var array $languages */
         static $languages;
@@ -199,7 +199,7 @@ class PredefinedOptionsFactory
     /**
      * @return Option[]
      */
-    private function getProvinceOptions()
+    private function getProvinceOptions(): array
     {
         /** @var array $provinces */
         static $provinces;
@@ -223,7 +223,7 @@ class PredefinedOptionsFactory
     /**
      * @return Option[]
      */
-    private function getStateOptions()
+    private function getStateOptions(): array
     {
         /** @var array $states */
         static $states;
@@ -247,7 +247,7 @@ class PredefinedOptionsFactory
     /**
      * @return Option[]
      */
-    private function getStateTerritoryOptions()
+    private function getStateTerritoryOptions(): array
     {
         /** @var array $states */
         static $states;
@@ -272,7 +272,7 @@ class PredefinedOptionsFactory
     /**
      * @return bool
      */
-    private function isChecked(mixed $value)
+    private function isChecked(mixed $value): bool
     {
         return \in_array((string) $value, $this->selectedValues, true);
     }
@@ -280,7 +280,7 @@ class PredefinedOptionsFactory
     /**
      * @return ExternalOptionsConfiguration
      */
-    private function getConfig()
+    private function getConfig(): ExternalOptionsConfiguration
     {
         return $this->configuration;
     }
@@ -290,7 +290,7 @@ class PredefinedOptionsFactory
      *
      * @return string
      */
-    private static function getMonthFormatFromType($type = null)
+    private static function getMonthFormatFromType($type = null): string
     {
         $format = 'F';
         $format = match ($type) {
@@ -308,7 +308,7 @@ class PredefinedOptionsFactory
      *
      * @return string
      */
-    private static function getDayFormatFromType($type = null)
+    private static function getDayFormatFromType($type = null): string
     {
         $format = 'd';
         $format = match ($type) {
@@ -324,7 +324,7 @@ class PredefinedOptionsFactory
      *
      * @return string
      */
-    private static function getDayOfTheWeekFormatFromType($type = null)
+    private static function getDayOfTheWeekFormatFromType($type = null): string
     {
         $format = 'l';
         $format = match ($type) {

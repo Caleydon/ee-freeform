@@ -183,7 +183,7 @@ class Properties implements JsonSerializable
     /**
      * @param string $hash
      */
-    public function removeHash($hash)
+    public function removeHash($hash): void
     {
         if (isset($this->propertyList[$hash])) {
             unset($this->propertyList[$hash]);
@@ -203,7 +203,7 @@ class Properties implements JsonSerializable
         $properties = $this->propertyList;
         array_walk_recursive(
             $properties,
-            function (&$value, $key) {
+            function (&$value, $key): void {
                 if (null === $value) {
                     $value = null;
                 } else if (is_string($value) && !in_array($key, ['value', 'label', 'handle', 'description'], true) && preg_match('/^(true|false)$/i', $value)) {

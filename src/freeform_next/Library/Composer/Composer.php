@@ -72,7 +72,7 @@ class Composer
     /**
      * @return Form
      */
-    public function getForm()
+    public function getForm(): Form
     {
         return $this->form;
     }
@@ -96,7 +96,7 @@ class Composer
      *
      * @param int $id
      */
-    public function removeFieldById($id)
+    public function removeFieldById($id): void
     {
         $field = $this->form->getLayout()->getFieldById($id);
 
@@ -183,7 +183,7 @@ class Composer
      * This method sets defaults for all composer items
      * It happens if a new Form Model is created
      */
-    private function setDefaults()
+    private function setDefaults(): void
     {
         $this->properties = new Properties(
             [
@@ -237,7 +237,7 @@ class Composer
         );
     }
 
-    private function attachCustomComposerState()
+    private function attachCustomComposerState(): void
     {
         $properties = [
             Properties::PAGE_PREFIX . '0'        => [

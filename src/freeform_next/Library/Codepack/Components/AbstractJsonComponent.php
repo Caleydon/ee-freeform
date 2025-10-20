@@ -63,12 +63,11 @@ abstract class AbstractJsonComponent implements ComponentInterface
     abstract protected function setProperties();
 
     /**
-     * @param string $location
      *
      * @return bool
      * @throws CodepackException
      */
-    private function parseJson($location)
+    private function parseJson(string $location): bool
     {
         $jsonFile = $location . '/' . $this->fileName;
         if (!file_exists($jsonFile)) {

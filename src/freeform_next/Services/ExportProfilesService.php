@@ -15,7 +15,7 @@ use Solspace\Addons\FreeformNext\Repositories\SettingsRepository;
 
 class ExportProfilesService
 {
-    public function exportCsv(Form $form, array $labels, array $data)
+    public function exportCsv(Form $form, array $labels, array $data): void
     {
         $data = $this->normalizeArrayData($form, $data);
 
@@ -36,7 +36,7 @@ class ExportProfilesService
         exit();
     }
 
-    public function exportJson(Form $form, array $data)
+    public function exportJson(Form $form, array $data): void
     {
         $data = $this->normalizeArrayData($form, $data, false);
 
@@ -59,7 +59,7 @@ class ExportProfilesService
         $this->outputFile($output, $fileName, 'application/octet-stream');
     }
 
-    public function exportText(Form $form, array $data)
+    public function exportText(Form $form, array $data): void
     {
         $data = $this->normalizeArrayData($form, $data);
 
@@ -79,7 +79,7 @@ class ExportProfilesService
         $this->outputFile($output, $fileName, 'text/plain');
     }
 
-    public function exportXml(Form $form, array $data)
+    public function exportXml(Form $form, array $data): void
     {
         $data = $this->normalizeArrayData($form, $data);
 
@@ -179,11 +179,9 @@ class ExportProfilesService
     }
 
     /**
-     * @param bool  $flattenArrays
-     *
      * @return array
      */
-    private function normalizeArrayData(Form $form, array $data, $flattenArrays = true)
+    private function normalizeArrayData(Form $form, array $data, bool $flattenArrays = true)
     {
         $isRemoveNewlines = (bool) SettingsRepository::getInstance()->getOrCreate()->removeNewlines;
 
@@ -280,10 +278,8 @@ class ExportProfilesService
 
     /**
      * @param string $content
-     * @param string $fileName
-     * @param string $contentType
      */
-    private function outputFile($content, $fileName, $contentType)
+    private function outputFile($content, string $fileName, string $contentType): void
     {
         header('Content-Description: File Transfer');
         header('Content-Type: ' . $contentType);
@@ -300,7 +296,10 @@ class ExportProfilesService
     }
 
 
-    private function populateDataWithTableDate($data, $tableRowsData, $tableFieldIds, $form)
+    /**
+     * @return mixed[]
+     */
+    private function populateDataWithTableDate(array $data, array $tableRowsData, array $tableFieldIds, Form $form): array
     {
         $newData = [];
 
@@ -381,7 +380,10 @@ class ExportProfilesService
         return $newData;
     }
 
-    private function getArtificialRowsCount($tableRowsData)
+    /**
+     * @return int[]
+     */
+    private function getArtificialRowsCount(array $tableRowsData): array
     {
         $artificialRowsCount = [];
 

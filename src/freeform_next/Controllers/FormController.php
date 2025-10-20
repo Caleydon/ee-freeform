@@ -54,7 +54,7 @@ class FormController extends Controller
     /**
      * @return CpView
      */
-    public function index()
+    public function index(): CpView
     {
         $canManageForms = $this->getPermissionsService()->canManageForms(ee()->session->userdata('group_id'));
         $canAccessSubmissions = $this->getPermissionsService()->canAccessSubmissions(ee()->session->userdata('group_id'));
@@ -167,7 +167,7 @@ class FormController extends Controller
     /**
      * @return CpView
      */
-    public function edit(FormModel $form)
+    public function edit(FormModel $form): RedirectView|CpView
     {
         if (!($this->getPermissionsService()->canManageForms(ee()->session->userdata('role_id')))) {
             return new RedirectView($this->getLink('denied'));
@@ -314,7 +314,7 @@ class FormController extends Controller
     /**
      * @return RedirectView
      */
-    public function batchDelete()
+    public function batchDelete(): RedirectView
     {
         if (!($this->getPermissionsService()->canManageForms(ee()->session->userdata('group_id')))) {
             return new RedirectView($this->getLink('denied'));
@@ -371,7 +371,7 @@ class FormController extends Controller
     /**
      * @return array
      */
-    private function getSourceTargetsList()
+    private function getSourceTargetsList(): array
     {
         $channels = ee('Model')
             ->get('Channel')

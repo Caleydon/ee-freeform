@@ -7,7 +7,7 @@ use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
 use Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
-// use Rector\Set\ValueObject\SetList;
+use Rector\Set\ValueObject\SetList;
 
 return static function (RectorConfig $config): void {
     $config->bootstrapFiles([__DIR__ . '/stubs.php']);
@@ -18,7 +18,7 @@ return static function (RectorConfig $config): void {
 
     $config->sets([
         LevelSetList::UP_TO_PHP_80,
-        // SetList::TYPE_DECLARATION,
+        SetList::TYPE_DECLARATION,
     ]);
 
     $config->skip([

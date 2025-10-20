@@ -36,7 +36,7 @@ class Freeform_next_ft extends EE_Fieldtype
     /**
      * @inheritdoc
      */
-    public function update($version = '')
+    public function update($version = ''): bool
     {
         return $version && version_compare($this->info['version'], $version, '>');
     }
@@ -345,7 +345,7 @@ class Freeform_next_ft extends EE_Fieldtype
      *
      * @return bool
      */
-    public function accepts_content_type($name)
+    public function accepts_content_type($name): bool
     {
         return in_array($name, ['channel', 'fluid_field', 'grid', 'blocks/1'], true);
     }

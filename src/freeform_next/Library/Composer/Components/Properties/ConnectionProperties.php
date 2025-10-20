@@ -18,7 +18,7 @@ class ConnectionProperties extends AbstractProperties
     /**
      * @return ConnectionInterface[]
      */
-    public function getList()
+    public function getList(): ?array
     {
         if (null === $this->compiledList) {
             $list = [];
@@ -42,7 +42,7 @@ class ConnectionProperties extends AbstractProperties
     /**
      * @inheritDoc
      */
-    protected function getPropertyManifest()
+    protected function getPropertyManifest(): array
     {
         return [
             'list' => self::TYPE_ARRAY,

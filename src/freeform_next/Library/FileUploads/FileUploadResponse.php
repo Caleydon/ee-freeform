@@ -29,7 +29,7 @@ class FileUploadResponse
     /**
      * @return int[]
      */
-    public function getAssetIds()
+    public function getAssetIds(): array
     {
         return $this->assetIds;
     }
@@ -37,7 +37,7 @@ class FileUploadResponse
     /**
      * @return array
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }

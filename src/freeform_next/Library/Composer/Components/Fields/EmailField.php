@@ -33,7 +33,7 @@ class EmailField extends AbstractField implements RecipientInterface, MultipleVa
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return FieldInterface::TYPE_EMAIL;
     }
@@ -43,7 +43,7 @@ class EmailField extends AbstractField implements RecipientInterface, MultipleVa
      *
      * @return string
      */
-    public function getInputHtml()
+    public function getInputHtml(): string
     {
         $attributes = $this->getCustomAttributes();
 

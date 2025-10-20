@@ -20,7 +20,7 @@ class DemoTemplatesController extends Controller
      * Show CodePack contents
      * Provide means to prefix the CodePack
      */
-    public function index()
+    public function index(): RedirectView|CpView
     {
         $codepack = $this->getCodepack();
 
@@ -103,7 +103,7 @@ class DemoTemplatesController extends Controller
      * @return View
      * @throws CodepackException
      */
-    private function install()
+    private function install(): RedirectView|CpView
     {
         $codepack = $this->getCodepack();
         $prefix   = ee()->input->post('prefix');
@@ -142,7 +142,7 @@ class DemoTemplatesController extends Controller
      * @return CodePack
      * @throws ManifestNotPresentException
      */
-    private function getCodepack()
+    private function getCodepack(): Codepack
     {
         return new Codepack(__DIR__ . '/../codepack');
     }

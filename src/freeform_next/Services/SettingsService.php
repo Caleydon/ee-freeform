@@ -35,7 +35,7 @@ class SettingsService
     /**
      * Mark the tutorial as finished
      */
-    public function finishTutorial()
+    public function finishTutorial(): bool
     {
         $settings               = $this->getSettingsModel();
         $settings->showTutorial = false;
@@ -69,7 +69,7 @@ class SettingsService
     /**
      * @return FormTemplate[]
      */
-    public function getCustomFormTemplates()
+    public function getCustomFormTemplates(): array
     {
         $templates = [];
         foreach ($this->getSettingsModel()->listTemplatesInFormTemplateDirectory() as $path => $name) {
@@ -82,7 +82,7 @@ class SettingsService
     /**
      * @return bool
      */
-    public function isDbEmailTemplateStorage()
+    public function isDbEmailTemplateStorage(): bool
     {
         return $this->getSettingsModel()->isDbEmailTemplateStorage();
     }
@@ -90,7 +90,7 @@ class SettingsService
     /**
      * @return bool
      */
-    public function isDatabaseSessionStorage()
+    public function isDatabaseSessionStorage(): bool
     {
         return $this->getSettingsModel()->isDatabaseSessionStorage();
     }
@@ -98,7 +98,7 @@ class SettingsService
     /**
      * @return bool
      */
-    public function isDefaultTemplates()
+    public function isDefaultTemplates(): bool
     {
         return $this->getSettingsModel()->isDefaultTemplates();
     }
@@ -106,7 +106,7 @@ class SettingsService
     /**
      * @return bool
      */
-    public function isFormSubmitDisable()
+    public function isFormSubmitDisable(): bool
     {
         return $this->getSettingsModel()->isFormSubmitDisable();
     }
@@ -114,7 +114,7 @@ class SettingsService
     /**
      * @return SessionInterface
      */
-    public function getSessionStorageImplementation()
+    public function getSessionStorageImplementation(): DbSession|EESession
     {
         if ($this->isDatabaseSessionStorage()) {
             return new DbSession();
@@ -138,7 +138,7 @@ class SettingsService
     /**
      * Remove all stale stored session data entries
      */
-    public function cleanUpDatabaseSessionData()
+    public function cleanUpDatabaseSessionData(): void
     {
         $date = new DateTime('-180 minutes');
 

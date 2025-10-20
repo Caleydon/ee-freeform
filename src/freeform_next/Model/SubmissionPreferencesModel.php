@@ -85,7 +85,7 @@ class SubmissionPreferencesModel extends Model
     /**
      * @return SubmissionPreferenceSetting[]
      */
-    public function getLayout()
+    public function getLayout(): ?array
     {
         if (null === $this->layout) {
             /** @var array $settings */

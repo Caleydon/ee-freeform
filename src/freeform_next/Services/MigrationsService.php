@@ -50,7 +50,7 @@ class MigrationsService
     /**
      * @return bool
      */
-    public function isFreeformClassicMigrateable()
+    public function isFreeformClassicMigrateable(): bool
     {
         return $this->isClassicFreeformInstalled()
             && $this->isFreeformNextFreshlyInstalled()
@@ -68,7 +68,7 @@ class MigrationsService
     /**
      * @return bool
      */
-    public function isFreeformNextFreshlyInstalled()
+    public function isFreeformNextFreshlyInstalled(): bool
     {
         $forms    = FormRepository::getInstance()->getAllForms();
         $fields   = FieldRepository::getInstance()->getAllFields();
@@ -82,7 +82,7 @@ class MigrationsService
     /**
      * @return bool
      */
-    public function isExpressCompatible()
+    public function isExpressCompatible(): bool
     {
         if (FreeformHelper::get('version') !== FREEFORM_EXPRESS) {
             return true;
@@ -97,7 +97,7 @@ class MigrationsService
     /**
      * @return bool
      */
-    public function migrateFreeformClassicFields()
+    public function migrateFreeformClassicFields(): bool
     {
         $nextFieldHelper = $this->getNextFieldHelper();
         $nextFieldHelper->deleteAllFields();
@@ -122,7 +122,7 @@ class MigrationsService
     /**
      * @return bool
      */
-    public function migrateFreeformClassicFormStatuses()
+    public function migrateFreeformClassicFormStatuses(): bool
     {
         $classicStatuses = $this->getClassicFormStatuses();
 
@@ -140,7 +140,7 @@ class MigrationsService
     /**
      * @return bool
      */
-    public function migrateFreeformClassicFormNotifications()
+    public function migrateFreeformClassicFormNotifications(): bool
     {
         $classicNotifications = $this->getClassicFormNotifications();
 
@@ -158,7 +158,7 @@ class MigrationsService
     /**
      * @return bool
      */
-    public function migrateFreeformClassicForms()
+    public function migrateFreeformClassicForms(): bool
     {
         $classicForms = $this->getClassicForms();
 
@@ -184,7 +184,7 @@ class MigrationsService
      *
      * @return bool
      */
-    public function migrateFreeformClassicSubmissions($formId, $page)
+    public function migrateFreeformClassicSubmissions($formId, $page): bool
     {
         $classicSubmissions = $this->getClassicSubmissions($formId, $page);
 
@@ -214,7 +214,7 @@ class MigrationsService
      *
      * @return bool|FieldModel
      */
-    public function saveNextField($classicField)
+    public function saveNextField(array $classicField)
     {
         $nextFieldHelper = $this->getNextFieldHelper();
 
@@ -259,7 +259,7 @@ class MigrationsService
      *
      * @return bool|NotificationModel
      */
-    public function saveNextFormNotification($notification)
+    public function saveNextFormNotification(array $notification)
     {
         $nextFormNotificationHelper = $this->getNextFormNotificationHelper();
 
@@ -283,7 +283,7 @@ class MigrationsService
      * @throws Exception
      * @throws FreeformException
      */
-    public function saveNextForms($classicForm)
+    public function saveNextForms(array $classicForm): bool
     {
         $nextFormHelper = $this->getNextFormHelper();
 
@@ -310,7 +310,7 @@ class MigrationsService
      * @return bool
      * @throws Exception
      */
-    public function saveNextSubmission($classicSubmission, $formId)
+    public function saveNextSubmission($classicSubmission, $formId): bool
     {
         $nextFormHelper = $this->getNextSubmissionHelper();
 
@@ -320,7 +320,7 @@ class MigrationsService
     /**
      * @return array
      */
-    public function getStages()
+    public function getStages(): array
     {
         return [
             self::STATUS__FIELDS,
@@ -334,7 +334,7 @@ class MigrationsService
     /**
      * @return array
      */
-    public function getStagesInfo()
+    public function getStagesInfo(): array
     {
         return [
             self::STATUS__FIELDS => [
@@ -393,7 +393,7 @@ class MigrationsService
      *
      * @return bool
      */
-    public function stageExists($stage)
+    public function stageExists($stage): bool
     {
         if (!in_array($stage, $this->getStages(), false)) {
             return false;
@@ -493,7 +493,7 @@ class MigrationsService
      *
      * @return bool
      */
-    private function isFinished($stage)
+    private function isFinished($stage): bool
     {
         if (!$this->result->isMigrationSuccessful()) {
             return false;

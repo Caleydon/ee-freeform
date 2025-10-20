@@ -46,7 +46,7 @@ class NavigationLink
     /**
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return lang($this->title);
     }
@@ -89,7 +89,7 @@ class NavigationLink
     /**
      * @return NavigationLink
      */
-    public function getButtonLink()
+    public function getButtonLink(): ?\Solspace\Addons\FreeformNext\Utilities\ControlPanel\Navigation\NavigationLink
     {
         return $this->buttonLink;
     }
@@ -131,7 +131,7 @@ class NavigationLink
     /**
      * @return array|NavigationLink[]
      */
-    public function getSubNav()
+    public function getSubNav(): array
     {
         return $this->subNav;
     }

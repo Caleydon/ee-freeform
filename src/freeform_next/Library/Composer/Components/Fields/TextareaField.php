@@ -33,7 +33,7 @@ class TextareaField extends AbstractField implements SingleValueInterface, Place
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE_TEXTAREA;
     }
@@ -75,7 +75,7 @@ class TextareaField extends AbstractField implements SingleValueInterface, Place
      *
      * @return string
      */
-    public function getInputHtml()
+    public function getInputHtml(): string
     {
         $attributes = $this->getCustomAttributes();
 

@@ -83,7 +83,7 @@ abstract class AbstractIntegration implements IntegrationInterface
      *
      * @param bool $value
      */
-    final public function setForceUpdate($value)
+    final public function setForceUpdate($value): void
     {
         $this->forceUpdate = (bool)$value;
     }
@@ -126,7 +126,7 @@ abstract class AbstractIntegration implements IntegrationInterface
     /**
      * Perform anything necessary before this integration is saved
      */
-    public function onBeforeSave(IntegrationStorageInterface $model)
+    public function onBeforeSave(IntegrationStorageInterface $model): void
     {
     }
 

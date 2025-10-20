@@ -33,7 +33,7 @@ class HubSpot extends AbstractCRMIntegration
      *
      * @return SettingBlueprint[]
      */
-    public static function getSettingBlueprints()
+    public static function getSettingBlueprints(): array
     {
         return [
             new SettingBlueprint(
@@ -53,7 +53,7 @@ class HubSpot extends AbstractCRMIntegration
      *
      * @return bool
      */
-    public function pushObject(array $keyValueList, $formFields = NULL)
+    public function pushObject(array $keyValueList, $formFields = NULL): bool
     {
         $client = new Client();
 
@@ -165,7 +165,7 @@ class HubSpot extends AbstractCRMIntegration
      *
      * @return bool
      */
-    public function checkConnection()
+    public function checkConnection(): bool
     {
         $client = new Client();
 
@@ -226,7 +226,7 @@ class HubSpot extends AbstractCRMIntegration
     /**
      * A method that initiates the authentication
      */
-    public function initiateAuthentication()
+    public function initiateAuthentication(): void
     {
     }
 
@@ -235,7 +235,7 @@ class HubSpot extends AbstractCRMIntegration
      *
      * @param IntegrationStorageInterface $model
      */
-    public function onBeforeSave(IntegrationStorageInterface $model)
+    public function onBeforeSave(IntegrationStorageInterface $model): void
     {
         $model->updateAccessToken($this->getSetting(self::SETTING_API_KEY));
     }
@@ -243,17 +243,12 @@ class HubSpot extends AbstractCRMIntegration
     /**
      * @return string
      */
-    protected function getApiRootUrl()
+    protected function getApiRootUrl(): string
     {
         return 'https://api.hubapi.com/';
     }
 
-    /**
-     * @param string $endpoint
-     * @param string $dataType
-     * @param array  $fieldList
-     */
-    private function extractCustomFields($endpoint, $dataType, &$fieldList)
+    private function extractCustomFields(string $endpoint, string $dataType, array &$fieldList): void
     {
         $client = new Client();
 

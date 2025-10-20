@@ -28,7 +28,7 @@ class MailingListsController extends Controller
      *
      * @return View
      */
-    public function handle($id = null)
+    public function handle($id = null): CpView|AjaxView|RedirectView
     {
         if (null === $id) {
             return $this->index();
@@ -56,7 +56,7 @@ class MailingListsController extends Controller
     /**
      * @return CpView
      */
-    public function index()
+    public function index(): CpView
     {
         /** @var Table $table */
         $table = ee("CP/Table", ["sortable" => false, "searchable" => false]);
@@ -148,7 +148,7 @@ class MailingListsController extends Controller
      * @return View
      * @throws IntegrationException
      */
-    public function edit($id)
+    public function edit($id): RedirectView|CpView
     {
         $serviceProviderTypes = $this->getMailingListService()->getAllMailingListServiceProviders();
 
@@ -406,7 +406,7 @@ class MailingListsController extends Controller
     /**
      * @return AjaxView
      */
-    public function getIntegrationsAjax()
+    public function getIntegrationsAjax(): AjaxView
     {
         $integrations = MailingListRepository::getInstance()->getAllIntegrationObjects();
 
@@ -423,7 +423,7 @@ class MailingListsController extends Controller
     /**
      * @return RedirectView
      */
-    public function batchDelete()
+    public function batchDelete(): RedirectView
     {
         if (isset($_POST["id_list"])) {
             $ids = [];
@@ -453,7 +453,7 @@ class MailingListsController extends Controller
      * @return void|RedirectView
      * @throws IntegrationException
      */
-    public function authorize()
+    public function authorize(): RedirectView
     {
         $code = ee()->input->get("code");
         if (empty($code)) {
@@ -478,7 +478,7 @@ class MailingListsController extends Controller
     /**
      * Handle OAuth2 authorization
      */
-    private function handleAuthorization(IntegrationModel $model)
+    private function handleAuthorization(IntegrationModel $model): void
     {
         $integration = $model->getIntegrationObject();
         $code        = ee()->input->get("code");
@@ -518,7 +518,7 @@ class MailingListsController extends Controller
     /**
      * @return AjaxView
      */
-    private function check()
+    private function check(): AjaxView
     {
         $view = new AjaxView();
 

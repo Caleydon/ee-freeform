@@ -35,7 +35,7 @@ class FormToTagDataTransformer
     /**
      * @return string
      */
-    public function getOutput()
+    public function getOutput(): string
     {
         $output = $this->form->renderTag()
             . $this->getOutputWithoutWrappingFormTags()
@@ -47,7 +47,7 @@ class FormToTagDataTransformer
     /**
      * @return string
      */
-    public function getOutputWithoutWrappingFormTags()
+    public function getOutputWithoutWrappingFormTags(): string|array|null
     {
         $output = $this->content;
 
@@ -110,7 +110,7 @@ class FormToTagDataTransformer
      *
      * @return string
      */
-    private function parseFieldTags($content)
+    private function parseFieldTags($content): string|array|null
     {
         if (preg_match_all('/##FFN:([a-zA-Z_\-0-9]+):FFN##{field:render/', $content, $matches)) {
             [$matchedStrings, $hashes] = $matches;
@@ -187,7 +187,7 @@ class FormToTagDataTransformer
     /**
      * @return array
      */
-    private function rowData()
+    private function rowData(): array
     {
         $form = $this->form;
 
@@ -242,12 +242,11 @@ class FormToTagDataTransformer
     }
 
     /**
-     * @param string        $prefix
      * @param int|null      $columnIndex
      * @param int|null      $columnCount
      * @return array
      */
-    private function getFieldData(AbstractField $field, $prefix = 'field:', $columnIndex = null, $columnCount = null)
+    private function getFieldData(AbstractField $field, string $prefix = 'field:', $columnIndex = null, $columnCount = null)
     {
         static $transformer;
 
@@ -273,7 +272,7 @@ class FormToTagDataTransformer
     /**
      * @return array
      */
-    private function pages()
+    private function pages(): array
     {
         $form = $this->form;
 
@@ -286,10 +285,9 @@ class FormToTagDataTransformer
     }
 
     /**
-     * @param string $prefix
      * @return array
      */
-    private function pageData(Page $page, $prefix = 'page:')
+    private function pageData(Page $page, string $prefix = 'page:'): array
     {
         return [
             $prefix . 'label' => $page->getLabel(),

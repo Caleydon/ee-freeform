@@ -53,7 +53,7 @@ class NextSubmissionHelper
     /** @var array */
     public $errors;
 
-    public function saveSubmission($legacySubmissions, $newFormId)
+    public function saveSubmission($legacySubmissions, $newFormId): bool
     {
         $submissionId = null;
 

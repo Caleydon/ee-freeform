@@ -37,7 +37,7 @@ class StatusRepository extends Repository
     /**
      * @return array
      */
-    public function getStatusNamesById()
+    public function getStatusNamesById(): array
     {
         $names = [];
         foreach ($this->getAllStatuses() as $status) {
@@ -50,7 +50,7 @@ class StatusRepository extends Repository
     /**
      * @return array
      */
-    public function getColorsById()
+    public function getColorsById(): array
     {
         $colors = [];
         foreach ($this->getAllStatuses() as $status) {

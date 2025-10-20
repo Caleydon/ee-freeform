@@ -36,7 +36,7 @@ class PluginExtension
     /**
      * @return array
      */
-    public function getSettings()
+    public function getSettings(): array
     {
         return $this->settings ?: [];
     }

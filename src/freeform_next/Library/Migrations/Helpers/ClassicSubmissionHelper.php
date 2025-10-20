@@ -106,7 +106,7 @@ class ClassicSubmissionHelper extends AddonBuilder
         return false;
     }
 
-    public function getFormsCount()
+    public function getFormsCount(): int
     {
         $forms = FormRepository::getInstance()->getAllForms();
 
@@ -124,7 +124,7 @@ class ClassicSubmissionHelper extends AddonBuilder
      *
      * @return array
      */
-    private function getSubmissions($formId, $page)
+    private function getSubmissions($formId, $page): array
     {
         $fieldsByName = $fieldsByType = $fieldsById = [];
         $form         = $this->model('form')->get_info($formId);
@@ -335,7 +335,7 @@ class ClassicSubmissionHelper extends AddonBuilder
      * @return	string						html view for field in form
      */
 
-    protected function setup_select_fields($available_fields, $order = [])
+    protected function setup_select_fields($available_fields, $order = []): string
     {
         //---------------------------------------------
         //  Dependencies
@@ -436,7 +436,7 @@ class ClassicSubmissionHelper extends AddonBuilder
         return '<div class="publish">' . $field_view . '</div>';
     }
 
-    private function getFormPages($total_entries, $rowLimit)
+    private function getFormPages(int $total_entries, $rowLimit): float
     {
         return ceil($total_entries / $rowLimit);
     }

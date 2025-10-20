@@ -31,7 +31,7 @@ abstract class ExportData {
         $this->exportTo = $exportTo;
     }
 
-    public function initialize() {
+    public function initialize(): void {
 
         switch($this->exportTo) {
             case 'browser':
@@ -49,11 +49,11 @@ abstract class ExportData {
         $this->write($this->generateHeader());
     }
 
-    public function addRow($row) {
+    public function addRow($row): void {
         $this->write($this->generateRow($row));
     }
 
-    public function finalize() {
+    public function finalize(): void {
 
         $this->write($this->generateFooter());
 
@@ -78,7 +78,7 @@ abstract class ExportData {
 
     abstract public function sendHttpHeaders();
 
-    protected function write($data) {
+    protected function write(string $data) {
         switch($this->exportTo) {
             case 'browser':
                 echo $data;

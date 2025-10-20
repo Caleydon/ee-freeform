@@ -24,14 +24,14 @@ class ConstraintViolationList implements Countable, Stringable
     /**
      * @param string $message
      */
-    public function addError($message)
+    public function addError($message): void
     {
         $this->errors[] = $message;
     }
     /**
      * @return array
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }

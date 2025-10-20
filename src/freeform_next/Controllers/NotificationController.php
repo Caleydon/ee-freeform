@@ -27,7 +27,7 @@ class NotificationController extends Controller
     /**
      * @return CpView
      */
-    public function index()
+    public function index(): RedirectView|CpView
     {
         $canAccessNotifications = $this->getPermissionsService()->canAccessNotifications(ee()->session->userdata('group_id'));
 
@@ -143,13 +143,12 @@ class NotificationController extends Controller
     }
 
     /**
-     * @param string      $notificationId
      * @param Result|null $validation
      *
      * @return CpView
      * @throws FreeformException
      */
-    public function edit($notificationId, Result $validation = null)
+    public function edit(string $notificationId, Result $validation = null): RedirectView|CpView
     {
         $canAccessNotifications = $this->getPermissionsService()->canAccessNotifications(ee()->session->userdata('group_id'));
 
@@ -348,7 +347,7 @@ class NotificationController extends Controller
     /**
      * @return RedirectView
      */
-    public function batchDelete()
+    public function batchDelete(): RedirectView
     {
         $canAccessNotifications = $this->getPermissionsService()->canAccessNotifications(ee()->session->userdata('group_id'));
 
@@ -379,10 +378,9 @@ class NotificationController extends Controller
     }
 
     /**
-     * @param string            $template
      * @return string
      */
-    private function getFieldHtml(NotificationModel $model, $template)
+    private function getFieldHtml(NotificationModel $model, string $template): string|bool
     {
         ob_start();
         include PATH_THIRD . "freeform_next/Templates/notifications/{$template}.php";

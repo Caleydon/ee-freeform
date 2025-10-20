@@ -22,16 +22,14 @@ use Solspace\Addons\FreeformNext\Library\Pro\Fields\TableField;
 class FieldTransformer
 {
     /**
-     * @param string        $prefix
      * @param null          $columnIndex
      * @param null          $columnCount
-     *
      * @return array
      */
     public function transformField(
         AbstractField $field,
         mixed $value = null,
-        $prefix = 'field:',
+        string $prefix = 'field:',
         $columnIndex = null,
         $columnCount = null
     ) {
@@ -142,7 +140,7 @@ class FieldTransformer
     /**
      * @return array|null
      */
-    private function getOptions(AbstractField $field)
+    private function getOptions(AbstractField $field): ?array
     {
         if (!$field instanceof OptionsInterface) {
             return null;
@@ -165,7 +163,7 @@ class FieldTransformer
     /**
      * @return string|null
      */
-    private function getOptionValues(AbstractField $field)
+    private function getOptionValues(AbstractField $field): ?string
     {
         if (!$field instanceof OptionsInterface) {
             return null;
@@ -184,7 +182,7 @@ class FieldTransformer
     /**
      * @return array|null
      */
-    private function getTableLayout(AbstractField $field)
+    private function getTableLayout(AbstractField $field): ?array
     {
         if (!$field instanceof TableField) {
             return null;

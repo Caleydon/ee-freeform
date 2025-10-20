@@ -51,7 +51,7 @@ class FileUploadField extends AbstractField implements MultipleValueInterface, F
      *
      * @return string
      */
-    public function getValueAsString($optionsAsValues = true)
+    public function getValueAsString($optionsAsValues = true): string
     {
         return implode('|', $this->getValue());
     }
@@ -61,7 +61,7 @@ class FileUploadField extends AbstractField implements MultipleValueInterface, F
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE_FILE;
     }
@@ -85,7 +85,7 @@ class FileUploadField extends AbstractField implements MultipleValueInterface, F
     /**
      * @return int
      */
-    public function getMaxFileSizeMB()
+    public function getMaxFileSizeMB(): int|float
     {
         return $this->getMaxFileSizeKB() / 1024;
     }
@@ -93,7 +93,7 @@ class FileUploadField extends AbstractField implements MultipleValueInterface, F
     /**
      * @return int
      */
-    public function getFileCount()
+    public function getFileCount(): int
     {
         $fileCount = (int) $this->fileCount;
 
@@ -103,7 +103,7 @@ class FileUploadField extends AbstractField implements MultipleValueInterface, F
     /**
      * @return string
      */
-    public function getInputHtml()
+    public function getInputHtml(): string
     {
         $attributes = $this->getCustomAttributes();
 

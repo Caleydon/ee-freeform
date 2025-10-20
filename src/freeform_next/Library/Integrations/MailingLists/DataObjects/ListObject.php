@@ -49,7 +49,7 @@ class ListObject implements JsonSerializable
     /**
      * @return FieldObject[]
      */
-    public function getFields()
+    public function getFields(): array
     {
         return $this->fields;
     }

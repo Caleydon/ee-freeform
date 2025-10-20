@@ -12,8 +12,7 @@ class NumericConstraint implements ConstraintInterface
 
     private ?int $decimalCount = null;
 
-    /** @var string */
-    private $decimalSeparator;
+    private string $decimalSeparator;
 
     private bool $allowNegativeNumbers;
 

@@ -159,7 +159,7 @@ class FormRepository extends Repository
     /**
      * @return array
      */
-    public function getFormSubmissionCount(array $formIds)
+    public function getFormSubmissionCount(array $formIds): array
     {
         if (empty($formIds)) {
             return [];

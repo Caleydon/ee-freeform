@@ -50,7 +50,7 @@ class EELogger implements LoggerInterface
      * @param string $message
      * @param string $category
      */
-    public function log($level, $message, $category = self::DEFAULT_LOGGER_CATEGORY)
+    public function log($level, $message, $category = self::DEFAULT_LOGGER_CATEGORY): void
     {
 		ee()->logger->developer("[{$category}][{$this->getLevel($level)}]: " . $message);
     }
@@ -59,7 +59,7 @@ class EELogger implements LoggerInterface
      * @param string $message
      * @param string $category
      */
-    public function debug($message, $category = self::DEFAULT_LOGGER_CATEGORY)
+    public function debug($message, $category = self::DEFAULT_LOGGER_CATEGORY): void
     {
 		ee()->logger->developer("[{$category}][{$this->getLevel('debug')}]: " . $message);
     }
@@ -68,7 +68,7 @@ class EELogger implements LoggerInterface
      * @param string $message
      * @param string $category
      */
-    public function info($message, $category = self::DEFAULT_LOGGER_CATEGORY)
+    public function info($message, $category = self::DEFAULT_LOGGER_CATEGORY): void
     {
 		ee()->logger->developer("[{$category}][{$this->getLevel('info')}]: " . $message);
     }
@@ -77,7 +77,7 @@ class EELogger implements LoggerInterface
      * @param string $message
      * @param string $category
      */
-    public function warn($message, $category = self::DEFAULT_LOGGER_CATEGORY)
+    public function warn($message, $category = self::DEFAULT_LOGGER_CATEGORY): void
     {
 		ee()->logger->developer("[{$category}][{$this->getLevel('warn')}]: " . $message);
     }
@@ -86,7 +86,7 @@ class EELogger implements LoggerInterface
      * @param string $message
      * @param string $category
      */
-    public function error($message, $category = self::DEFAULT_LOGGER_CATEGORY)
+    public function error($message, $category = self::DEFAULT_LOGGER_CATEGORY): void
     {
 		ee()->logger->developer("[{$category}][{$this->getLevel('error')}]: " . $message);
     }
@@ -95,7 +95,7 @@ class EELogger implements LoggerInterface
      * @param string $message
      * @param string $category
      */
-    public function fatal($message, $category = self::DEFAULT_LOGGER_CATEGORY)
+    public function fatal($message, $category = self::DEFAULT_LOGGER_CATEGORY): void
     {
 		ee()->logger->developer("[{$category}][{$this->getLevel('fatal')}]: " . $message);
     }
@@ -105,7 +105,7 @@ class EELogger implements LoggerInterface
      *
      * @return string
 	 */
-    private function getLevel($level)
+    private function getLevel($level): string
     {
         return match ($level) {
             self::LEVEL_DEBUG => self::LEVEL_DEBUG,

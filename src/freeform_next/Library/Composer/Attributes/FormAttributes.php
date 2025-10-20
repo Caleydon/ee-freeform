@@ -138,17 +138,15 @@ class FormAttributes
     /**
      * @return string
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
 
     /**
-     * @param string $method
-     *
      * @return $this
      */
-    public function setMethod($method)
+    public function setMethod(string $method)
     {
         $this->method = $method;
 
@@ -167,7 +165,7 @@ class FormAttributes
      *
      * @return FormValueContext
      */
-    private function setFormValueContext(SessionInterface $session, RequestInterface $request)
+    private function setFormValueContext(SessionInterface $session, RequestInterface $request): void
     {
         $hashPrefix = HashHelper::hash($this->id);
 

@@ -64,7 +64,7 @@ abstract class MailingListOAuthConnector extends AbstractMailingListIntegration
     /**
      * A method that initiates the authentication
      */
-    public function initiateAuthentication()
+    public function initiateAuthentication(): void
     {
         $data = [
             "response_type" => "code",

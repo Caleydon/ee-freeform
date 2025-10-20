@@ -39,7 +39,7 @@ class TableField extends AbstractField implements MultipleValueInterface, MultiD
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE_TABLE;
     }
@@ -197,7 +197,7 @@ class TableField extends AbstractField implements MultipleValueInterface, MultiD
     /**
      * @return string
      */
-    protected function getInputHtml()
+    protected function getInputHtml(): string
     {
         $layout = $this->getLayout();
         if (!$layout || !is_array($layout)) {

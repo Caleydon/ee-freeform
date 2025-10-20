@@ -172,7 +172,7 @@ class SettingsModel extends Model
      * @return string
      * @throws FreeformException
      */
-    public function getDemoTemplateContent($name = 'flexbox')
+    public function getDemoTemplateContent($name = 'flexbox'): string|bool
     {
         $path = PATH_THIRD . "freeform_next/Templates/form/$name.html";
         if (!file_exists($path)) {
@@ -234,7 +234,7 @@ class SettingsModel extends Model
      * @return string
      * @throws FreeformException
      */
-    public function getEmailTemplateContent()
+    public function getEmailTemplateContent(): string|bool
     {
         $path = PATH_THIRD . 'freeform_next/Templates/notifications/default.html';
         if (!file_exists($path)) {
@@ -249,7 +249,7 @@ class SettingsModel extends Model
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return (int) $this->id;
     }
@@ -257,7 +257,7 @@ class SettingsModel extends Model
     /**
      * @return int
      */
-    public function getSiteId()
+    public function getSiteId(): int
     {
         return (int) $this->siteId;
     }
@@ -265,7 +265,7 @@ class SettingsModel extends Model
     /**
      * @return bool
      */
-    public function isSpamProtectionEnabled()
+    public function isSpamProtectionEnabled(): bool
     {
         return (bool) $this->spamProtectionEnabled;
     }
@@ -273,7 +273,7 @@ class SettingsModel extends Model
 	/**
 	 * @return bool
 	 */
-	public function isFreeformHoneypotEnhanced()
+	public function isFreeformHoneypotEnhanced(): bool
 	{
 		return (bool) $this->freeformHoneypotEnhancement;
 	}
@@ -281,7 +281,7 @@ class SettingsModel extends Model
     /**
      * @return bool
      */
-    public function isSpamBlockLikeSuccessfulPost()
+    public function isSpamBlockLikeSuccessfulPost(): bool
     {
         return (bool) $this->spamBlockLikeSuccessfulPost;
     }
@@ -289,7 +289,7 @@ class SettingsModel extends Model
     /**
      * @return bool
      */
-    public function isShowTutorial()
+    public function isShowTutorial(): bool
     {
         return (bool) $this->showTutorial;
     }
@@ -329,7 +329,7 @@ class SettingsModel extends Model
     /**
      * @return bool
      */
-    public function isDbEmailTemplateStorage()
+    public function isDbEmailTemplateStorage(): bool
     {
         return $this->notificationCreationMethod === self::NOTIFICATION_CREATION_METHOD_DATABASE;
     }
@@ -337,7 +337,7 @@ class SettingsModel extends Model
     /**
      * @return bool
      */
-    public function isDatabaseSessionStorage()
+    public function isDatabaseSessionStorage(): bool
     {
         return $this->sessionStorage === self::SESSION_STORAGE_DATABASE;
     }
@@ -345,7 +345,7 @@ class SettingsModel extends Model
     /**
      * @return bool
      */
-    public function isDefaultTemplates()
+    public function isDefaultTemplates(): bool
     {
         return (bool) $this->defaultTemplates;
     }
@@ -353,7 +353,7 @@ class SettingsModel extends Model
     /**
      * @return bool
      */
-    public function isFormSubmitDisable()
+    public function isFormSubmitDisable(): bool
     {
         return (bool) $this->formSubmitDisable;
     }
@@ -361,7 +361,7 @@ class SettingsModel extends Model
     /**
      * @return bool
      */
-    public function isAutoScrollToErrors()
+    public function isAutoScrollToErrors(): bool
     {
         return (bool) $this->autoScrollToErrors;
     }
@@ -369,7 +369,7 @@ class SettingsModel extends Model
     /**
      * @return mixed
      */
-    public function isRecaptchaEnabled()
+    public function isRecaptchaEnabled(): bool
     {
         return (bool) $this->recaptchaEnabled;
     }
@@ -423,7 +423,7 @@ class SettingsModel extends Model
      *
      * @return bool
      */
-    private function isFolderAbsolute($path)
+    private function isFolderAbsolute($path): int|bool
     {
         return preg_match("/^(?:\/|\\\\|\w\:\\\\).*$/", $path);
     }

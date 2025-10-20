@@ -25,7 +25,7 @@ class HashHelper
      *
      * @return string
      */
-    public static function hash($id)
+    public static function hash($id): string
     {
         return self::getHashids()->encode($id);
     }
@@ -47,7 +47,7 @@ class HashHelper
      *
      * @return array
      */
-    public static function decodeMultiple($hash)
+    public static function decodeMultiple($hash): array
     {
         return self::getHashids()->decode($hash);
     }
@@ -57,7 +57,7 @@ class HashHelper
      * @param int   $offset
      * @return string
      */
-    public static function sha1(mixed $value, $length = null, $offset = 0)
+    public static function sha1(mixed $value, $length = null, $offset = 0): string
     {
         $hash = sha1($value);
 

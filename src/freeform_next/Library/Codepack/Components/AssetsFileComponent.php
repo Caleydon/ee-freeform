@@ -22,7 +22,7 @@ class AssetsFileComponent extends AbstractFileComponent
     /**
      * @return string
      */
-    protected function getInstallDirectory()
+    protected function getInstallDirectory(): string
     {
         return $_SERVER['DOCUMENT_ROOT'] . '/assets';
     }
@@ -30,7 +30,7 @@ class AssetsFileComponent extends AbstractFileComponent
     /**
      * @return string
      */
-    protected function getTargetFilesDirectory()
+    protected function getTargetFilesDirectory(): string
     {
         return 'assets';
     }
@@ -44,7 +44,7 @@ class AssetsFileComponent extends AbstractFileComponent
      *
      * @throws FileNotFoundException
      */
-    public function fileContentModification($content, $prefix = null)
+    public function fileContentModification($content, $prefix = null): void
     {
         if (!file_exists($content)) {
             throw new FileNotFoundException(
@@ -75,11 +75,10 @@ class AssetsFileComponent extends AbstractFileComponent
      * And replaces it with the prefixed asset path
      *
      * @param string $content
-     * @param string $prefix
      *
      * @return string
      */
-    private function updateImagesURL($content, $prefix)
+    private function updateImagesURL(string|bool $content, string $prefix): string|array|null
     {
         $pattern = '/url\s*\(\s*([\'"]?)\/((?:images)\/[a-zA-Z1-9_\-\.\/]+)[\'"]?\s*\)/';
         $replace = 'url($1/assets/' . $prefix . '/$2$1)';
@@ -92,11 +91,10 @@ class AssetsFileComponent extends AbstractFileComponent
      * Updates all "../somePath/" urls to "../$prefix_somePath/" urls
      *
      * @param string $content
-     * @param string $prefix
      *
      * @return string
      */
-    private function updateRelativePaths($content, $prefix)
+    private function updateRelativePaths($content, string $prefix): string|array|null
     {
         $pattern = '/([\(\'"])\.\.\/([^"\'())]+)([\'"\)])/';
         $replace = '$1../' . $prefix . '$2$3';
@@ -111,7 +109,7 @@ class AssetsFileComponent extends AbstractFileComponent
      *
      * @return mixed
      */
-    private function replaceCustomPrefixCalls($content, $prefix)
+    private function replaceCustomPrefixCalls(string|array|null $content, $prefix): string|array|null
     {
         $pattern = '/(%prefix%)/';
         $content = preg_replace($pattern, $prefix, $content);

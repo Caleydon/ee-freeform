@@ -25,7 +25,7 @@ class Freeform_next_upd extends AddonUpdater
      *
      * @return bool
      */
-    public function runMigrations($previousVersion = null)
+    public function runMigrations($previousVersion = null): bool
     {
         if (version_compare($previousVersion, '1.0.3', '<=')) {
             ee()->db
@@ -616,7 +616,7 @@ class Freeform_next_upd extends AddonUpdater
     /**
      * @return array
      */
-    protected function getInstallableActions()
+    protected function getInstallableActions(): array
     {
         return [
             new PluginAction('submitForm', 'Freeform_next', true),
@@ -626,7 +626,7 @@ class Freeform_next_upd extends AddonUpdater
     /**
      * @return array|PluginExtension[]
      */
-    protected function getInstallableExtensions()
+    protected function getInstallableExtensions(): array
     {
         return [
             new PluginExtension('validateRecaptcha', ExtensionHelper::HOOK_FORM_VALIDATE, [], 5),

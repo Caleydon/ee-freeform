@@ -16,11 +16,9 @@ class Honeypot implements JsonSerializable
 {
     public const NAME_PREFIX = "freeform_form_handle";
 
-    /** @var string */
-    private $name;
+    private string $name;
 
-    /** @var string */
-    private $hash;
+    private string $hash;
 
     /** @var int */
     private $timestamp;
@@ -28,7 +26,7 @@ class Honeypot implements JsonSerializable
     /**
      * @return Honeypot
      */
-    public static function createFromUnserializedData(array $data)
+    public static function createFromUnserializedData(array $data): \Solspace\Addons\FreeformNext\Library\Session\Honeypot
     {
         $honeypot            = new Honeypot();
         $honeypot->name      = $data["name"];
@@ -51,7 +49,7 @@ class Honeypot implements JsonSerializable
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -59,7 +57,7 @@ class Honeypot implements JsonSerializable
     /**
      * @return string
      */
-    public function getHash()
+    public function getHash(): string
     {
         return $this->hash;
     }
@@ -89,7 +87,7 @@ class Honeypot implements JsonSerializable
     /**
      * @return string
      */
-    private function generateUniqueName()
+    private function generateUniqueName(): string
     {
         $hash = $this->generateHash(6);
 
@@ -97,11 +95,9 @@ class Honeypot implements JsonSerializable
     }
 
     /**
-     * @param int $length
-     *
      * @return string
      */
-    private function generateHash($length = 9)
+    private function generateHash(int $length = 9): string
     {
         $random = time() . random_int(111, 999) . (time() + 999);
         $hash   = sha1($random);

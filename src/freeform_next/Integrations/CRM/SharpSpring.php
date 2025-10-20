@@ -36,7 +36,7 @@ class SharpSpring extends AbstractCRMIntegration {
 	 *
 	 * @return SettingBlueprint[]
 	 */
-	public static function getSettingBlueprints()
+	public static function getSettingBlueprints(): array
 	{
 		return [
 			new SettingBlueprint(
@@ -64,7 +64,7 @@ class SharpSpring extends AbstractCRMIntegration {
 	 * @return bool
 	 * @throws IntegrationException
 	 */
-	public function pushObject(array $keyValueList, $formFields = NULL)
+	public function pushObject(array $keyValueList, $formFields = NULL): bool
 	{
 		$client = $this->getAuthorizedClient();
 
@@ -122,7 +122,7 @@ class SharpSpring extends AbstractCRMIntegration {
 	 * @return bool
 	 * @throws IntegrationException
 	 */
-	public function checkConnection()
+	public function checkConnection(): bool
 	{
 		$client = new Client();
 		$auth   = $this->getAuthorizedClient();
@@ -236,7 +236,7 @@ class SharpSpring extends AbstractCRMIntegration {
 	/**
 	 * A method that initiates the authentication
 	 */
-	public function initiateAuthentication()
+	public function initiateAuthentication(): void
 	{
 	}
 
@@ -247,7 +247,7 @@ class SharpSpring extends AbstractCRMIntegration {
 	 *
 	 * @throws IntegrationException
 	 */
-	public function onBeforeSave(IntegrationStorageInterface $model)
+	public function onBeforeSave(IntegrationStorageInterface $model): void
 	{
 		$accountId = $this->getAccountID();
 		$secretKey = $this->getSecretKey();
@@ -288,7 +288,7 @@ class SharpSpring extends AbstractCRMIntegration {
 	 *
 	 * @return string
 	 */
-	protected function getApiRootUrl()
+	protected function getApiRootUrl(): string
 	{
 		return 'https://api.sharpspring.com/pubapi/v1.2/';
 	}
@@ -300,7 +300,7 @@ class SharpSpring extends AbstractCRMIntegration {
   * @param string $id
   * @return string
   */
- private function generatePayload($method, array $params = ['where' => []], $id = 'freeform')
+ private function generatePayload(string $method, array $params = ['where' => []], $id = 'freeform')
 	{
 		return json_encode(
 			[
@@ -317,7 +317,7 @@ class SharpSpring extends AbstractCRMIntegration {
 	 *
 	 * @return void
 	 */
-	public function fetchAccessToken()
+	public function fetchAccessToken(): void
 	{
 	}
 
@@ -327,7 +327,7 @@ class SharpSpring extends AbstractCRMIntegration {
 	 * @return Client
 	 * @throws IntegrationException
 	 */
-	private function getAuthorizedClient()
+	private function getAuthorizedClient(): array
 	{
 		return [
 			'query' => [

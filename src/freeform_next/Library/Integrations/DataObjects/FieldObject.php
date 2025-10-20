@@ -24,7 +24,7 @@ class FieldObject implements JsonSerializable
     /**
      * @return array
      */
-    public static function getTypes()
+    public static function getTypes(): array
     {
         return [self::TYPE_STRING, self::TYPE_NUMERIC, self::TYPE_BOOLEAN, self::TYPE_ARRAY];
     }
@@ -32,7 +32,7 @@ class FieldObject implements JsonSerializable
     /**
      * @return string
      */
-    public static function getDefaultType()
+    public static function getDefaultType(): string
     {
         return self::TYPE_STRING;
     }
@@ -75,7 +75,7 @@ class FieldObject implements JsonSerializable
     /**
      * @return boolean
      */
-    public function isRequired()
+    public function isRequired(): bool
     {
         return (bool)$this->required;
     }

@@ -27,7 +27,7 @@ class FilesService implements FileUploadHandlerInterface
      *
      * @return FileUploadResponse
      */
-    public function uploadFile(FileUploadField $field)
+    public function uploadFile(FileUploadField $field): FileUploadResponse
     {
         $data = FileRepository::getInstance()->getAssetSourceSettingsFor($field);
 
@@ -109,7 +109,7 @@ class FilesService implements FileUploadHandlerInterface
      *
      * @param int $assetId
      */
-    public function markAssetUnfinalized($assetId)
+    public function markAssetUnfinalized($assetId): void
     {
         $date = new DateTime();
 
@@ -128,7 +128,7 @@ class FilesService implements FileUploadHandlerInterface
      * Remove all unfinalized assets which are older than the TTL
      * specified in settings
      */
-    public function cleanUpUnfinalizedAssets()
+    public function cleanUpUnfinalizedAssets(): void
     {
         $date = new DateTime('-180 minutes');
 

@@ -23,9 +23,8 @@ interface SessionInterface
 
     /**
      * @param string $key
-     * @param mixed  $value
      */
-    public function set($key, $value);
+    public function set($key, mixed $value);
 
     /**
      * @param string $key

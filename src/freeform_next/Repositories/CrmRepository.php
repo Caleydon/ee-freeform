@@ -31,7 +31,7 @@ class CrmRepository extends Repository
     /**
      * @return IntegrationInterface[]
      */
-    public function getAllIntegrationObjects()
+    public function getAllIntegrationObjects(): array
     {
         $models = $this->getAllIntegrations();
 

@@ -33,7 +33,7 @@ class Insightly extends AbstractCRMIntegration
      *
      * @return SettingBlueprint[]
      */
-    public static function getSettingBlueprints()
+    public static function getSettingBlueprints(): array
     {
         return [
             new SettingBlueprint(
@@ -53,7 +53,7 @@ class Insightly extends AbstractCRMIntegration
      *
      * @return bool
      */
-    public function pushObject(array $keyValueList, $formFields = NULL)
+    public function pushObject(array $keyValueList, $formFields = NULL): bool
     {
         $client = new Client();
 		$response = $client->get($this->getEndpoint('/Leads'), [
@@ -74,7 +74,7 @@ class Insightly extends AbstractCRMIntegration
      *
      * @return bool
      */
-    public function checkConnection()
+    public function checkConnection(): bool
     {
         $client = new Client();
 
@@ -189,7 +189,7 @@ class Insightly extends AbstractCRMIntegration
     /**
      * A method that initiates the authentication
      */
-    public function initiateAuthentication()
+    public function initiateAuthentication(): void
     {
     }
 
@@ -198,7 +198,7 @@ class Insightly extends AbstractCRMIntegration
      *
      * @param IntegrationStorageInterface $model
      */
-    public function onBeforeSave(IntegrationStorageInterface $model)
+    public function onBeforeSave(IntegrationStorageInterface $model): void
     {
         $model->updateAccessToken($this->getSetting(self::SETTING_API_KEY));
     }
@@ -206,7 +206,7 @@ class Insightly extends AbstractCRMIntegration
     /**
      * @return string
      */
-    protected function getApiRootUrl()
+    protected function getApiRootUrl(): string
     {
         return 'https://api.insightly.com/v3.0/';
     }

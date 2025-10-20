@@ -38,7 +38,7 @@ class SubmissionToTagDataTransformer
     /**
      * @return array
      */
-    private function transform(SubmissionAttributes $attributes)
+    private function transform(SubmissionAttributes $attributes): array
     {
         $formTransformer = new FormTransformer();
         $absoluteSubmissionCount = SubmissionRepository::getInstance()->getAllSubmissionCountFor($attributes);

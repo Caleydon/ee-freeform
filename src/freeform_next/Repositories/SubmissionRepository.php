@@ -279,7 +279,7 @@ class SubmissionRepository extends Repository
     /**
      * @return array
      */
-    public function getSubmissionTotalsPerForm()
+    public function getSubmissionTotalsPerForm(): array
     {
         $result = ee()->db
             ->select('COUNT(id) as total, formId')
@@ -300,7 +300,7 @@ class SubmissionRepository extends Repository
     /**
      * @return array
      */
-    public function getSpamTotalsPerForm()
+    public function getSpamTotalsPerForm(): array
     {
         $result = ee()->db
             ->select('COUNT(id) as total, formId')
@@ -365,11 +365,10 @@ class SubmissionRepository extends Repository
 
     /**
      * @param string $sql
-     * @param string $where
      *
      * @return string
      */
-    private function addWhereToSql($sql, $where, $hasOrderBy = true)
+    private function addWhereToSql($sql, string $where, bool $hasOrderBy = true): string|array
     {
         $pattern = '/WHERE (.*?)\s(?=(ORDER BY|LIMIT))/s';
 

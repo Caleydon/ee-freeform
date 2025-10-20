@@ -51,12 +51,12 @@ class SubmissionController extends Controller
     /**
      * @return CpView
      */
-    public function index(Form $form)
+    public function index(Form $form): RedirectView|CpView
     {
         return $this->submissionsIndex($form);
     }
 
-    public function submissionsIndex(Form $form)
+    public function submissionsIndex(Form $form): RedirectView|CpView
     {
         $canAccessSubmissions = $this->getPermissionsService()->canAccessSubmissions(ee()->session->userdata('group_id'));
 
@@ -563,7 +563,7 @@ class SubmissionController extends Controller
         return $view;
     }
 
-    public function spamIndex(Form $form)
+    public function spamIndex(Form $form): RedirectView|CpView
     {
         $canAccessSubmissions = $this->getPermissionsService()->canAccessSubmissions(ee()->session->userdata('group_id'));
 
@@ -1085,7 +1085,7 @@ class SubmissionController extends Controller
      *
      * @return CpView
      */
-    public function edit(Form $form, SubmissionModel $submission)
+    public function edit(Form $form, SubmissionModel $submission): RedirectView|CpView
     {
         $canManageSubmissions = $this->getPermissionsService()->canManageSubmissions(ee()->session->userdata('group_id'));
 
@@ -1393,7 +1393,7 @@ class SubmissionController extends Controller
      *
      * @return bool
      */
-    public function save(Form $form, SubmissionModel $submission)
+    public function save(Form $form, SubmissionModel $submission): bool
     {
         $canManageSubmissions = $this->getPermissionsService()->canManageSubmissions(ee()->session->userdata('group_id'));
 
@@ -1460,7 +1460,7 @@ class SubmissionController extends Controller
     /**
      * @return RedirectView
      */
-    public function batchDelete(Form $form)
+    public function batchDelete(Form $form): RedirectView
     {
         $canManageSubmissions = $this->getPermissionsService()->canManageSubmissions(ee()->session->userdata('group_id'));
 
@@ -1491,7 +1491,7 @@ class SubmissionController extends Controller
         return new RedirectView($this->getLink('submissions/' . $form->getHandle()));
     }
 
-    private function getFilterableFieldTypes()
+    private function getFilterableFieldTypes(): array
     {
         return [
             AbstractField::TYPE_EMAIL,

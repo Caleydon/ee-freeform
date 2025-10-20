@@ -139,7 +139,7 @@ class Navigation
      *
      * @return bool
      */
-    private function isUrlActive($url)
+    private function isUrlActive($url): bool
     {
         return str_starts_with($this->getCurrentUrl(), $this->getTrimLink($url));
     }
@@ -149,7 +149,7 @@ class Navigation
      *
      * @return bool|string
      */
-    private function getTrimLink($url)
+    private function getTrimLink($url): string
     {
         if ($url instanceof URL) {
             $url = $url->compile();

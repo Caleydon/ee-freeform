@@ -191,7 +191,7 @@ class CustomFieldAttributes extends AbstractAttributes
     /**
      * @return array
      */
-    public function getInputAttributes()
+    public function getInputAttributes(): ?array
     {
         if (null === $this->inputAttributes) {
             return $this->inputAttributes;
@@ -313,7 +313,7 @@ class CustomFieldAttributes extends AbstractAttributes
      *
      * @return string
      */
-    private function combineClassStrings($classStringA = null, $classStringB = null)
+    private function combineClassStrings($classStringA = null, $classStringB = null): string
     {
         $classListA = explode(' ', $classStringA ?: '');
         $classListB = explode(' ', $classStringB ?: '');

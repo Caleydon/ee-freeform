@@ -36,7 +36,7 @@ class MailingListField extends AbstractField implements NoStorageInterface, Sing
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return FieldInterface::TYPE_MAILING_LIST;
     }
@@ -62,7 +62,7 @@ class MailingListField extends AbstractField implements NoStorageInterface, Sing
     /**
      * @return bool
      */
-    public function isHidden()
+    public function isHidden(): bool
     {
         return (bool) $this->hidden;
     }
@@ -72,7 +72,7 @@ class MailingListField extends AbstractField implements NoStorageInterface, Sing
      *
      * @return string
      */
-    public function getInputHtml()
+    public function getInputHtml(): string
     {
         $attributes = $this->getCustomAttributes();
         $output     = '';

@@ -12,13 +12,12 @@ use Solspace\Addons\FreeformNext\Utilities\ControlPanel\View;
 class LogController extends Controller
 {
     /**
-     * @param string      $logName
      * @param string|null $action
      *
      * @return View
      * @throws FreeformException
      */
-    public function view($logName, $action = null)
+    public function view(string $logName, $action = null): RedirectView|CpView
     {
         $dir      = __DIR__ . '/../logs/';
         $filePath = $dir . $logName . '.log';
@@ -56,11 +55,9 @@ class LogController extends Controller
     }
 
     /**
-     * @param string $filePath
-     *
      * @return string
      */
-    private function getParsedLogContent($filePath)
+    private function getParsedLogContent(string $filePath)
     {
         $content = [];
 
@@ -128,11 +125,10 @@ class LogController extends Controller
      * Reads $length chars but moves cursor back where it was before reading
      *
      * @param resource $handle
-     * @param int      $length
      *
      * @return bool|string
      */
-    private function readNotSeek(&$handle, $length)
+    private function readNotSeek(&$handle, int $length): string|bool
     {
         $r = fread($handle, $length);
         fseek($handle, -$length, SEEK_CUR);

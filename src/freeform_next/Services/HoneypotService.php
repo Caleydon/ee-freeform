@@ -23,7 +23,7 @@ class HoneypotService
     /**
      * Adds honeypot javascript to forms
      */
-    public function addFormJavascript(FormRenderObject $renderObject)
+    public function addFormJavascript(FormRenderObject $renderObject): void
     {
         $isHoneypotEnabled = $this->getSettingsService()->getSettingsModel()->isSpamProtectionEnabled();
 
@@ -36,12 +36,12 @@ class HoneypotService
     /**
      * Assembles a honeypot field
      */
-    public function addHoneyPotInputToForm(FormRenderObject $renderObject)
+    public function addHoneyPotInputToForm(FormRenderObject $renderObject): void
     {
         $renderObject->appendToOutput($this->getHoneypotInput($renderObject->getForm()));
     }
 
-    public function validateFormHoneypot(Form $form)
+    public function validateFormHoneypot(Form $form): void
     {
         if (!$this->getSettingsService()->getSettingsModel()->isSpamProtectionEnabled()) {
             return;
@@ -91,7 +91,7 @@ class HoneypotService
     /**
      * @return string
      */
-    public function getHoneypotJavascriptScript(Form $form)
+    public function getHoneypotJavascriptScript(Form $form): string
     {
         $honeypot = $this->getHoneypot($form);
 
@@ -115,7 +115,7 @@ class HoneypotService
     /**
      * @return Honeypot
      */
-    private function getNewHoneypot()
+    private function getNewHoneypot(): Honeypot
     {
 		$honeypot = new Honeypot($this->isEnhanced());
 
@@ -155,12 +155,12 @@ class HoneypotService
 
         $cleanList = array_filter(
             $honeypotList,
-            fn(Honeypot $honeypot) => $honeypot->getTimestamp() > (time() - self::MAX_HONEYPOT_TTL)
+            fn(Honeypot $honeypot): bool => $honeypot->getTimestamp() > (time() - self::MAX_HONEYPOT_TTL)
         );
 
         usort(
             $cleanList,
-            fn(Honeypot $a, Honeypot $b) => $b->getTimestamp() <=> $a->getTimestamp()
+            fn(Honeypot $a, Honeypot $b): int => $b->getTimestamp() <=> $a->getTimestamp()
         );
 
         if (\count($cleanList) > self::MAX_HONEYPOT_COUNT) {
@@ -173,7 +173,7 @@ class HoneypotService
     /**
      * Removes a honeypot from the list once it has been validated
      */
-    private function removeHoneypot(Honeypot $honeypot)
+    private function removeHoneypot(Honeypot $honeypot): void
     {
         $list = $this->getHoneypotList();
 
@@ -188,7 +188,7 @@ class HoneypotService
         $this->updateHoneypotList($list);
     }
 
-    private function updateHoneypotList(array $honeypotList)
+    private function updateHoneypotList(array $honeypotList): void
     {
         $this->getSession()->set(self::FORM_HONEYPOT_KEY, json_encode($honeypotList));
     }
@@ -196,7 +196,7 @@ class HoneypotService
     /**
      * @return SettingsService
      */
-    private function getSettingsService()
+    private function getSettingsService(): SettingsService
     {
         return new SettingsService();
     }
@@ -218,7 +218,7 @@ class HoneypotService
     /**
      * @return string
      */
-    public function getHoneypotInput(Form $form)
+    public function getHoneypotInput(Form $form): string
     {
         static $honeypotHashes = [];
 

@@ -36,7 +36,7 @@ class IpUtils
      *
      * @return bool Whether the IP is valid
      */
-    public static function checkIp($requestIp, $ips)
+    public static function checkIp($requestIp, $ips): bool
     {
         if (!is_array($ips)) {
             $ips = [$ips];
@@ -62,7 +62,7 @@ class IpUtils
      *
      * @return bool Whether the request IP matches the IP, or whether the request IP is within the CIDR subnet
      */
-    public static function checkIp4($requestIp, $ip)
+    public static function checkIp4(string $requestIp, string $ip)
     {
         $cacheKey = $requestIp.'-'.$ip;
         if (isset(self::$checkedIps[$cacheKey])) {
@@ -110,7 +110,7 @@ class IpUtils
      *
      * @throws RuntimeException When IPV6 support is not enabled
      */
-    public static function checkIp6($requestIp, $ip)
+    public static function checkIp6(string $requestIp, string $ip)
     {
         $cacheKey = $requestIp.'-'.$ip;
         if (isset(self::$checkedIps[$cacheKey])) {

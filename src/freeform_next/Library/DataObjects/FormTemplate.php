@@ -18,8 +18,7 @@ class FormTemplate implements JsonSerializable
 {
     private string|array $fileName;
 
-    /** @var string */
-    private $name;
+    private string $name;
 
     /**
      * FormTemplate constructor.
@@ -43,7 +42,7 @@ class FormTemplate implements JsonSerializable
     /**
      * @return string
      */
-    public function getFileName()
+    public function getFileName(): string|array
     {
         return $this->fileName;
     }
@@ -51,7 +50,7 @@ class FormTemplate implements JsonSerializable
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }

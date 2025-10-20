@@ -20,7 +20,7 @@ class FormRenderObject
     /**
      * @return Form
      */
-    public function getForm()
+    public function getForm(): Form
     {
         return $this->form;
     }
@@ -28,7 +28,7 @@ class FormRenderObject
     /**
      * @return string
      */
-    public function getCompiledOutput()
+    public function getCompiledOutput(): string
     {
         return implode("\n", $this->outputChunks);
     }

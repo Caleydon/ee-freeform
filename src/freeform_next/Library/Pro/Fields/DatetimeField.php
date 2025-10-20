@@ -53,7 +53,7 @@ class DatetimeField extends TextField implements InitialValueInterface
     /**
      * @return string
      */
-    public static function getFieldTypeName()
+    public static function getFieldTypeName(): string
     {
         return 'Date & Time';
     }
@@ -63,7 +63,7 @@ class DatetimeField extends TextField implements InitialValueInterface
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE_DATETIME;
     }
@@ -202,7 +202,7 @@ class DatetimeField extends TextField implements InitialValueInterface
     /**
      * @inheritDoc
      */
-    public function getConstraints()
+    public function getConstraints(): array
     {
         return [
             new DateTimeConstraint(
@@ -221,7 +221,7 @@ class DatetimeField extends TextField implements InitialValueInterface
     /**
      * @return string
      */
-    public function getInputHtml()
+    public function getInputHtml(): string
     {
         $attributes = $this->getCustomAttributes();
         $this->addInputClass('form-date-time-field');
@@ -257,7 +257,7 @@ class DatetimeField extends TextField implements InitialValueInterface
     /**
      * @return string
      */
-    private function getDatepickerFormat()
+    private function getDatepickerFormat(): string|array
     {
         $format = $this->getFormat();
 
@@ -275,7 +275,7 @@ class DatetimeField extends TextField implements InitialValueInterface
      *
      * @return string
      */
-    private function getHumanReadableFormat()
+    private function getHumanReadableFormat(): string|array
     {
         $format = $this->getFormat();
 
@@ -293,7 +293,7 @@ class DatetimeField extends TextField implements InitialValueInterface
      *
      * @return string
      */
-    private function getFormat()
+    private function getFormat(): string
     {
         $showDate = in_array($this->getDateTimeType(), [self::DATETIME_TYPE_BOTH, self::DATETIME_TYPE_DATE], true);
         $showTime = in_array($this->getDateTimeType(), [self::DATETIME_TYPE_BOTH, self::DATETIME_TYPE_TIME], true);

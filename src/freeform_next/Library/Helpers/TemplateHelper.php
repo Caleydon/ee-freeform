@@ -87,7 +87,7 @@ class TemplateHelper
     /**
      * Loads the TMPL if it's not initialized
      */
-    private static function loadTemplateLib()
+    private static function loadTemplateLib(): void
     {
         if (!isset(ee()->TMPL)) {
             ee()->load->library('template', null, 'TMPL');

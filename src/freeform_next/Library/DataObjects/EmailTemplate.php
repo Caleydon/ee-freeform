@@ -18,31 +18,25 @@ class EmailTemplate
 {
     public const METADATA_PATTERN = "/{!--\s*__KEY__:\s*(.*)\s*--}/";
 
-    /** @var string */
-    private $name;
+    private string $name;
 
     private string|array $fileName;
 
     private string|array $handle;
 
-    /** @var string */
-    private $description;
+    private ?string $description;
 
     private string|bool $templateData;
 
-    /** @var string */
-    private $fromEmail;
+    private ?string $fromEmail;
 
-    /** @var string */
-    private $fromName;
+    private ?string $fromName;
 
-    /** @var string */
-    private $replyToEmail;
+    private ?string $replyToEmail;
 
     private bool $includeAttachments;
 
-    /** @var string */
-    private $subject;
+    private ?string $subject;
 
     private string|array|null $body = null;
 
@@ -82,7 +76,7 @@ class EmailTemplate
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -90,7 +84,7 @@ class EmailTemplate
     /**
      * @return string
      */
-    public function getHandle()
+    public function getHandle(): string|array
     {
         return $this->handle;
     }
@@ -98,7 +92,7 @@ class EmailTemplate
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -106,7 +100,7 @@ class EmailTemplate
     /**
      * @return string
      */
-    public function getFromEmail()
+    public function getFromEmail(): ?string
     {
         return $this->fromEmail;
     }
@@ -114,7 +108,7 @@ class EmailTemplate
     /**
      * @return string
      */
-    public function getFromName()
+    public function getFromName(): ?string
     {
         return $this->fromName;
     }
@@ -122,7 +116,7 @@ class EmailTemplate
     /**
      * @return string
      */
-    public function getReplyToEmail()
+    public function getReplyToEmail(): ?string
     {
         return $this->replyToEmail;
     }
@@ -130,7 +124,7 @@ class EmailTemplate
     /**
      * @return bool
      */
-    public function isIncludeAttachments()
+    public function isIncludeAttachments(): bool
     {
         return $this->includeAttachments;
     }
@@ -138,7 +132,7 @@ class EmailTemplate
     /**
      * @return string
      */
-    public function getSubject()
+    public function getSubject(): ?string
     {
         return $this->subject;
     }
@@ -146,19 +140,16 @@ class EmailTemplate
     /**
      * @return string
      */
-    public function getBody()
+    public function getBody(): string|array|null
     {
         return $this->body;
     }
 
     /**
-     * @param string $key
-     * @param bool   $required
-     *
      * @return null|string
      * @throws EmailTemplateException
      */
-    private function getMetadata($key, $required = false)
+    private function getMetadata(string $key, bool $required = false): ?string
     {
         $value   = null;
         $pattern = str_replace('__KEY__', $key, self::METADATA_PATTERN);

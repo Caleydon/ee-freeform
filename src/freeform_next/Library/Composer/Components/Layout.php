@@ -83,7 +83,7 @@ class Layout implements JsonSerializable, Iterator
     /**
      * @return bool
      */
-    public function hasDatepickerEnabledFields()
+    public function hasDatepickerEnabledFields(): bool
     {
         return $this->hasDatepickerEnabledFields;
     }
@@ -91,7 +91,7 @@ class Layout implements JsonSerializable, Iterator
     /**
      * @return bool
      */
-    public function hasTableFields()
+    public function hasTableFields(): bool
     {
         return $this->hasTableFields;
     }
@@ -99,7 +99,7 @@ class Layout implements JsonSerializable, Iterator
     /**
      * @return Page[]
      */
-    public function getPages()
+    public function getPages(): array
     {
         return $this->pages;
     }
@@ -107,7 +107,7 @@ class Layout implements JsonSerializable, Iterator
     /**
      * @return AbstractField[]|NoRenderInterface[]
      */
-    public function getHiddenFields()
+    public function getHiddenFields(): array
     {
         return $this->hiddenFields;
     }
@@ -115,7 +115,7 @@ class Layout implements JsonSerializable, Iterator
     /**
      * @return AbstractField[]|FileUploadInterface[]
      */
-    public function getFileUploadFields()
+    public function getFileUploadFields(): array
     {
         return $this->fileUploadFields;
     }
@@ -123,7 +123,7 @@ class Layout implements JsonSerializable, Iterator
     /**
      * @return AbstractField[]|MailingListInterface[]
      */
-    public function getMailingListFields()
+    public function getMailingListFields(): array
     {
         return $this->mailingListFields;
     }
@@ -131,7 +131,7 @@ class Layout implements JsonSerializable, Iterator
     /**
      * @return AbstractField[]
      */
-    public function getFields()
+    public function getFields(): array
     {
         return $this->fields;
     }
@@ -144,7 +144,7 @@ class Layout implements JsonSerializable, Iterator
     /**
      * @return AbstractField[]
      */
-    public function getFieldsByHandle()
+    public function getFieldsByHandle(): ?array
     {
         if (null === $this->fieldsByHandle) {
             $fields = [];
@@ -193,7 +193,7 @@ class Layout implements JsonSerializable, Iterator
      * ** DOES NOT REMOVE IT FROM LAYOUT OBJECT **
      * !!This is meant only for cleaning up the export JSON data!!
      */
-    public function removeFieldFromData(AbstractField $field)
+    public function removeFieldFromData(AbstractField $field): void
     {
         foreach ($this->layoutData as $pageIndex => $page) {
             foreach ($page as $rowIndex => $row) {
@@ -267,7 +267,7 @@ class Layout implements JsonSerializable, Iterator
     /**
      * @return AbstractField[]|RecipientInterface[]
      */
-    public function getRecipientFields()
+    public function getRecipientFields(): array
     {
         return $this->recipientFields;
     }
@@ -401,11 +401,9 @@ class Layout implements JsonSerializable, Iterator
     }
 
     /**
-     * @param string $string
-     *
      * @return string
      */
-    private function translate($string, array $variables = [])
+    private function translate(string $string, array $variables = [])
     {
         return $this->translator->translate($string, $variables);
     }
@@ -431,7 +429,7 @@ class Layout implements JsonSerializable, Iterator
      * @since 5.0.0
      */
 	#[ReturnTypeWillChange]
-    public function current()
+    public function current(): mixed
     {
         return current($this->pages);
     }
@@ -444,7 +442,7 @@ class Layout implements JsonSerializable, Iterator
      * @since 5.0.0
      */
 	#[ReturnTypeWillChange]
-    public function next()
+    public function next(): void
     {
         next($this->pages);
     }
@@ -457,7 +455,7 @@ class Layout implements JsonSerializable, Iterator
      * @since 5.0.0
      */
 	#[ReturnTypeWillChange]
-    public function key()
+    public function key(): mixed
     {
         return key($this->pages);
     }
@@ -483,7 +481,7 @@ class Layout implements JsonSerializable, Iterator
      * @since 5.0.0
      */
 	#[ReturnTypeWillChange]
-    public function rewind()
+    public function rewind(): void
     {
         reset($this->pages);
     }

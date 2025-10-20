@@ -28,7 +28,7 @@ class CrmController extends Controller
      *
      * @return View
      */
-    public function handle($id = null)
+    public function handle($id = null): CpView|AjaxView|RedirectView
     {
         if (null === $id) {
             return $this->index();
@@ -52,7 +52,7 @@ class CrmController extends Controller
     /**
      * @return CpView
      */
-    public function index()
+    public function index(): CpView
     {
         /** @var Table $table */
         $table = ee('CP/Table', ['sortable' => false, 'searchable' => false]);
@@ -145,7 +145,7 @@ class CrmController extends Controller
      * @return View
      * @throws IntegrationException
      */
-    public function edit($id)
+    public function edit($id): RedirectView|CpView
     {
         $serviceProviderTypes = $this->getCrmService()->getAllCrmServiceProviders();
 
@@ -396,7 +396,7 @@ class CrmController extends Controller
     /**
      * @return AjaxView
      */
-    public function getIntegrationsAjax()
+    public function getIntegrationsAjax(): AjaxView
     {
         $integrations = CrmRepository::getInstance()->getAllIntegrationObjects();
 
@@ -413,7 +413,7 @@ class CrmController extends Controller
     /**
      * @return RedirectView
      */
-    public function batchDelete()
+    public function batchDelete(): RedirectView
     {
         if (isset($_POST['id_list'])) {
             $ids = [];
@@ -440,7 +440,7 @@ class CrmController extends Controller
     /**
      * Handle OAuth2 authorization
      */
-    private function handleAuthorization(IntegrationModel $model)
+    private function handleAuthorization(IntegrationModel $model): void
     {
         $integration = $model->getIntegrationObject();
         $code        = ee()->input->get('code');
@@ -460,7 +460,7 @@ class CrmController extends Controller
     /**
      * @return AjaxView
      */
-    private function check()
+    private function check(): AjaxView
     {
         $view = new AjaxView();
 

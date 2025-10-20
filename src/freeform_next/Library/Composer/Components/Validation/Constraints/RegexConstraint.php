@@ -6,8 +6,7 @@ use Solspace\Addons\FreeformNext\Library\Composer\Components\Validation\Errors\C
 
 class RegexConstraint implements ConstraintInterface
 {
-    /** @var string */
-    private $message;
+    private string $message;
 
     /** @var string */
     private $pattern;

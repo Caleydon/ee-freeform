@@ -45,7 +45,7 @@ class Hook
     /**
      * @return array
      */
-    public function getSettings()
+    public function getSettings(): array
     {
         return $this->settings;
     }
@@ -53,7 +53,7 @@ class Hook
     /**
      * @return int
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         return (int) $this->priority;
     }
@@ -69,7 +69,7 @@ class Hook
     /**
      * @return bool
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return (bool) $this->enabled;
     }

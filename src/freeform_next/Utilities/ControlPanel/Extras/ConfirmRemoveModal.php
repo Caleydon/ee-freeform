@@ -55,7 +55,7 @@ class ConfirmRemoveModal extends Modal
     /**
      * @param string $description
      */
-    public function setDescription($description)
+    public function setDescription($description): void
     {
         $this->description = $description;
     }
@@ -99,7 +99,7 @@ class ConfirmRemoveModal extends Modal
     /**
      * Combines all variables and adds the Modal to the CP
      */
-    public function compile()
+    public function compile(): void
     {
         $variables = [
             'name'      => 'modal-confirm-remove',

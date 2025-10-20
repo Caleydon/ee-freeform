@@ -52,7 +52,7 @@ class NextFormHelper
      * @throws FreeformException
      * @throws Exception
      */
-    public function saveForm(array $classicForm)
+    public function saveForm(array $classicForm): bool
     {
         $this->setCurrentFieldsByLegacyId();
         $data = $this->convertData($classicForm);
@@ -221,7 +221,7 @@ class NextFormHelper
     /**
      * @return mixed
      */
-    private function getNotificationEmails(array $classicForm)
+    private function getNotificationEmails(array $classicForm): string|array
     {
         return str_replace('|', "\n", $classicForm['admin_notification_email']);
     }
@@ -229,7 +229,7 @@ class NextFormHelper
     /**
      * @return array
      */
-    private function getNormalFormData(array $nextFormFields)
+    private function getNormalFormData(array $nextFormFields): array
     {
         $result = [
             'layout'         => [],
@@ -271,7 +271,7 @@ class NextFormHelper
      * @param int   $composerId
      * @return array
      */
-    private function getComposerFormData(array $classicForm, $composerId)
+    private function getComposerFormData(array $classicForm, $composerId): array
     {
         $result = [
             'layout'         => [],
@@ -365,10 +365,9 @@ class NextFormHelper
     }
 
     /**
-     * @param bool       $required
      * @return array
      */
-    private function getPreparedField(FieldModel $nextFormField, $required = false)
+    private function getPreparedField(FieldModel $nextFormField, bool $required = false): array
     {
         $preparedField                 = [];
         $preparedField['hash']         = $nextFormField->getHash();
@@ -468,7 +467,7 @@ class NextFormHelper
     /**
      * @return array
      */
-    private function getPreparedHtmlField(array $composerField)
+    private function getPreparedHtmlField(array $composerField): array
     {
         /** @var FieldModel $nextFormField */
 
@@ -484,7 +483,7 @@ class NextFormHelper
     /**
      * @return int
      */
-    private function getNewId()
+    private function getNewId(): int
     {
         return random_int(10000, 99_999_999);
     }
@@ -540,7 +539,7 @@ class NextFormHelper
     /**
      * @return bool|mixed
      */
-    private function getNextFieldTypeFromClassicFieldType(array $classicType)
+    private function getNextFieldTypeFromClassicFieldType(array $classicType): string|bool
     {
         // Classic Field Type => Next Field Type
         $mapping = [
@@ -588,12 +587,12 @@ class NextFormHelper
      *
      * @return bool
      */
-    private function formatClassicRequiredValue($value)
+    private function formatClassicRequiredValue($value): bool
     {
         return $value === 'y';
     }
 
-    private function setCurrentFieldsByLegacyId()
+    private function setCurrentFieldsByLegacyId(): void
     {
         $this->currentNewFieldsByLegacyId = FieldRepository::getInstance()->getAllFieldsByLegacyId();
     }
@@ -621,7 +620,7 @@ class NextFormHelper
      *
      * @return array
      */
-    private function getNextValueFromClassicValueMapping()
+    private function getNextValueFromClassicValueMapping(): array
     {
         return [
             'label'        => 'field_label',
@@ -637,7 +636,7 @@ class NextFormHelper
     /**
      * @return array
      */
-    private function getNextTypesArray()
+    private function getNextTypesArray(): array
     {
         return [
             'text'         => [

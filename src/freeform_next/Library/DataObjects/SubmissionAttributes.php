@@ -98,7 +98,7 @@ class SubmissionAttributes
     /**
      * @return Form
      */
-    public function getForm()
+    public function getForm(): Form
     {
         return $this->form;
     }
@@ -116,7 +116,7 @@ class SubmissionAttributes
      *
      * @return $this
      */
-    public function setSubmissionId($submissionId = null)
+    public function setSubmissionId(mixed $submissionId = null)
     {
         $this->submissionId = $submissionId;
         $this->setFilter(SubmissionModel::TABLE . '.id', $submissionId);
@@ -137,7 +137,7 @@ class SubmissionAttributes
      *
      * @return SubmissionAttributes
      */
-    public function setToken($token = null)
+    public function setToken(mixed $token = null)
     {
         $this->token = $token;
         $this->setFilter(SubmissionModel::TABLE . '.token', $token);
@@ -230,7 +230,7 @@ class SubmissionAttributes
     /**
      * @return string
      */
-    public function getSort()
+    public function getSort(): ?string
     {
         return $this->sort;
     }
@@ -260,7 +260,7 @@ class SubmissionAttributes
      *
      * @return $this
      */
-    public function setStatus($status = null)
+    public function setStatus(mixed $status = null)
     {
         $this->status = $status;
         $this->setFilter(StatusModel::TABLE . '.name', $status);
@@ -385,7 +385,7 @@ class SubmissionAttributes
     /**
      * @return array
      */
-    public function getLikeFilters()
+    public function getLikeFilters(): array
     {
         return $this->likeFilters;
     }
@@ -393,7 +393,7 @@ class SubmissionAttributes
     /**
      * @return array
      */
-    public function getOrLikeFilters()
+    public function getOrLikeFilters(): array
     {
         return $this->orLikeFilters;
     }
@@ -401,7 +401,7 @@ class SubmissionAttributes
     /**
      * @return array
      */
-    public function getIdFilters()
+    public function getIdFilters(): array
     {
         return $this->idFilters;
     }
@@ -409,7 +409,7 @@ class SubmissionAttributes
     /**
      * @return array
      */
-    public function getOrIdFilters()
+    public function getOrIdFilters(): array
     {
         return $this->orIdFilters;
     }
@@ -417,7 +417,7 @@ class SubmissionAttributes
     /**
      * @return array
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return $this->filters;
     }
@@ -425,7 +425,7 @@ class SubmissionAttributes
     /**
      * @return array
      */
-    public function getOrFilters()
+    public function getOrFilters(): array
     {
         return $this->orFilters;
     }
@@ -433,7 +433,7 @@ class SubmissionAttributes
     /**
      * @return array
      */
-    public function getInFilters()
+    public function getInFilters(): array
     {
         return $this->inFilters;
     }
@@ -441,7 +441,7 @@ class SubmissionAttributes
     /**
      * @return array
      */
-    public function getNotInFilters()
+    public function getNotInFilters(): array
     {
         return $this->notInFilters;
     }
@@ -449,7 +449,7 @@ class SubmissionAttributes
     /**
      * @return array
      */
-    public function getWhere()
+    public function getWhere(): array
     {
         return $this->where;
     }
@@ -549,7 +549,7 @@ class SubmissionAttributes
      *
      * @return array|bool
      */
-    private function getInArray($string)
+    private function getInArray($string): bool|array
     {
         if (false !== $this->getNotInArray($string)) {
             return false;
@@ -567,7 +567,7 @@ class SubmissionAttributes
      *
      * @return array|bool
      */
-    private function getNotInArray($string)
+    private function getNotInArray($string): bool|array
     {
         if (!str_starts_with($string, 'not ')) {
             return false;
@@ -578,10 +578,7 @@ class SubmissionAttributes
         return explode('|', $string);
     }
 
-    /**
-     * @param string $key
-     */
-    private function setFilter($key, mixed $value)
+    private function setFilter(string $key, mixed $value): void
     {
         unset($this->filters[$key], $this->inFilters[$key], $this->notInFilters[$key]);
 

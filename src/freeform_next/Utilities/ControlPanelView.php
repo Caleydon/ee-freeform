@@ -27,7 +27,7 @@ class ControlPanelView
      *
      * @return Navigation
      */
-    protected function buildNavigation()
+    protected function buildNavigation(): Navigation
     {
         return new Navigation();
     }
@@ -35,7 +35,7 @@ class ControlPanelView
     /**
      * @return array
      */
-    protected final function renderView(View $view)
+    protected final function renderView(View $view): array
     {
         if ($view instanceof AjaxView) {
             header('Content-Type: application/json');
@@ -81,11 +81,9 @@ class ControlPanelView
     }
 
     /**
-     * @param string $target
-     *
      * @return mixed
      */
-    protected function getLink($target)
+    protected function getLink(string $target): object
     {
         return ee('CP/URL', 'addons/settings/freeform_next/' . $target);
     }

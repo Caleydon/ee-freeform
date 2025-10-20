@@ -15,8 +15,7 @@ class UpdateService
 
     private string $jsonPath;
 
-    /** @var AddonInfo */
-    private $addonInfo;
+    private AddonInfo $addonInfo;
 
     private bool $writeToCache;
 
@@ -51,7 +50,7 @@ class UpdateService
     /**
      * @return bool
      */
-    public function updateCount()
+    public function updateCount(): int
     {
         return count($this->getInstallableUpdates());
     }
@@ -93,7 +92,7 @@ class UpdateService
      *
      * @return bool
      */
-    private function fetchLatestFeed()
+    private function fetchLatestFeed(): bool
     {
         $content = @file_get_contents($this->jsonUrl) ?: '';
 

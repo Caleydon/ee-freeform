@@ -22,7 +22,7 @@ class DateTimeConstraint implements ConstraintInterface
     /**
      * @inheritDoc
      */
-    public function validate($value)
+    public function validate($value): ConstraintViolationList
     {
         $violationList = new ConstraintViolationList();
 
@@ -44,7 +44,7 @@ class DateTimeConstraint implements ConstraintInterface
      *
      * @return string
      */
-    private function parseFormat($format)
+    private function parseFormat($format): string|array|null
     {
         $format = preg_replace('/\s?A/i', 'a', $format);
 

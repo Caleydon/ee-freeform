@@ -20,7 +20,7 @@ class ConnectionResult
     /**
      * @return bool
      */
-    public function isSuccessful()
+    public function isSuccessful(): bool
     {
         $isEmpty = empty($this->formErrors) && empty($this->fieldErrors);
 
@@ -43,7 +43,7 @@ class ConnectionResult
     /**
      * @return array
      */
-    public function getFormErrors()
+    public function getFormErrors(): array
     {
         return $this->formErrors;
     }
@@ -51,7 +51,7 @@ class ConnectionResult
     /**
      * @return array
      */
-    public function getFieldErrors()
+    public function getFieldErrors(): array
     {
         return $this->fieldErrors;
     }

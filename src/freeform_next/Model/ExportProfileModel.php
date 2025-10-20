@@ -53,7 +53,7 @@ class ExportProfileModel extends Model
     /**
      * @return array
      */
-    public static function createValidationRules()
+    public static function createValidationRules(): array
     {
         return [
             'name' => 'required',
@@ -85,7 +85,7 @@ class ExportProfileModel extends Model
     /**
      * @return int
      */
-    public function getSubmissionCount()
+    public function getSubmissionCount(): int|string
     {
         $command = $this->buildCommand();
 

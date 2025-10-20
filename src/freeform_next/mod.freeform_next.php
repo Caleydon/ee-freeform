@@ -176,7 +176,7 @@ class Freeform_Next extends Plugin
     /**
      * @throws FreeformException
      */
-    public function submitForm(Form $form = null)
+    public function submitForm(Form $form = null): void
     {
         if (null === $form) {
             $hash = $this->getPost(FormValueContext::FORM_HASH_KEY, null);
@@ -325,7 +325,7 @@ class Freeform_Next extends Plugin
         return $form;
     }
 
-    private function findAndAttachSearchParams(Form $form, SubmissionAttributes $attributes)
+    private function findAndAttachSearchParams(Form $form, SubmissionAttributes $attributes): void
     {
         $table = ee()->db->dbprefix('freeform_next_submissions');
 
@@ -379,7 +379,7 @@ class Freeform_Next extends Plugin
      * search:field='>=20'
      * search:field='>3|<5'
      */
-    private function _numeric_comparison_search($terms, $col_name, $site_id)
+    private function _numeric_comparison_search(array $terms, $col_name, $site_id): string
     {
         preg_match_all('/([<>]=?)(\d+)/', $terms, $matches, PREG_SET_ORDER);
 
@@ -404,7 +404,7 @@ class Freeform_Next extends Plugin
      *
      * search:field="=words|other words"
      */
-    private function _exact_field_search($terms, $col_name, $site_id = false)
+    private function _exact_field_search($terms, string $col_name, $site_id = false): string
     {
         // Did this because I don't like repeatedly checking
         // the beginning of the string with strncmp for that
@@ -463,7 +463,7 @@ class Freeform_Next extends Plugin
      *
      *        search:field="words|other words|IS_EMPTY"
      */
-    private function _field_search($terms, $col_name, $site_id = false)
+    private function _field_search(array $terms, $col_name, $site_id = false): string
     {
         $not = '';
         if (strncasecmp($terms, 'not ', 4) == 0) {

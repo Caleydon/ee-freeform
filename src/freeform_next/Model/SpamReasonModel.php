@@ -90,7 +90,7 @@ class SpamReasonModel extends Model
                     $insertData
                 );
         } else {
-            if (!empty($this->dateCreated)) {
+            if ($this->dateCreated instanceof DateTime) {
                 if (is_string($this->dateCreated)) {
                     $dateCreated = $this->dateCreated;
                 } else {
@@ -102,7 +102,7 @@ class SpamReasonModel extends Model
 
             $insertData['dateCreated'] = $dateCreated;
 
-            if (!empty($this->dateUpdated)) {
+            if ($this->dateUpdated instanceof DateTime) {
                 if (is_string($this->dateUpdated)) {
                     $dateUpdated = $this->dateUpdated;
                 } else {

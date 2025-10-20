@@ -35,7 +35,7 @@ class MailChimp extends AbstractMailingListIntegration
      *
      * @return SettingBlueprint[]
      */
-    public static function getSettingBlueprints()
+    public static function getSettingBlueprints(): array
     {
         return [
             new SettingBlueprint(
@@ -106,7 +106,7 @@ class MailChimp extends AbstractMailingListIntegration
      * @return bool
      * @throws IntegrationException
      */
-    public function pushEmails(ListObject $mailingList, array $emails, array $mappedValues)
+    public function pushEmails(ListObject $mailingList, array $emails, array $mappedValues): bool
     {
         $client   = new Client();
         $endpoint = $this->getEndpoint('lists/' . $mailingList->getId());
@@ -158,7 +158,7 @@ class MailChimp extends AbstractMailingListIntegration
     /**
      * A method that initiates the authentication
      */
-    public function initiateAuthentication()
+    public function initiateAuthentication(): void
     {
     }
 
@@ -181,7 +181,7 @@ class MailChimp extends AbstractMailingListIntegration
      *
      * @throws IntegrationException
      */
-    public function onBeforeSave(IntegrationStorageInterface $model)
+    public function onBeforeSave(IntegrationStorageInterface $model): void
     {
         if (preg_match('/([a-zA-Z]+\d+)$/', $this->getSetting(self::SETTING_API_KEY), $matches)) {
             $dataCenter = $matches[1];
@@ -202,7 +202,7 @@ class MailChimp extends AbstractMailingListIntegration
      * @return ListObject[]
      * @throws IntegrationException
      */
-    protected function fetchLists()
+    protected function fetchLists(): array
     {
         $client = new Client();
 
@@ -324,7 +324,7 @@ class MailChimp extends AbstractMailingListIntegration
      * @return string
      * @throws IntegrationException
      */
-    protected function getApiRootUrl()
+    protected function getApiRootUrl(): string
     {
         $dataCenter = $this->getSetting(self::SETTING_DATA_CENTER);
 

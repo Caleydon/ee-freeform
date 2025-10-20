@@ -50,7 +50,7 @@ class MailingListModel extends Model
     /**
      * @return FieldObject[]
      */
-    public function getFieldObjects()
+    public function getFieldObjects(): array
     {
         /** @var MailingListFieldModel[] $fields */
         $fields = ee('Model')

@@ -24,7 +24,7 @@ class HiddenField extends TextField implements SingleValueInterface, NoRenderInt
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE_HIDDEN;
     }
@@ -32,7 +32,7 @@ class HiddenField extends TextField implements SingleValueInterface, NoRenderInt
     /**
      * @return string
      */
-    public function getInputHtml()
+    public function getInputHtml(): string
     {
         $attributes = $this->getCustomAttributes();
 

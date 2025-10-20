@@ -26,7 +26,7 @@ class CheckboxGroupField extends AbstractExternalOptionsField implements Multipl
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE_CHECKBOX_GROUP;
     }
@@ -36,7 +36,7 @@ class CheckboxGroupField extends AbstractExternalOptionsField implements Multipl
      *
      * @return string
      */
-    public function getInputHtml()
+    public function getInputHtml(): string
     {
         $attributes = $this->getCustomAttributes();
         $output     = '';
@@ -67,7 +67,7 @@ class CheckboxGroupField extends AbstractExternalOptionsField implements Multipl
      *
      * @return string
      */
-    public function getValueAsString($optionsAsValues = true)
+    public function getValueAsString($optionsAsValues = true): string
     {
         if (!$optionsAsValues) {
             return implode(', ', $this->getValue());

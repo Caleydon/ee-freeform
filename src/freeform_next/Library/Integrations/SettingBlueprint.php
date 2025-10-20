@@ -24,7 +24,7 @@ class SettingBlueprint
     /**
      * @return array
      */
-    public static function getEditableTypes()
+    public static function getEditableTypes(): array
     {
         return [
             self::TYPE_TEXT,
@@ -91,7 +91,7 @@ class SettingBlueprint
     /**
      * @return boolean
      */
-    public function isRequired()
+    public function isRequired(): bool
     {
         return $this->required;
     }
@@ -115,7 +115,7 @@ class SettingBlueprint
     /**
      * @return bool
      */
-    public function isEditable()
+    public function isEditable(): bool
     {
         return in_array($this->getType(), self::getEditableTypes(), true);
     }

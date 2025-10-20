@@ -26,7 +26,7 @@ class RadioGroupField extends AbstractExternalOptionsField implements SingleValu
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE_RADIO_GROUP;
     }
@@ -36,7 +36,7 @@ class RadioGroupField extends AbstractExternalOptionsField implements SingleValu
      *
      * @return string
      */
-    public function getInputHtml()
+    public function getInputHtml(): string
     {
         $attributes = $this->getCustomAttributes();
         $output     = '';

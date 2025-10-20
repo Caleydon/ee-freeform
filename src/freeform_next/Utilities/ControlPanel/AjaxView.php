@@ -46,12 +46,12 @@ class AjaxView extends View
     /**
      * @return bool
      */
-    public function hasErrors()
+    public function hasErrors(): bool
     {
         return !empty($this->errors);
     }
 
-    public function setVariables(array $variables)
+    public function setVariables(array $variables): void
     {
         $this->variables = $variables;
     }
@@ -113,7 +113,7 @@ class AjaxView extends View
     /**
      * @param bool $showErrorsIfEmpty
      */
-    public function setShowErrorsIfEmpty($showErrorsIfEmpty)
+    public function setShowErrorsIfEmpty($showErrorsIfEmpty): void
     {
         $this->showErrorsIfEmpty = (bool) $showErrorsIfEmpty;
     }

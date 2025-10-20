@@ -26,7 +26,7 @@ class PluginUpdate
         $this->parseItems($items);
     }
 
-    private function parseItems(array $items)
+    private function parseItems(array $items): void
     {
         foreach ($items as $item) {
             if (preg_match('/\[(\w+)\]\s*(.*)/', $item, $matches)) {
@@ -69,7 +69,7 @@ class PluginUpdate
     /**
      * @return DateTime
      */
-    public function getDate()
+    public function getDate(): DateTime
     {
         return $this->date;
     }
@@ -77,7 +77,7 @@ class PluginUpdate
     /**
      * @return array
      */
-    public function getBugfixes()
+    public function getBugfixes(): array
     {
         return $this->bugfixes;
     }
@@ -85,7 +85,7 @@ class PluginUpdate
     /**
      * @return array
      */
-    public function getFeatures()
+    public function getFeatures(): array
     {
         return $this->features;
     }
@@ -93,7 +93,7 @@ class PluginUpdate
     /**
      * @return array
      */
-    public function getNotes()
+    public function getNotes(): array
     {
         return $this->notes;
     }

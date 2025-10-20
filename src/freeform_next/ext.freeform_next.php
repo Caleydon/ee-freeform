@@ -28,6 +28,9 @@ require_once __DIR__ . '/vendor/autoload.php';
  */
 class Freeform_next_ext
 {
+    /**
+     * @var string
+     */
     public $version = '1.0.0';
 
     public function __construct()
@@ -92,27 +95,27 @@ class Freeform_next_ext
         }
     }
 
-    public function validateRecaptcha(Form $form)
+    public function validateRecaptcha(Form $form): void
     {
         $this->getRecaptchaService()->validateFormRecaptcha($form);
     }
 
-    public function addRecaptchaInputToForm(Form $form, FormRenderObject $renderObject)
+    public function addRecaptchaInputToForm(Form $form, FormRenderObject $renderObject): void
     {
         $this->getRecaptchaService()->addRecaptchaInputToForm($renderObject);
     }
 
-    public function addRecaptchaJavascriptToForm(Form $form, FormRenderObject $renderObject)
+    public function addRecaptchaJavascriptToForm(Form $form, FormRenderObject $renderObject): void
     {
         $this->getRecaptchaService()->addRecaptchaJavascriptToForm($renderObject);
     }
 
-    public function validateHoneypot(Form $form)
+    public function validateHoneypot(Form $form): void
     {
         $this->getHoneypotService()->validateFormHoneypot($form);
     }
 
-    public function addHoneypotInputToForm(Form $form, FormRenderObject $renderObject)
+    public function addHoneypotInputToForm(Form $form, FormRenderObject $renderObject): void
     {
     	if($this->getSettingsService()->getSettingsModel()->isSpamProtectionEnabled())
 		{
@@ -120,12 +123,12 @@ class Freeform_next_ext
 		}
     }
 
-    public function addHoneypotJavascriptToForm(Form $form, FormRenderObject $renderObject)
+    public function addHoneypotJavascriptToForm(Form $form, FormRenderObject $renderObject): void
     {
         $this->getHoneypotService()->addFormJavascript($renderObject);
     }
 
-    public function addDateTimeJavascript(Form $form, FormRenderObject $renderObject)
+    public function addDateTimeJavascript(Form $form, FormRenderObject $renderObject): void
     {
         if ($form->getLayout()->hasDatepickerEnabledFields()) {
             static $datepickerLoaded;
@@ -146,7 +149,7 @@ class Freeform_next_ext
         }
     }
 
-    public function addTableJavascript(Form $form, FormRenderObject $renderObject)
+    public function addTableJavascript(Form $form, FormRenderObject $renderObject): void
     {
         if ($form->getLayout()->hasTableFields()) {
             static $tableScriptLoaded;
@@ -160,7 +163,7 @@ class Freeform_next_ext
         }
     }
 
-    public function addFormDisabledJavascript(Form $form, FormRenderObject $renderObject)
+    public function addFormDisabledJavascript(Form $form, FormRenderObject $renderObject): void
     {
         if ($this->getSettingsService()->isFormSubmitDisable()) {
             // Add the form submit disable logic
@@ -175,7 +178,7 @@ class Freeform_next_ext
         }
     }
 
-    public function addFormAnchorJavascript(Form $form, FormRenderObject $renderObject)
+    public function addFormAnchorJavascript(Form $form, FormRenderObject $renderObject): void
     {
         $autoScroll = $this->getSettingsService()->getSettingsModel()->isAutoScrollToErrors();
 
@@ -192,7 +195,7 @@ class Freeform_next_ext
 	 *
 	 * @param object $menu ExpressionEngine\Service\CustomMenu\Menu
 	 */
-    public function addCpCustomMenu($menu)
+    public function addCpCustomMenu($menu): void
 	{
 		$permissionsService = new PermissionsService;
 

@@ -13,7 +13,7 @@ class RedirectView extends View implements RenderlessViewInterface
     {
     }
 
-    public function compile()
+    public function compile(): void
     {
         header('Location: ' . $this->url);
         die();

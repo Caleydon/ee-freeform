@@ -45,7 +45,7 @@ class NextFormNotificationHelper
     /** @var array */
     public $errors;
 
-    public function saveNotification($classicNotification)
+    public function saveNotification(array $classicNotification)
     {
         $notification = NotificationRepository::getInstance()->getOrCreateNotification(null);
         $isNew        = !$notification->id;
@@ -91,7 +91,7 @@ class NextFormNotificationHelper
         return $formattedHtml;
     }
 
-    private function htmlFormattingMap()
+    private function htmlFormattingMap(): array
     {
         /* Old Element => New Element */
 

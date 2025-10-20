@@ -11,7 +11,7 @@ class FormTagParamUtilities
     public const PATTERN_ARRAY_ATTRIBUTES  = '/(override_values|input_attributes|form_attributes):([a-zA-Z_\-0-9]+)=(?:"|\')([^\'"]*)(?:"|\')?/';
     public const PATTERN_SINGLE_ATTRIBUTES = '/(input_attributes|form_attributes):([a-zA-Z_\-0-9]+)(?:\s|\})/';
 
-    public static function setFormCustomAttributes(Form $form)
+    public static function setFormCustomAttributes(Form $form): void
     {
         $new = [
             'overrideValues'  => [],

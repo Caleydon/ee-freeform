@@ -32,7 +32,7 @@ class FieldController extends Controller
     /**
      * @return CpView
      */
-    public function index()
+    public function index(): RedirectView|CpView
     {
         $canAccessFields = $this->getPermissionsService()->canAccessFields(ee()->session->userdata('group_id'));
 
@@ -111,7 +111,7 @@ class FieldController extends Controller
      * @return CpView
      * @throws FieldException
      */
-    public function edit($id, Result $validation = null)
+    public function edit($id, Result $validation = null): RedirectView|CpView
     {
         $canAccessFields = $this->getPermissionsService()->canAccessFields(ee()->session->userdata('group_id'));
 
@@ -368,7 +368,7 @@ class FieldController extends Controller
     /**
      * @return RedirectView
      */
-    public function batchDelete()
+    public function batchDelete(): RedirectView
     {
         $canAccessFields = $this->getPermissionsService()->canAccessFields(ee()->session->userdata('group_id'));
 
@@ -1110,10 +1110,9 @@ class FieldController extends Controller
     }
 
     /**
-     * @param string     $template
      * @return string
      */
-    private function getFieldHtml(FieldModel $model, $template, $type)
+    private function getFieldHtml(FieldModel $model, string $template, string $type): string|bool
     {
         $singleValue = $type !== FieldInterface::TYPE_CHECKBOX_GROUP;
 

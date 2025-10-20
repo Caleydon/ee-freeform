@@ -24,7 +24,7 @@ abstract class AbstractFileComponent implements ComponentInterface
     protected $targetFilesDirectory;
 
     /** @var Folder */
-    protected $contents;
+    protected FileObject $contents;
 
     /**
      * @param string $location - the location of files
@@ -64,7 +64,7 @@ abstract class AbstractFileComponent implements ComponentInterface
      *
      * @param string|null $prefix
      */
-    public function install($prefix = null)
+    public function install($prefix = null): void
     {
         $siteId = ee()->config->item('site_id');
 
@@ -158,7 +158,7 @@ abstract class AbstractFileComponent implements ComponentInterface
      *
      * @return string
      */
-    public function fileContentModification($content, $prefix = null)
+    public function fileContentModification($content, $prefix = null): void
     {
     }
 

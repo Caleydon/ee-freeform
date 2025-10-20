@@ -23,7 +23,7 @@ class SelectField extends AbstractExternalOptionsField implements SingleValueInt
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE_SELECT;
     }
@@ -33,7 +33,7 @@ class SelectField extends AbstractExternalOptionsField implements SingleValueInt
      *
      * @return string
      */
-    public function getInputHtml()
+    public function getInputHtml(): string
     {
         $attributes = $this->getCustomAttributes();
 

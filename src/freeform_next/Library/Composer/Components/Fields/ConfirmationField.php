@@ -16,7 +16,7 @@ class ConfirmationField extends TextField implements NoStorageInterface, Remembe
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return self::TYPE_CONFIRMATION;
     }
@@ -99,11 +99,9 @@ class ConfirmationField extends TextField implements NoStorageInterface, Remembe
 
     /**
      * @param string $string
-     * @param string $name
-     * @param bool   $escapeValue
      * @return string
      */
-    private function injectAttribute($string, $name, mixed $value, $escapeValue = true)
+    private function injectAttribute(string|array|null $string, string $name, mixed $value, bool $escapeValue = true): string|array|null
     {
         if (preg_match('/' . $name . '=[\'"][^\'"]*[\'"]/', $string)) {
             $string = preg_replace(

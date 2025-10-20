@@ -72,10 +72,9 @@ class SubmissionTransformer
     }
 
     /**
-     * @param string          $prefix
      * @return array
      */
-    private function getFields(SubmissionModel $model, $prefix = 'field:')
+    private function getFields(SubmissionModel $model, string $prefix = 'field:'): array
     {
         $fieldTransformer = new FieldTransformer();
         $data             = [];
@@ -98,10 +97,9 @@ class SubmissionTransformer
     }
 
     /**
-     * @param string          $prefix
      * @return array
      */
-    private function getSeparateFieldInfo(SubmissionModel $model, $prefix = 'submission:')
+    private function getSeparateFieldInfo(SubmissionModel $model, string $prefix = 'submission:'): array
     {
         $fieldTransformer = new FieldTransformer();
 

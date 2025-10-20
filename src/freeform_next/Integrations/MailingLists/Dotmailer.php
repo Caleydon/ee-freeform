@@ -36,7 +36,7 @@ class Dotmailer extends AbstractMailingListIntegration
      *
      * @return SettingBlueprint[]
      */
-    public static function getSettingBlueprints()
+    public static function getSettingBlueprints(): array
     {
         return [
             new SettingBlueprint(
@@ -107,7 +107,7 @@ class Dotmailer extends AbstractMailingListIntegration
      * @return bool
      * @throws IntegrationException
      */
-    public function pushEmails(ListObject $mailingList, array $emails, array $mappedValues)
+    public function pushEmails(ListObject $mailingList, array $emails, array $mappedValues): bool
     {
         $client   = new Client();
         $endpoint = $this->getEndpoint('/address-books/' . $mailingList->getId() . '/contacts');
@@ -154,7 +154,7 @@ class Dotmailer extends AbstractMailingListIntegration
     /**
      * A method that initiates the authentication
      */
-    public function initiateAuthentication()
+    public function initiateAuthentication(): void
     {
     }
 
@@ -177,7 +177,7 @@ class Dotmailer extends AbstractMailingListIntegration
      *
      * @throws IntegrationException
      */
-    public function onBeforeSave(IntegrationStorageInterface $model)
+    public function onBeforeSave(IntegrationStorageInterface $model): void
     {
         $client = new Client();
 
@@ -211,7 +211,7 @@ class Dotmailer extends AbstractMailingListIntegration
      * @return ListObject[]
      * @throws IntegrationException
      */
-    protected function fetchLists()
+    protected function fetchLists(): array
     {
         $client = new Client();
         $endpoint = $this->getEndpoint('/address-books');
@@ -323,7 +323,7 @@ class Dotmailer extends AbstractMailingListIntegration
      *
      * @return string
      */
-    protected function getApiRootUrl()
+    protected function getApiRootUrl(): string
     {
         return rtrim($this->getSetting(self::SETTING_ENDPOINT) ?: '', '/') . '/v2/';
     }

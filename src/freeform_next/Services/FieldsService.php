@@ -78,7 +78,7 @@ class FieldsService implements FieldHandlerInterface
     /**
      * @throws Exception
      */
-    public function deleteFieldFromForms(FieldModel $model)
+    public function deleteFieldFromForms(FieldModel $model): void
     {
         $forms = FormRepository::getInstance()->getAllForms();
 
@@ -97,7 +97,7 @@ class FieldsService implements FieldHandlerInterface
      * @param AbstractField $field
      * @param Form          $form
      */
-    public function beforeValidate(AbstractField $field, Form $form)
+    public function beforeValidate(AbstractField $field, Form $form): void
     {
         ExtensionHelper::call(ExtensionHelper::HOOK_FIELD_BEFORE_VALIDATE, $field, $form);
     }
@@ -106,7 +106,7 @@ class FieldsService implements FieldHandlerInterface
      * @param AbstractField $field
      * @param Form          $form
      */
-    public function afterValidate(AbstractField $field, Form $form)
+    public function afterValidate(AbstractField $field, Form $form): void
     {
         ExtensionHelper::call(ExtensionHelper::HOOK_FIELD_AFTER_VALIDATE, $field, $form);
     }

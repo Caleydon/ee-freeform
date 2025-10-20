@@ -46,7 +46,7 @@ class CrmService implements CRMHandlerInterface
     /**
      * @return IntegrationInterface[]
      */
-    public function getAllIntegrations()
+    public function getAllIntegrations(): array
     {
         return CrmRepository::getInstance()->getAllIntegrationObjects();
     }
@@ -78,7 +78,7 @@ class CrmService implements CRMHandlerInterface
      *
      * @return bool
      */
-    public function updateFields(AbstractCRMIntegration $integration, array $fields)
+    public function updateFields(AbstractCRMIntegration $integration, array $fields): bool
     {
         $handles = [];
         foreach ($fields as $field) {
@@ -161,7 +161,7 @@ class CrmService implements CRMHandlerInterface
     /**
      * Update the access token of an integration
      */
-    public function updateAccessToken(AbstractCRMIntegration $integration)
+    public function updateAccessToken(AbstractCRMIntegration $integration): void
     {
         $model              = CrmRepository::getInstance()->getIntegrationById($integration->getId());
         $model->accessToken = $integration->getAccessToken();
@@ -174,7 +174,7 @@ class CrmService implements CRMHandlerInterface
      *
      * @return FieldObject[]
      */
-    public function getFields(AbstractCRMIntegration $integration)
+    public function getFields(AbstractCRMIntegration $integration): array
     {
         /** @var array $fieldData */
         $fieldData = ee()
@@ -202,7 +202,7 @@ class CrmService implements CRMHandlerInterface
     /**
      * @param AbstractCRMIntegration $integration
      */
-    public function flagIntegrationForUpdating(AbstractCRMIntegration $integration)
+    public function flagIntegrationForUpdating(AbstractCRMIntegration $integration): void
     {
         ee()
             ->db
@@ -367,7 +367,7 @@ class CrmService implements CRMHandlerInterface
     /**
      * @return array
      */
-    public function getAllCrmSettingBlueprints()
+    public function getAllCrmSettingBlueprints(): array
     {
         $serviceProviderTypes = $this->getAllCrmServiceProviders();
 
@@ -410,7 +410,7 @@ class CrmService implements CRMHandlerInterface
         throw new IntegrationException('Could not get Crm settings');
     }
 
-    public function onAfterResponse(AbstractIntegration $integration, ResponseInterface $response)
+    public function onAfterResponse(AbstractIntegration $integration, ResponseInterface $response): void
     {
         //
     }

@@ -30,7 +30,7 @@ class PlainView extends View
     /**
      * @return string
      */
-    public function compile()
+    public function compile(): string|bool
     {
         ob_start();
         extract($this->templateVariables, EXTR_SKIP);
@@ -63,17 +63,15 @@ class PlainView extends View
     /**
      * @return array
      */
-    public function getTemplateVariables()
+    public function getTemplateVariables(): array
     {
         return $this->templateVariables ?: [];
     }
 
     /**
-     * @param array $templateVariables
-     *
      * @return $this
      */
-    public function setTemplateVariables($templateVariables)
+    public function setTemplateVariables(array $templateVariables)
     {
         $this->templateVariables = $templateVariables;
 
