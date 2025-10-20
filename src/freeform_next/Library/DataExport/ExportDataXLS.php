@@ -93,7 +93,7 @@ class ExportDataExcel extends ExportData {
             ($timestamp > 0) &&
             ($timestamp < strtotime('+500 years'))) {
             $type = 'DateTime';
-            $item = strftime("%Y-%m-%dT%H:%M:%S",$timestamp);
+            $item = gmdate('Y-m-d\TH:i:s', (int) $timestamp);
             $style = 'sDT'; // defined in header; tells excel to format date for display
         }
         else {
