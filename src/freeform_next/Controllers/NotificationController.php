@@ -12,7 +12,7 @@
 namespace Solspace\Addons\FreeformNext\Controllers;
 
 use EllisLab\ExpressionEngine\Library\CP\Table;
-use EllisLab\ExpressionEngine\Service\Validation\Result;
+use ExpressionEngine\Service\Validation\Result;
 use Solspace\Addons\FreeformNext\Library\Exceptions\FreeformException;
 use Solspace\Addons\FreeformNext\Library\Helpers\ExtensionHelper;
 use Solspace\Addons\FreeformNext\Model\NotificationModel;

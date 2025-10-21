@@ -13,7 +13,7 @@ namespace Solspace\Addons\FreeformNext\Controllers;
 
 use Exception;
 use EllisLab\ExpressionEngine\Library\CP\Table;
-use EllisLab\ExpressionEngine\Service\Validation\Result;
+use ExpressionEngine\Service\Validation\Result;
 use Solspace\Addons\FreeformNext\Library\Composer\Components\FieldInterface;
 use Solspace\Addons\FreeformNext\Library\Exceptions\FieldExceptions\FieldException;
 use Solspace\Addons\FreeformNext\Library\Helpers\ExtensionHelper;
