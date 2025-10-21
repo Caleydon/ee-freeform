@@ -17,7 +17,7 @@ class LogController extends Controller
      * @return View
      * @throws FreeformException
      */
-    public function view(string $logName, $action = null): RedirectView|CpView
+    public function view(string $logName, ?string $action = null): RedirectView|CpView
     {
         $dir      = __DIR__ . '/../logs/';
         $filePath = $dir . $logName . '.log';

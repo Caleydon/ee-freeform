@@ -170,7 +170,7 @@ abstract class AbstractIntegration implements IntegrationInterface
      * @param mixed|null  $value
      * @return bool|string
      */
-    public function convertCustomFieldValue(FieldObject $fieldObject, $value = null)
+    public function convertCustomFieldValue(FieldObject $fieldObject, mixed $value = null): bool|string
     {
         if (is_array($value) && $fieldObject->getType() !== FieldObject::TYPE_ARRAY) {
             $value = implode(', ', $value);

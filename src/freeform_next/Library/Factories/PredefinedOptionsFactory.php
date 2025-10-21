@@ -290,7 +290,7 @@ class PredefinedOptionsFactory
      *
      * @return string
      */
-    private static function getMonthFormatFromType($type = null): string
+    private static function getMonthFormatFromType(?string $type = null): string
     {
         $format = 'F';
         $format = match ($type) {
@@ -308,7 +308,7 @@ class PredefinedOptionsFactory
      *
      * @return string
      */
-    private static function getDayFormatFromType($type = null): string
+    private static function getDayFormatFromType(?string $type = null): string
     {
         $format = 'd';
         $format = match ($type) {
@@ -324,7 +324,7 @@ class PredefinedOptionsFactory
      *
      * @return string
      */
-    private static function getDayOfTheWeekFormatFromType($type = null): string
+    private static function getDayOfTheWeekFormatFromType(?string $type = null): string
     {
         $format = 'l';
         $format = match ($type) {

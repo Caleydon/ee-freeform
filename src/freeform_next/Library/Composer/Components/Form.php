@@ -45,7 +45,7 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
     public const PAGE_INDEX_KEY     = 'page_index';
     public const RETURN_URI_KEY     = 'formReturnUrl';
     public const DEFAULT_PAGE_INDEX = 0;
-    private int $id;
+    private null|string|int $id = null;
     /** @var string */
     private $name;
     /** @var string */
@@ -530,7 +530,7 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
      * @return string
      * @throws FreeformException
      */
-    public function render(array $customFormAttributes = null)
+    public function render(?array $customFormAttributes = null)
     {
         $this->setAttributes($customFormAttributes);
 
@@ -541,7 +541,7 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
      * @return string
      * @throws FreeformException
      */
-    public function renderTag(array $customFormAttributes = null): string
+    public function renderTag(?array $customFormAttributes = null): string
     {
         $this->setAttributes($customFormAttributes);
 
@@ -695,7 +695,7 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
      * @return $this
      * @throws FreeformException
      */
-    public function setAttributes(array $attributes = null)
+    public function setAttributes(?array $attributes = null)
     {
         if (null !== $attributes) {
             $this->customAttributes->mergeAttributes($attributes);
@@ -710,7 +710,7 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
      *
      * @return Form
      */
-    public function populateFromSubmission($token = null)
+    public function populateFromSubmission(SubmissionModel|int|string|null $token = null)
     {
         if (null === $token || FreeformHelper::get('version') !== FREEFORM_PRO) {
             return $this;
@@ -841,7 +841,7 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
      *
      * @throws ComposerException
      */
-    private function sendOutEmailNotifications(SubmissionModel $submission = null): void
+    private function sendOutEmailNotifications(?SubmissionModel $submission = null): void
     {
         $adminNotifications = $this->properties->getAdminNotificationProperties();
         if ($adminNotifications->getNotificationId()) {

@@ -148,7 +148,7 @@ class NotificationController extends Controller
      * @return CpView
      * @throws FreeformException
      */
-    public function edit(string $notificationId, Result $validation = null): RedirectView|CpView
+    public function edit(string $notificationId, ?Result $validation = null): RedirectView|CpView
     {
         $canAccessNotifications = $this->getPermissionsService()->canAccessNotifications(ee()->session->userdata('group_id'));
 

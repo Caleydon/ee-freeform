@@ -17,7 +17,7 @@ class RegexConstraint implements ConstraintInterface
      * @param string $message
      * @param string $pattern
      */
-    public function __construct($message, $pattern = null)
+    public function __construct($message, ?string $pattern = null)
     {
         $this->message = $message ?: 'Value is not valid';
         $this->pattern = $pattern ?: null;

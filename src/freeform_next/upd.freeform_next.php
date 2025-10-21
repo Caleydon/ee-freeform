@@ -25,7 +25,7 @@ class Freeform_next_upd extends AddonUpdater
      *
      * @return bool
      */
-    public function runMigrations($previousVersion = null): bool
+    public function runMigrations(?string $previousVersion = null): bool
     {
         if (version_compare($previousVersion, '1.0.3', '<=')) {
             ee()->db

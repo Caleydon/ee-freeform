@@ -22,7 +22,7 @@ class PhoneConstraint implements ConstraintInterface
      * @param string $message
      * @param string $pattern
      */
-    public function __construct(private $message = 'Invalid phone number', $pattern = null)
+    public function __construct(private $message = 'Invalid phone number', ?string $pattern = null)
     {
         $this->pattern = !empty($pattern) ? $pattern : null;
     }

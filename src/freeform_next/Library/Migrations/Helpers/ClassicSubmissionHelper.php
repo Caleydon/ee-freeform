@@ -89,7 +89,7 @@ class ClassicSubmissionHelper extends AddonBuilder
         return $submissions;
     }
 
-    public function getNextForm($formId = null)
+    public function getNextForm(mixed $formId = null)
     {
         $forms = FormRepository::getInstance()->getAllForms();
 

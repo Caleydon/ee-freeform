@@ -416,7 +416,7 @@ class MigrationsService
      * @param null $page
      * @return MigrationResultObject
      */
-    public function runStage($stage, $formId = null, $page = null)
+    public function runStage($stage, mixed $formId = null, mixed $page = null)
     {
         $this->result = new MigrationResultObject();
 

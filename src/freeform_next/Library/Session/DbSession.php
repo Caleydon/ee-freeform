@@ -20,7 +20,7 @@ class DbSession implements SessionInterface
      *
      * @return mixed
      */
-    public function get($key, $defaultValue = null)
+    public function get($key, mixed $defaultValue = null)
     {
         if (null === $key) {
             return $defaultValue;

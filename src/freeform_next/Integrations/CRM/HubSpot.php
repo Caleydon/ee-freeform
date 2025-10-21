@@ -53,7 +53,7 @@ class HubSpot extends AbstractCRMIntegration
      *
      * @return bool
      */
-    public function pushObject(array $keyValueList, $formFields = NULL): bool
+    public function pushObject(array $keyValueList, ?array $formFields = NULL): bool
     {
         $client = new Client();
 

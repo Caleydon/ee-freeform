@@ -14,7 +14,7 @@ class Hook
      * @param int    $priority
      * @param bool   $enabled
      */
-    public function __construct(private $class, private $method, private $hook = null, private $version = '1.0.0', private array $settings = [], private $priority = 10, private $enabled = true)
+    public function __construct(private $class, private $method, private ?string $hook = null, private $version = '1.0.0', private array $settings = [], private $priority = 10, private $enabled = true)
     {
     }
 

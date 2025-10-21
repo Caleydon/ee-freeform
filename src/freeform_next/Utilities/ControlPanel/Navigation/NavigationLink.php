@@ -34,7 +34,7 @@ class NavigationLink
      * @param string $title
      * @param string $method
      */
-    public function __construct(private $title, $method = null)
+    public function __construct(private $title, ?string $method = null)
     {
         $this->subNav = [];
 
@@ -111,7 +111,7 @@ class NavigationLink
      *
      * @return $this
      */
-    public function setButtonLink(NavigationLink $link = null)
+    public function setButtonLink(?NavigationLink $link = null)
     {
         $this->buttonLink = $link;
 

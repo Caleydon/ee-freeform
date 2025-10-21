@@ -196,7 +196,7 @@ class FormValueContext implements JsonSerializable
      *
      * @return $this
      */
-    public function setCustomFormData(array $data = null)
+    public function setCustomFormData(?array $data = null)
     {
         $this->customFormData = $data;
 
@@ -362,7 +362,7 @@ class FormValueContext implements JsonSerializable
      *
      * @return string|null
      */
-    private function getSessionHash($hash = null): ?string
+    private function getSessionHash(?string $hash = null): ?string
     {
         if (null === $hash) {
             $hash = $this->getPostedHash();

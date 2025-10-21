@@ -63,7 +63,7 @@ class Composer
         private StatusHandlerInterface $statusHandler,
         private TranslatorInterface $translator,
         private ?array $composerState = null,
-        FormAttributes $formAttributes = null,
+        ?FormAttributes $formAttributes = null,
         private ?ComposerState $customComposerState = null
     ) {
         $this->validateComposerData($formAttributes);

@@ -19,7 +19,7 @@ class EESession implements SessionInterface
      *
      * @return mixed
      */
-    public function get($key, $defaultValue = null)
+    public function get($key, mixed $defaultValue = null)
     {
         return $_SESSION[$key] ?? $defaultValue;
     }

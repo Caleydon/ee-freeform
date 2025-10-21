@@ -90,7 +90,7 @@ class SettingsController extends Controller
      * @return View
      * @throws FreeformException
      */
-    public function statusesAction($id = null)
+    public function statusesAction(null|string|int $id = null)
     {
         $canAccessSettings = $this->getPermissionsService()->canAccessSettings(ee()->session->userdata('group_id'));
 

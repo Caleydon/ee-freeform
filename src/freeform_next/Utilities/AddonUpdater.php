@@ -59,7 +59,7 @@ abstract class AddonUpdater
      *
      * @return bool
      */
-    final public function update($previousVersion = null): bool
+    final public function update(?string $previousVersion = null): bool
     {
         $this->runMigrations($previousVersion);
         $this->checkAndInstallActions();

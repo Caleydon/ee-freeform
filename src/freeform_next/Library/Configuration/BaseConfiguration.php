@@ -18,7 +18,7 @@ abstract class BaseConfiguration implements Stringable
      * @throws FreeformException
      * @throws ReflectionException
      */
-    public function __construct(array $config = null)
+    public function __construct(?array $config = null)
     {
         if (null === $config) {
             return;

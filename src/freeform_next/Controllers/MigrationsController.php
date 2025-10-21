@@ -23,7 +23,7 @@ class MigrationsController extends Controller
      *
      * @return View
      */
-    public function handle($id = null): RedirectView|CpView|AjaxView
+    public function handle(null|string|int $id = null): RedirectView|CpView|AjaxView
     {
         if (null === $id) {
             return $this->index();

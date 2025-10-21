@@ -64,7 +64,7 @@ abstract class AbstractFileComponent implements ComponentInterface
      *
      * @param string|null $prefix
      */
-    public function install($prefix = null): void
+    public function install(?string $prefix = null): void
     {
         $siteId = ee()->config->item('site_id');
 
@@ -158,7 +158,7 @@ abstract class AbstractFileComponent implements ComponentInterface
      *
      * @return ?string
      */
-    public function fileContentModification($content, $prefix = null): ?string
+    public function fileContentModification($content, ?string $prefix = null): ?string
     {
         return null;
     }

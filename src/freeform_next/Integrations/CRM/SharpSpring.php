@@ -64,7 +64,7 @@ class SharpSpring extends AbstractCRMIntegration {
 	 * @return bool
 	 * @throws IntegrationException
 	 */
-	public function pushObject(array $keyValueList, $formFields = NULL): bool
+	public function pushObject(array $keyValueList, ?array $formFields = NULL): bool
 	{
 		$client = $this->getAuthorizedClient();
 

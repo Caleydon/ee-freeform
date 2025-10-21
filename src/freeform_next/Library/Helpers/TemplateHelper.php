@@ -17,7 +17,7 @@ class TemplateHelper
      *
      * @return string
      */
-    public static function renderString($string, array $variables = null)
+    public static function renderString($string, ?array $variables = null)
     {
         self::loadTemplateLib();
 
@@ -33,7 +33,7 @@ class TemplateHelper
     public static function renderStringWithForm(
         $string,
         Form $form,
-        SubmissionModel $submissionModel = null,
+        ?SubmissionModel $submissionModel = null,
         $skipHelperFields = false
     ) {
         $form = clone $form;

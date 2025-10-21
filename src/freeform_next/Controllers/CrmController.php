@@ -28,7 +28,7 @@ class CrmController extends Controller
      *
      * @return View
      */
-    public function handle($id = null): CpView|AjaxView|RedirectView
+    public function handle(null|string|int $id = null): CpView|AjaxView|RedirectView
     {
         if (null === $id) {
             return $this->index();

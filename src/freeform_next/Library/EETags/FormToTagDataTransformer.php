@@ -246,7 +246,7 @@ class FormToTagDataTransformer
      * @param int|null      $columnCount
      * @return array
      */
-    private function getFieldData(AbstractField $field, string $prefix = 'field:', $columnIndex = null, $columnCount = null)
+    private function getFieldData(AbstractField $field, string $prefix = 'field:', ?int $columnIndex = null, ?int $columnCount = null)
     {
         static $transformer;
 

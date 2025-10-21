@@ -165,7 +165,7 @@ class FormsService implements FormHandlerInterface
     /**
      * @inheritDoc
      */
-    public function onAfterSubmit(Form $form, SubmissionModel $submission = null): void
+    public function onAfterSubmit(Form $form, ?SubmissionModel $submission = null): void
     {
         ExtensionHelper::call(ExtensionHelper::HOOK_FORM_AFTER_SUBMIT, $form, $submission);
     }

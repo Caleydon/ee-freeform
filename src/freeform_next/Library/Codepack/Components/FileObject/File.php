@@ -40,7 +40,7 @@ class File extends FileObject
      * @return void
      * @throws FileObjectException
      */
-    public function copy($target, $prefix = null, $callable = null, $filePrefix = null)
+    public function copy($target, ?string $prefix = null, null|callable|array $callable = null, ?string $filePrefix = null)
     {
         $fs = $this->getFilesystem();
 

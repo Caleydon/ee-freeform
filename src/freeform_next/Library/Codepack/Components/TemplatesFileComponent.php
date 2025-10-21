@@ -42,7 +42,7 @@ class TemplatesFileComponent extends AbstractFileComponent
      *
      * @return ?string
      */
-    public function fileContentModification($content, $prefix = null): ?string
+    public function fileContentModification($content, ?string $prefix = null): ?string
     {
         $content = $this->updateSrcAndHref($content, $prefix);
         $content = $this->updateLinks($content, $prefix);

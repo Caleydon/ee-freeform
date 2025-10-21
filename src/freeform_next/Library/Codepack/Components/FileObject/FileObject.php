@@ -63,7 +63,7 @@ abstract class FileObject
      *
      * @return void
      */
-    abstract public function copy($target, $prefix = null, $callable = null, $filePrefix = null);
+    abstract public function copy($target, ?string $prefix = null, null|callable|array $callable = null, ?string $filePrefix = null);
 
     /**
      * @return string

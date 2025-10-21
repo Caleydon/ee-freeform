@@ -75,7 +75,7 @@ class CustomFieldAttributes extends AbstractAttributes
      */
     public function __construct(
         private AbstractField $field,
-        array $attributes = null,
+        ?array $attributes = null,
         private ?CustomFormAttributes $formAttributes = null
     ) {
         parent::__construct($attributes);

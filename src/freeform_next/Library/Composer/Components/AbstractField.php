@@ -164,7 +164,7 @@ abstract class AbstractField implements FieldInterface, JsonSerializable, String
      *
      * @return string
      */
-    public final function render(array $customAttributes = null)
+    public final function render(?array $customAttributes = null)
     {
         $this->setCustomAttributes($customAttributes);
 
@@ -200,7 +200,7 @@ abstract class AbstractField implements FieldInterface, JsonSerializable, String
      *
      * @return string
      */
-    public final function renderLabel(array $customAttributes = null)
+    public final function renderLabel(?array $customAttributes = null)
     {
         $this->setCustomAttributes($customAttributes);
 
@@ -211,7 +211,7 @@ abstract class AbstractField implements FieldInterface, JsonSerializable, String
      *
      * @return string
      */
-    public function renderInstructions(array $customAttributes = null)
+    public function renderInstructions(?array $customAttributes = null)
     {
         $this->setCustomAttributes($customAttributes);
 
@@ -224,7 +224,7 @@ abstract class AbstractField implements FieldInterface, JsonSerializable, String
      *
      * @return string
      */
-    public final function renderInput(array $customAttributes = null)
+    public final function renderInput(?array $customAttributes = null)
     {
         $this->setCustomAttributes($customAttributes);
 
@@ -237,7 +237,7 @@ abstract class AbstractField implements FieldInterface, JsonSerializable, String
      *
      * @return string
      */
-    public final function renderErrors(array $customAttributes = null)
+    public final function renderErrors(?array $customAttributes = null)
     {
         $this->setCustomAttributes($customAttributes);
 
@@ -311,7 +311,7 @@ abstract class AbstractField implements FieldInterface, JsonSerializable, String
      *
      * @return $this
      */
-    public function addErrors(array $errors = null)
+    public function addErrors(?array $errors = null)
     {
         if (empty($errors)) {
             return $this;
@@ -419,7 +419,7 @@ abstract class AbstractField implements FieldInterface, JsonSerializable, String
      *
      * @return string
      */
-    public function getIdAttribute($suffix = null)
+    public function getIdAttribute(?string $suffix = null)
     {
         $attribute = sprintf('form-input-%s', $this->getHandle());
 
@@ -449,7 +449,7 @@ abstract class AbstractField implements FieldInterface, JsonSerializable, String
      *
      * @param array|null $attributes
      */
-    public function setAttributes(array $attributes = null): void
+    public function setAttributes(?array $attributes = null): void
     {
         $this->setCustomAttributes($attributes);
     }
@@ -593,7 +593,7 @@ abstract class AbstractField implements FieldInterface, JsonSerializable, String
      *
      * @return string
      */
-    protected function getNumericAttributeString($name, $value = null)
+    protected function getNumericAttributeString($name, ?int $value = null)
     {
         if (null !== $value && 0 !== $value) {
             return sprintf(' %s="%s"', $name, $value);
@@ -715,7 +715,7 @@ abstract class AbstractField implements FieldInterface, JsonSerializable, String
      *
      * @param array|null $attributes
      */
-    private function setCustomAttributes(array $attributes = null): void
+    private function setCustomAttributes(?array $attributes = null): void
     {
         if (null !== $attributes) {
             $this->customAttributes->mergeAttributes($attributes);

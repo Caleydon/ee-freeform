@@ -135,7 +135,7 @@ class ExportProfilesController extends Controller
      * @return CpView
      * @throws FreeformException
      */
-    public function edit($profileId, $formHandle, Result $validation = null): CpView
+    public function edit($profileId, $formHandle, ?Result $validation = null): CpView
     {
         $profile = ExportProfilesRepository::getInstance()->getProfileById($profileId);
 

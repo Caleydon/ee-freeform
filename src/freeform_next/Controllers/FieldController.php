@@ -111,7 +111,7 @@ class FieldController extends Controller
      * @return CpView
      * @throws FieldException
      */
-    public function edit($id, Result $validation = null): RedirectView|CpView
+    public function edit($id, ?Result $validation = null): RedirectView|CpView
     {
         $canAccessFields = $this->getPermissionsService()->canAccessFields(ee()->session->userdata('group_id'));
 
@@ -229,7 +229,7 @@ class FieldController extends Controller
      *
      * @return FieldModel
      */
-    public function save($fieldId = null)
+    public function save(null|string|int $fieldId = null)
     {
         $field = FieldRepository::getInstance()->getOrCreateField($fieldId);
 

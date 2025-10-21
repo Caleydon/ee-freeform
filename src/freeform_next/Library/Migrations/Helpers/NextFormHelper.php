@@ -431,7 +431,7 @@ class NextFormHelper
      *
      * @return array
      */
-    private function getPreparedSubmitField(array $composerField = null, array $previousComposerRow = null)
+    private function getPreparedSubmitField(?array $composerField = null, ?array $previousComposerRow = null)
     {
         /** @var FieldModel $nextFormField */
 

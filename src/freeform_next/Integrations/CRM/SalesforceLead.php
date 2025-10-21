@@ -231,7 +231,7 @@ class SalesforceLead extends AbstractSalesforceIntegration implements TokenRefre
      * @return bool
      * @throws Exception
      */
-    public function pushObject(array $keyValueList, $formFields = NULL)
+    public function pushObject(array $keyValueList, ?array $formFields = NULL): bool
     {
         $client   = new Client();
         $endpoint = $this->getEndpoint('/sobjects/Lead');
@@ -374,7 +374,7 @@ class SalesforceLead extends AbstractSalesforceIntegration implements TokenRefre
      *
      * @return bool|string
      */
-    public function convertCustomFieldValue(FieldObject $fieldObject, $value = null)
+    public function convertCustomFieldValue(FieldObject $fieldObject, mixed $value = null): bool|string
     {
         if ($fieldObject->getType() === FieldObject::TYPE_ARRAY) {
             return is_array($value) ? implode(';', $value) : $value;

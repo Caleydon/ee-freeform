@@ -22,7 +22,7 @@ abstract class AbstractAttributes
      *
      * @throws FreeformException
      */
-    public function __construct(array $attributes = null)
+    public function __construct(?array $attributes = null)
     {
         if ($attributes) {
             foreach ($attributes as $key => $value) {
@@ -42,7 +42,7 @@ abstract class AbstractAttributes
      *
      * @throws FreeformException
      */
-    public function mergeAttributes(array $attributes = null)
+    public function mergeAttributes(?array $attributes = null)
     {
         if ($attributes) {
             foreach ($attributes as $key => $value) {
@@ -97,7 +97,7 @@ abstract class AbstractAttributes
     /**
      * @return bool|null
      */
-    final protected function getBooleanValue(mixed $value = null)
+    final protected function getBooleanValue(?bool $value = null)
     {
         if ($value !== null) {
             return match (strtolower($value)) {

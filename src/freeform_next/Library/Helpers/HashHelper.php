@@ -57,7 +57,7 @@ class HashHelper
      * @param int   $offset
      * @return string
      */
-    public static function sha1(mixed $value, $length = null, $offset = 0): string
+    public static function sha1(mixed $value, ?int $length = null, ?int $offset = 0): string
     {
         $hash = sha1($value);
 

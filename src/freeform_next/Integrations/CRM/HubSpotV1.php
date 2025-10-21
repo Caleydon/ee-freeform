@@ -77,7 +77,7 @@ class HubSpotV1 extends AbstractCRMIntegration
      * @param array $keyValueList
      * @param array $formFields
      */
-    public function pushObject(array $keyValueList, $formFields = null): bool
+    public function pushObject(array $keyValueList, ?array$formFields = null): bool
     {
         $isAppendContactData = $this->getSetting(self::SETTING_APPEND_CONTACT_DATA);
         $isAppendCompanyData = $this->getSetting(self::SETTING_APPEND_COMPANY_DATA);

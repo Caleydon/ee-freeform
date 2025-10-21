@@ -34,7 +34,7 @@ class FieldRepository extends Repository
      *
      * @return FieldModel
      */
-    public function getOrCreateField($fieldId = null)
+    public function getOrCreateField(null|string|int $fieldId = null)
     {
         $field = null;
         if ($fieldId) {

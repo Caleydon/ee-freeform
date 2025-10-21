@@ -21,7 +21,7 @@ class FileUploadResponse
      *
      * @param int[] $assetIds
      */
-    public function __construct(array $assetIds = null, private array $errors = [])
+    public function __construct(?array $assetIds = null, private array $errors = [])
     {
         $this->assetIds = $assetIds ?: [];
     }
