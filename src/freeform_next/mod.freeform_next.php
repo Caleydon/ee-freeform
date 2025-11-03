@@ -379,7 +379,7 @@ class Freeform_Next extends Plugin
      * search:field='>=20'
      * search:field='>3|<5'
      */
-    private function _numeric_comparison_search(array $terms, $col_name, $site_id): string
+    private function _numeric_comparison_search($terms, $col_name, $site_id): string
     {
         preg_match_all('/([<>]=?)(\d+)/', $terms, $matches, PREG_SET_ORDER);
 
@@ -463,7 +463,7 @@ class Freeform_Next extends Plugin
      *
      *        search:field="words|other words|IS_EMPTY"
      */
-    private function _field_search(array $terms, $col_name, $site_id = false): string
+    private function _field_search($terms, $col_name, $site_id = false): string
     {
         $not = '';
         if (strncasecmp($terms, 'not ', 4) == 0) {
