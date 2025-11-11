@@ -78,8 +78,13 @@ abstract class ExportData {
 
     abstract public function sendHttpHeaders();
 
-    protected function write(string $data) {
-        switch($this->exportTo) {
+    protected function write(?string $data)
+    {
+        if ($data === null) {
+            return;
+        }
+
+        switch ($this->exportTo) {
             case 'browser':
                 echo $data;
                 break;
