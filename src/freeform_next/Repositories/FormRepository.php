@@ -167,6 +167,27 @@ class FormRepository extends Repository
 
         $data = ee()->db
             ->select('formId, COUNT(id) as total')
+            ->where('isSpam', 0)
+            ->group_by('formId')
+            ->where_in('formId', $formIds ?: [])
+            ->get(SubmissionModel::TABLE)
+            ->result_array();
+
+        return array_column($data, 'total', 'formId');
+    }
+
+    /**
+     * @return array
+     */
+    public function getFormSpamCount(array $formIds): array
+    {
+        if (empty($formIds)) {
+            return [];
+        }
+
+        $data = ee()->db
+            ->select('formId, COUNT(id) as total')
+            ->where('isSpam', 1)
             ->group_by('formId')
             ->where_in('formId', $formIds ?: [])
             ->get(SubmissionModel::TABLE)

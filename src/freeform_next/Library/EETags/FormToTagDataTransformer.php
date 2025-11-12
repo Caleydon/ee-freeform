@@ -77,10 +77,17 @@ class FormToTagDataTransformer
             $submissionCount = 0;
         }
 
+        $spamCount = FormRepository::getInstance()->getFormSpamCount([$this->form->getId()]);
+        if (!empty($spamCount)) {
+            $spamCount = reset($spamCount);
+        } else {
+            $spamCount = 0;
+        }
+
         $data = array_merge($data, $this->pageData($this->form->getCurrentPage(), 'current_page:'));
         $data = array_merge(
             $data,
-            $formTransformer->transformForm($this->form, $submissionCount, $this->skipHelperFields)
+            $formTransformer->transformForm($this->form, $submissionCount, $spamCount, $this->skipHelperFields)
         );
         $data = array_merge($data, $this->getFields());
 

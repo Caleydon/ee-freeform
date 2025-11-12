@@ -8,6 +8,7 @@
             <th>Handle</th>
             {if logged_in_group_id == "1"}
             <th>Submissions</th>
+            <th>Spam Submissions</th>
             {/if}
         </tr>
         </thead>
@@ -33,7 +34,20 @@
             {if logged_in_group_id == "1"}
             <td>
                 <a href="{path='demo/{segment_2}/{form:handle}/submissions'}">
-                    {form:submission_count} submissions
+                    {if form:submission_count == "1"}
+                        {form:submission_count} submission
+                    {if:else}
+                        {form:submission_count} submissions
+                    {/if}
+                </a>
+            </td>
+            <td>
+                <a href="{path='demo/{segment_2}/{form:handle}/spam'}">
+                    {if form:submission_count == "1"}
+                        {form:submission_count} spam submission
+                    {if:else}
+                        {form:submission_count} spam submissions
+                    {/if}
                 </a>
             </td>
             {/if}

@@ -96,6 +96,7 @@ class Freeform_Next extends Plugin
         }
 
         $submissionCounts = FormRepository::getInstance()->getFormSubmissionCount($formIds);
+        $spamCounts = FormRepository::getInstance()->getFormSpamCount($formIds);
 
         if (empty($forms)) {
             return $this->returnNoResults();
@@ -104,7 +105,8 @@ class Freeform_Next extends Plugin
         $data = [];
         foreach ($forms as $formModel) {
             $submissionCount = $submissionCounts[$formModel->id] ?? 0;
-            $data[]          = $transformer->transformForm($formModel->getForm(), $submissionCount);
+            $spamCount = $spamCounts[$formModel->id] ?? 0;
+            $data[]          = $transformer->transformForm($formModel->getForm(), $submissionCount, $spamCount);
         }
 
         $output = ee()->TMPL->tagdata;
@@ -139,7 +141,69 @@ class Freeform_Next extends Plugin
             ->setOrderBy($this->getParam('orderby'))
             ->setSort($this->getParam('sort'))
             ->setLimit($limit)
-            ->setOffset($this->getParam('offset'));
+            ->setOffset($this->getParam('offset'))
+            ->addFilter('isSpam', false);
+
+        $this->findAndAttachSearchParams($form, $attributes);
+
+        $total = SubmissionRepository::getInstance()->getAllSubmissionCountFor($attributes);
+
+        /** @var \Pagination_object $pagination */
+        $pagination = ee()->pagination->create();
+
+        $search  = [LD . 'submission:switch', LD . 'submission:paginate', LD . '/submission:paginate'];
+        $replace = [LD . 'switch', LD . 'paginate', LD . '/paginate'];
+
+        $output = str_replace($search, $replace, ee()->TMPL->tagdata);
+        $output = $pagination->prepare($output);
+
+        if ($shouldPaginate) {
+            $pagination->prefix = 'P';
+            $pagination->build($total, (int) $limit);
+
+            $attributes->setOffset($pagination->offset);
+        }
+
+        $submissions = SubmissionRepository::getInstance()->getAllSubmissionsFor($attributes);
+
+        if (empty($submissions)) {
+            return $this->returnNoResults();
+        }
+
+        $transformer = new SubmissionToTagDataTransformer($form, $output, $submissions);
+        $output      = $transformer->getOutput($attributes);
+
+        return $pagination->render($output);
+    }
+
+    /**
+     * @return string
+     */
+    public function spam()
+    {
+        ee()->load->library('pagination');
+        $form = $this->assembleFormFromTag();
+
+        if (!$form) {
+            return $this->returnNoResults();
+        }
+
+        $limit          = $this->getParam('limit');
+        $shouldPaginate = (bool) $this->getParam('paginate') && (bool) $limit;
+
+        $attributes = new SubmissionAttributes($form);
+        $attributes
+            ->setStatus($this->getParam('status'))
+            ->setDateRangeStart($this->getParam('date_range_start'))
+            ->setDateRangeEnd($this->getParam('date_range_end'))
+            ->setDateRange($this->getParam('date_range'))
+            ->setSubmissionId($this->getParam('submission_id'))
+            ->setToken($this->getParam('token'))
+            ->setOrderBy($this->getParam('orderby'))
+            ->setSort($this->getParam('sort'))
+            ->setLimit($limit)
+            ->setOffset($this->getParam('offset'))
+            ->addFilter('isSpam', true);
 
         $this->findAndAttachSearchParams($form, $attributes);
 
