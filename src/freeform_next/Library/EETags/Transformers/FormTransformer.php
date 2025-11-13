@@ -16,11 +16,12 @@ class FormTransformer implements Transformer
      *
      * @param Form $form
      * @param int  $submissionCount
+     * @param int  $spamCount
      * @param bool $skipHelperFields
      *
      * @return array
      */
-    public function transformForm(Form $form, $submissionCount = 0, $skipHelperFields = false): array
+    public function transformForm(Form $form, $submissionCount = 0, $spamCount = 0, $skipHelperFields = false): array
     {
         return [
             'form:id'                        => $form->getId(),
@@ -39,6 +40,7 @@ class FormTransformer implements Transformer
             'form:row_class'                 => $form->getCustomAttributes()->getRowClass(),
             'form:column_class'              => $form->getCustomAttributes()->getColumnClass(),
             'form:submission_count'          => $submissionCount,
+            'form:spam_count'                => $spamCount,
             'form:field_id_prefix'           => $form->getCustomAttributes()->getFieldIdPrefix(),
             'form:fields'                    => $this->getFields($form, 'field:', $skipHelperFields),
             'form:current_page'              => [
