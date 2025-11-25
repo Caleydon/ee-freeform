@@ -107,6 +107,14 @@ class FormsService implements FormHandlerInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isSpamFolderEnabled(): bool
+    {
+        return SettingsRepository::getInstance()->getOrCreate()->isSpamFolderEnabled();
+    }
+
+    /**
      * @param Form $form
      *
      * @return int

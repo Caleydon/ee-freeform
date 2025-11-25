@@ -124,6 +124,14 @@ class SettingsService
     }
 
     /**
+     * @return bool
+     */
+    public function isSpamFolderEnabled(): bool
+    {
+        return $this->getSettingsModel()->isSpamFolderEnabled();
+    }
+
+    /**
      * @return SettingsModel
      */
     public function getSettingsModel()

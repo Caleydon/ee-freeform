@@ -257,7 +257,11 @@ class Freeform_next_mcp extends ControlPanelView
             }
         }
 
-        if ($form && null !== $submissionId) {
+        if (!$form) {
+            return $this->renderView(new RedirectView(UrlHelper::getLink('forms')));
+        }
+
+        if (null !== $submissionId) {
             if (strtolower($submissionId) === 'delete') {
                 return $this->renderView($this->getSubmissionController()->batchDelete($form));
             }
@@ -307,7 +311,15 @@ class Freeform_next_mcp extends ControlPanelView
             }
         }
 
-        if ($form && null !== $submissionId) {
+        if (!$form) {
+            return $this->renderView(new RedirectView(UrlHelper::getLink('forms')));
+        }
+
+        if (FreeformHelper::isFreeformAtLeast('3.3.5') && !$this->getSettingsService()->isSpamFolderEnabled()) {
+            return $this->renderView(new RedirectView(UrlHelper::getLink('submissions/' . $formHandle . '/')));
+        }
+
+        if (null !== $submissionId) {
             if (strtolower($submissionId) === 'delete') {
                 return $this->renderView($this->getSubmissionController()->batchDelete($form));
             }
@@ -521,7 +533,13 @@ class Freeform_next_mcp extends ControlPanelView
 
             $submissions = new NavigationLink('Submissions', "submissions/{$firstForm->handle}");
 
-            $spamSubmissions = new NavigationLink('Spam', "spam/{$firstForm->handle}");
+            if (FreeformHelper::isFreeformAtLeast('3.3.5')) {
+                if ($this->getSettingsService()->isSpamFolderEnabled()) {
+                    $spamSubmissions = new NavigationLink('Spam', "spam/{$firstForm->handle}");
+                }
+            } else {
+                $spamSubmissions = new NavigationLink('Spam', "spam/{$firstForm->handle}");
+            }
         }
 
         $notifications = null;
@@ -787,6 +805,20 @@ class Freeform_next_mcp extends ControlPanelView
 
         if (null === $instance) {
             $instance = new PermissionsService();
+        }
+
+        return $instance;
+    }
+
+    /**
+     * @return SettingsService
+     */
+    private function getSettingsService()
+    {
+        static $instance;
+
+        if (null === $instance) {
+            $instance = new SettingsService();
         }
 
         return $instance;

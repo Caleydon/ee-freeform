@@ -293,6 +293,54 @@ class SettingsController extends Controller
 	{
 		$settings = $this->getSettings();
 
+        $sections = [
+            [
+                [
+                    'title'  => 'Freeform Honeypot',
+                    'desc'   => 'Enable this to use Freeform\'s built in Honeypot spam protection.',
+                    'fields' => [
+                        'spamProtectionEnabled' => [
+                            'type'  => 'yes_no',
+                            'value' => $settings->isSpamProtectionEnabled(),
+                        ],
+                    ],
+                ],
+                [
+                    'title'  => 'Javascript Enhancement',
+                    'desc'   => 'Enable this to use Freeform\'s built-in Javascript enhancement for the Honeypot feature. This will require users to have JS enabled for their browser and help fight spambots more aggressively.',
+                    'fields' => [
+                        'freeformHoneypotEnhancement' => [
+                            'type'  => 'yes_no',
+                            'value' => $settings->isFreeformHoneypotEnhanced(),
+                        ],
+                    ],
+                ],
+                [
+                    'title'  => 'Spam protection simulates a successful submission?',
+                    'desc'   => 'Enable this to change the spam protection behavior to simulate a successful submission instead of just reloading the form.',
+                    'fields' => [
+                        'spamBlockLikeSuccessfulPost' => [
+                            'type'  => 'yes_no',
+                            'value' => $settings->isSpamBlockLikeSuccessfulPost(),
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        if (FreeformHelper::isFreeformAtLeast('3.3.5')) {
+            $sections[0][] = [
+                'title'  => 'Spam Folder',
+                'desc'   => 'When enabled, all submissions caught by spam protection measures will be flagged as spam and stored in the database, but available to manage in a separate menu inside Freeform.',
+                'fields' => [
+                    'spamFolderEnabled' => [
+                        'type'  => 'yes_no',
+                        'value' => $settings->isSpamFolderEnabled(),
+                    ],
+                ],
+            ];
+        }
+
 		$view = new CpView('settings/common', []);
 		$view
 			->setHeading(lang('Spam Protection'))
@@ -303,41 +351,8 @@ class SettingsController extends Controller
 					'cp_page_title'         => $view->getHeading(),
 					'save_btn_text'         => 'btn_save_settings',
 					'save_btn_text_working' => 'btn_saving',
-					'sections'              => [
-						[
-							[
-								'title'  => 'Freeform Honeypot',
-								'desc'   => 'Enable this to use Freeform\'s built in Honeypot spam protection.',
-								'fields' => [
-									'spamProtectionEnabled' => [
-										'type'  => 'yes_no',
-										'value' => $settings->isSpamProtectionEnabled(),
-									],
-								],
-							],
-							[
-								'title'  => 'Javascript Enhancement',
-								'desc'   => 'Enable this to use Freeform\'s built-in Javascript enhancement for the Honeypot feature. This will require users to have JS enabled for their browser and help fight spambots more aggressively.',
-								'fields' => [
-									'freeformHoneypotEnhancement' => [
-										'type'  => 'yes_no',
-										'value' => $settings->isFreeformHoneypotEnhanced(),
-									],
-								],
-							],
-							[
-								'title'  => 'Spam protection simulates a successful submission?',
-								'desc'   => 'Enable this to change the spam protection behavior to simulate a successful submission instead of just reloading the form.',
-								'fields' => [
-									'spamBlockLikeSuccessfulPost' => [
-										'type'  => 'yes_no',
-										'value' => $settings->isSpamBlockLikeSuccessfulPost(),
-									],
-								],
-							],
-						],
-					],
-				]
+					'sections'              => $sections,
+                ]
 			);
 
 		return $view;

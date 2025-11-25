@@ -285,9 +285,16 @@ class Freeform_Next extends Plugin
                         [$submissionModel->id, $submissionModel->token],
                         $returnUrl
                     );
-                }
 
-                $this->persistSpamReasons($form, $submissionModel);
+                    if ($submissionModel->isSpam) {
+                        $returnUrl = str_replace('submissions', 'spam', $returnUrl);
+                    }
+
+                    $this->persistSpamReasons($form, $submissionModel);
+                } else {
+                    $returnUrl = str_replace('SUBMISSION_ID', '', $returnUrl);
+                    $returnUrl = rtrim($returnUrl, '/');
+                }
 
                 if ($isAjaxRequest) {
                     $this->returnJson(

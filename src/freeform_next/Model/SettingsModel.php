@@ -22,6 +22,7 @@ use Symfony\Component\Finder\SplFileInfo;
  * @property bool   $spamProtectionEnabled
  * @property bool   $freeformHoneypotEnhancement
  * @property bool   $spamBlockLikeSuccessfulPost
+ * @property bool   $spamFolderEnabled
  * @property bool   $showTutorial
  * @property string $fieldDisplayOrder
  * @property string $formattingTemplatePath
@@ -52,6 +53,7 @@ class SettingsModel extends Model
 
     public const DEFAULT_SPAM_PROTECTION_ENABLED         = true;
     public const DEFAULT_SPAM_BLOCK_LIKE_SUCCESSFUL_POST = false;
+    public const DEFAULT_SPAM_FOLDER_ENABLED             = true;
     public const DEFAULT_SHOW_TUTORIAL                   = true;
     public const DEFAULT_FIELD_DISPLAY_ORDER             = self::FIELD_DISPLAY_ORDER_TYPE;
     public const DEFAULT_FORMATTING_TEMPLATE_PATH        = null;
@@ -79,6 +81,7 @@ class SettingsModel extends Model
     protected $spamProtectionEnabled;
     protected $freeformHoneypotEnhancement;
     protected $spamBlockLikeSuccessfulPost;
+    protected $spamFolderEnabled;
     protected $showTutorial;
     protected $fieldDisplayOrder;
     protected $formattingTemplatePath;
@@ -110,6 +113,7 @@ class SettingsModel extends Model
                 'siteId'                      => ee()->config->item('site_id'),
                 'spamProtectionEnabled'       => self::DEFAULT_SPAM_PROTECTION_ENABLED,
                 'spamBlockLikeSuccessfulPost' => self::DEFAULT_SPAM_BLOCK_LIKE_SUCCESSFUL_POST,
+                'spamFolderEnabled'           => self::DEFAULT_SPAM_FOLDER_ENABLED,
                 'showTutorial'                => self::DEFAULT_SHOW_TUTORIAL,
                 'fieldDisplayOrder'           => self::DEFAULT_FIELD_DISPLAY_ORDER,
                 'formattingTemplatePath'      => self::DEFAULT_FORMATTING_TEMPLATE_PATH,
@@ -284,6 +288,14 @@ class SettingsModel extends Model
     public function isSpamBlockLikeSuccessfulPost(): bool
     {
         return (bool) $this->spamBlockLikeSuccessfulPost;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSpamFolderEnabled(): bool
+    {
+        return (bool) $this->spamFolderEnabled;
     }
 
     /**
