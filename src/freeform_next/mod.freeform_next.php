@@ -287,7 +287,9 @@ class Freeform_Next extends Plugin
                     );
                 }
 
-                $this->persistSpamReasons($form, $submissionModel);
+                if ($submissionModel instanceof SubmissionModel) {
+                    $this->persistSpamReasons($form, $submissionModel);
+                }
 
                 if ($isAjaxRequest) {
                     $this->returnJson(
