@@ -290,7 +290,10 @@ class Freeform_Next extends Plugin
                         $returnUrl = str_replace('submissions', 'spam', $returnUrl);
                     }
 
-                    $this->persistSpamReasons($form, $submissionModel);
+                    if ($submissionModel instanceof SubmissionModel) {
+                        $this->persistSpamReasons($form, $submissionModel);
+                    }
+
                 } else {
                     $returnUrl = str_replace('SUBMISSION_ID', '', $returnUrl);
                     $returnUrl = rtrim($returnUrl, '/');
