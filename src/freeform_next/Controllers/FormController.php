@@ -58,6 +58,8 @@ class FormController extends Controller
     {
         $canManageForms = $this->getPermissionsService()->canManageForms(ee()->session->userdata('group_id'));
         $canAccessSubmissions = $this->getPermissionsService()->canAccessSubmissions(ee()->session->userdata('group_id'));
+        $settingsService = new SettingsService();
+        $spamFolderEnabled = $settingsService->getSettingsModel()->isSpamFolderEnabled();
 
         /** @var Table $table */
         $table = ee('CP/Table', ['sortable' => false, 'searchable' => false]);
@@ -120,7 +122,11 @@ class FormController extends Controller
                 ],
                 [
                     'content' => $spamTotals[$form->id] ?? 0,
-                    'href'    => ($canAccessSubmissions ? $this->getLink('spam/' . $form->handle) : null ),
+                    'href'    => (
+                        $canAccessSubmissions && $spamFolderEnabled
+                            ? $this->getLink('spam/' . $form->handle)
+                            : null
+                    ),
                 ],
                 $toolbar,
             ];

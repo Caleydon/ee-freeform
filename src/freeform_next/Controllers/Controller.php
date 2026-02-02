@@ -14,6 +14,7 @@ namespace Solspace\Addons\FreeformNext\Controllers;
 use Solspace\Addons\FreeformNext\Library\Helpers\UrlHelper;
 use Solspace\Addons\FreeformNext\Services\FieldsService;
 use Solspace\Addons\FreeformNext\Services\PermissionsService;
+use Solspace\Addons\FreeformNext\Services\SettingsService;
 
 abstract class Controller
 {
@@ -66,6 +67,20 @@ abstract class Controller
 
         if (null === $instance) {
             $instance = new PermissionsService();
+        }
+
+        return $instance;
+    }
+
+    /**
+     * @return SettingsService
+     */
+    protected function getSettingsService()
+    {
+        static $instance;
+
+        if (null === $instance) {
+            $instance = new SettingsService();
         }
 
         return $instance;

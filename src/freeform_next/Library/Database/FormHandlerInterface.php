@@ -56,6 +56,11 @@ interface FormHandlerInterface
     public function isSpamProtectionEnabled();
 
     /**
+     * @return bool
+     */
+    public function isSpamFolderEnabled();
+
+    /**
      * Do something before the form is saved
      * Return bool determines whether the form should be saved or not
      *

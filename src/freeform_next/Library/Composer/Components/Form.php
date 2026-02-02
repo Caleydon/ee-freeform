@@ -35,7 +35,6 @@ use Solspace\Addons\FreeformNext\Library\Integrations\DataObjects\FieldObject;
 use Solspace\Addons\FreeformNext\Library\Mailing\MailHandlerInterface;
 use Solspace\Addons\FreeformNext\Library\Session\FormValueContext;
 use Solspace\Addons\FreeformNext\Library\Translations\TranslatorInterface;
-use Solspace\Addons\FreeformNext\Model\SpamReasonModel;
 use Solspace\Addons\FreeformNext\Model\SubmissionModel;
 use Solspace\Addons\FreeformNext\Repositories\SubmissionRepository;
 
@@ -478,6 +477,10 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
 
         if ($this->isMarkedAsSpam()) {
             $this->formSaved = true;
+
+            if (FreeformHelper::isFreeformAtLeast('3.3.5') && !$this->formHandler->isSpamFolderEnabled()) {
+                return null;
+            }
         }
 
         if ($formValueContext->shouldFormWalkToPreviousPage()) {

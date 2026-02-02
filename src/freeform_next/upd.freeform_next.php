@@ -610,6 +610,14 @@ class Freeform_next_upd extends AddonUpdater
             }
         }
 
+        if (version_compare($previousVersion, '3.3.5', '<')) {
+            $settingsTable = ee()->db->dbprefix('freeform_next_settings');
+
+            if (ee()->db->table_exists($settingsTable) && ! ee()->db->field_exists('spamFolderEnabled', $settingsTable)) {
+                ee()->db->query("ALTER TABLE `{$settingsTable}` ADD COLUMN `spamFolderEnabled` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1 AFTER `spamBlockLikeSuccessfulPost`");
+            }
+        }
+
         return true;
     }
 

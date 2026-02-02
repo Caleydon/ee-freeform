@@ -164,4 +164,16 @@ class FreeformHelper
 
         return $return;
     }
+
+    public static function isFreeformAtLeast(string $minVersion): bool
+    {
+        $addon = ee('Addon')->get('freeform_next');
+
+        $installed = $addon->getInstalledVersion();
+        if (!$installed) {
+            return false;
+        }
+
+        return version_compare($installed, $minVersion, '>=');
+    }
 }

@@ -226,10 +226,19 @@ class Freeform_next_ext
                     ee('CP/URL', "addons/settings/freeform_next/submissions/{$formModel->handle}")
                 );
 
-                $sub->addItem(
-                    lang('Spam'),
-                    ee('CP/URL', "addons/settings/freeform_next/spam/{$formModel->handle}")
-                );
+                if (FreeformHelper::isFreeformAtLeast('3.3.5')) {
+                    if ($this->getSettingsService()->isSpamFolderEnabled()) {
+                        $sub->addItem(
+                            lang('Spam'),
+                            ee('CP/URL', "addons/settings/freeform_next/spam/{$formModel->handle}")
+                        );
+                    }
+                } else {
+                    $sub->addItem(
+                        lang('Spam'),
+                        ee('CP/URL', "addons/settings/freeform_next/spam/{$formModel->handle}")
+                    );
+                }
             }
         }
 
