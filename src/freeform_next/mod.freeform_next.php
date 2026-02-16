@@ -349,6 +349,24 @@ class Freeform_Next extends Plugin
                         ],
                     ]
                 );
+            } else {
+                $payload = [
+                    'formErrors'  => $form->getErrors(),
+                    'fieldErrors' => [],
+                ];
+
+                foreach ($form->getLayout()->getFields() as $field) {
+                    if ($field->hasErrors()) {
+                        $payload['fieldErrors'][$field->getHandle()] = $field->getErrors();
+                    }
+                }
+
+                // Store as flashdata (1 request)
+                $flashKey = 'freeform_next_errors_' . $form->getId();
+                ee()->session->set_flashdata($flashKey, $payload);
+
+                // Redirect back to the form page (NOT return_url)
+                $this->redirect(ee()->input->server('HTTP_REFERER') ?: '/');
             }
         }
     }
@@ -390,8 +408,41 @@ class Freeform_Next extends Plugin
         }
 
         $form = $formModel->getForm();
+
+        // Normal postback flow (no use_action_url)
         if (null !== $hash && (int) $postedId === (int) $formModel->getId()) {
             $this->submitForm($form);
+        }
+
+        // ACT flow (use_action_url="yes") to rehydrate flashed errors once
+        $flashKey = 'freeform_next_errors_' . $form->getId();
+        $payload = ee()->session->flashdata($flashKey);
+
+        if (is_array($payload)) {
+            $formErrors = $payload['formErrors'] ?? [];
+            if (!empty($formErrors)) {
+                $form->addErrors($formErrors);
+            }
+
+            $fieldErrors = $payload['fieldErrors'] ?? [];
+            foreach ($fieldErrors as $handle => $messages) {
+                $field = $form->get($handle);
+                if (!$field || !is_array($messages)) {
+                    continue;
+                }
+
+                if (method_exists($field, 'addErrors')) {
+                    $field->addErrors($messages);
+                } else if (method_exists($field, 'addError')) {
+                    foreach ($messages as $msg) {
+                        $field->addError($msg);
+                    }
+                } else {
+                    foreach ($messages as $msg) {
+                        $form->addError($msg);
+                    }
+                }
+            }
         }
 
         FormTagParamUtilities::setFormCustomAttributes($form);
