@@ -147,8 +147,8 @@ class Freeform_next_jump extends AbstractJumpMenu
 	{
 		$items = [];
 
-		$spacedKeywordsString = ee()->db->escape_str(ee()->security->xss_clean(implode(' ', $searchKeywords)));
-		$underscoredKeywordsString = ee()->db->escape_str(ee()->security->xss_clean(implode(' ', $searchKeywords)));
+		$spacedKeywordsString = ee()->db->escape_str(ee('Security/XSS')->clean(implode(' ', $searchKeywords)));
+		$underscoredKeywordsString = ee()->db->escape_str(ee('Security/XSS')->clean(implode(' ', $searchKeywords)));
 
 		$forms = ee('Model')
 			->get(FormModel::MODEL)
@@ -175,8 +175,8 @@ class Freeform_next_jump extends AbstractJumpMenu
 	{
 		$items = [];
 
-		$spacedKeywordsString = ee()->db->escape_str(ee()->security->xss_clean(implode(' ', $searchKeywords)));
-		$underscoredKeywordsString = ee()->db->escape_str(ee()->security->xss_clean(implode(' ', $searchKeywords)));
+		$spacedKeywordsString = ee()->db->escape_str(ee('Security/XSS')->clean(implode(' ', $searchKeywords)));
+		$underscoredKeywordsString = ee()->db->escape_str(ee('Security/XSS')->clean(implode(' ', $searchKeywords)));
 
 		$fields = ee('Model')
 			->get(FieldModel::MODEL)
@@ -203,8 +203,8 @@ class Freeform_next_jump extends AbstractJumpMenu
 	{
 		$items = [];
 
-		$spacedKeywordsString = ee()->db->escape_str(ee()->security->xss_clean(implode(' ', $searchKeywords)));
-		$underscoredKeywordsString = ee()->db->escape_str(ee()->security->xss_clean(implode(' ', $searchKeywords)));
+		$spacedKeywordsString = ee()->db->escape_str(ee('Security/XSS')->clean(implode(' ', $searchKeywords)));
+		$underscoredKeywordsString = ee()->db->escape_str(ee('Security/XSS')->clean(implode(' ', $searchKeywords)));
 
 		$forms = ee('Model')
 			->get(FormModel::MODEL)
