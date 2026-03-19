@@ -130,7 +130,7 @@ class SubmissionRepository extends Repository
 
         $orLikeGroup = [];
         foreach ($attributes->getOrLikeFilters() as $key => $value) {
-            $orLikeGroup[] = ee()->db->dbprefix($submissionTable) . ".{$key} LIKE '%" . ee()->security->xss_clean($value) . "%'";
+            $orLikeGroup[] = ee()->db->dbprefix($submissionTable) . ".{$key} LIKE '%" . ee('Security/XSS')->clean($value) . "%'";
         }
 
         if(! empty($orLikeGroup))
