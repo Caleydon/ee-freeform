@@ -328,6 +328,8 @@ class Freeform_Next extends Plugin
                 );
             }
         } else {
+            $isActSubmission = (int) ee()->input->get('ACT') > 0;
+
             if ($isAjaxRequest) {
                 $fieldErrors = [];
 
@@ -349,16 +351,27 @@ class Freeform_Next extends Plugin
                         ],
                     ]
                 );
-            } else {
+            }
+
+            // Only redirect for ACT submissions
+            if ($isActSubmission) {
                 $payload = [
                     'formErrors'  => $form->getErrors(),
                     'fieldErrors' => [],
+                    'values'      => [],
                 ];
 
                 foreach ($form->getLayout()->getFields() as $field) {
-                    if ($field->hasErrors()) {
-                        $payload['fieldErrors'][$field->getHandle()] = $field->getErrors();
+                    $handle = $field->getHandle();
+                    if (!$handle) {
+                        continue;
                     }
+
+                    if ($field->hasErrors()) {
+                        $payload['fieldErrors'][$handle] = $field->getErrors();
+                    }
+
+                    $payload['values'][$handle] = $field->getValue();
                 }
 
                 // Store as flashdata (1 request)
@@ -368,6 +381,9 @@ class Freeform_Next extends Plugin
                 // Redirect back to the form page (NOT return_url)
                 $this->redirect(ee()->input->server('HTTP_REFERER') ?: '/');
             }
+
+            // Standard same-page postback
+            return;
         }
     }
 
@@ -419,6 +435,22 @@ class Freeform_Next extends Plugin
         $payload = ee()->session->flashdata($flashKey);
 
         if (is_array($payload)) {
+            $values = $payload['values'] ?? [];
+            foreach ($values as $handle => $value) {
+                $field = $form->get($handle);
+                if (!$field) {
+                    continue;
+                }
+
+                if (method_exists($field, 'getType') && $field->getType() === 'file') {
+                    continue;
+                }
+
+                if (method_exists($field, 'setValue')) {
+                    $field->setValue($value);
+                }
+            }
+
             $formErrors = $payload['formErrors'] ?? [];
             if (!empty($formErrors)) {
                 $form->addErrors($formErrors);
