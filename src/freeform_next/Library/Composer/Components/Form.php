@@ -324,8 +324,20 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
      * @param string|null $value
      * @return Form
      */
-    public function setMarkedAsSpam(string $type, string $message, ?string $value = null): self
+    public function setMarkedAsSpam(string|bool $type = 'external', ?string $message = null, ?string $value = null): self
     {
+        // Support older format (pre v3.3) for third party add-ons like Snaptcha
+        if (is_bool($type)) {
+            if (!$type) {
+                return $this;
+            }
+
+            $type = 'external';
+            $message = $message ?? 'Marked as spam by an external extension.';
+        }
+
+        $message = $message ?? 'Marked as spam.';
+
         $spamReasons = $this->getSpamReasons();
 
         foreach ($spamReasons as $spamReason) {
@@ -334,7 +346,11 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
             }
         }
 
-        $spamReasons[] = ['type' => $type, 'message' => $message, 'value' => $value];
+        $spamReasons[] = [
+            'type' => $type,
+            'message' => $message,
+            'value' => $value,
+        ];
 
         $this->spamReasons = $spamReasons;
 
@@ -840,7 +856,6 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
     }
     /**
      * Send out any email notifications
-     *
      *
      * @throws ComposerException
      */
