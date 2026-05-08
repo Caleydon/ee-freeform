@@ -430,9 +430,14 @@ class Freeform_Next extends Plugin
             $this->submitForm($form);
         }
 
-        // ACT flow (use_action_url="yes") to rehydrate flashed errors once
+        // ACT flow (use_action_url="yes") to rehydrate flashed errors once.
+        // Only read flash data on a clean GET request.
+        // Skip on POST or AJAX, (prevents stale values from a failed submission being reapplied when the corrected form is submitted).
+        $isPostRequest = strtoupper((string) ee()->input->server('REQUEST_METHOD')) === 'POST';
         $flashKey = 'freeform_next_errors_' . $form->getId();
-        $payload = ee()->session->flashdata($flashKey);
+        $payload = (!$isPostRequest && !AJAX_REQUEST)
+            ? ee()->session->flashdata($flashKey)
+            : null;
 
         if (is_array($payload)) {
             $values = $payload['values'] ?? [];
