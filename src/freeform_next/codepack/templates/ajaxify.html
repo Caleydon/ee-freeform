@@ -146,15 +146,31 @@
         var response = JSON.parse(request.response);
 
         if (response.success && response.finished) {
-          // Reset the form so that the user may enter fresh information
-          form.reset();
+          // If return URL then redirect
+          if (response.returnUrl) {
+            window.location.href = response.returnUrl;
+            return;
+          }
 
-          // ============================================================
-          // Uncomment this to have the form redirect to the success page
-          // ============================================================
-          // if (response.returnUrl) {
-          //   window.location.href = response.returnUrl;
-          // }
+          // If no return URL then clear all fields
+          for (var i = 0; i < form.elements.length; i++) {
+            var elem = form.elements[i];
+            if (!elem.name) {
+                continue;
+            }
+
+            if (['hidden', 'submit', 'button', 'reset'].indexOf(elem.type) > -1) {
+                continue;
+            }
+
+            if (elem.type === 'checkbox' || elem.type === 'radio') {
+                elem.checked = false;
+            } else if (elem.tagName.toLowerCase() === 'select') {
+                elem.selectedIndex = 0;
+            } else {
+                elem.value = '';
+            }
+          }
 
           renderFormSuccess(form);
 
@@ -164,10 +180,12 @@
         }
 
         if (response.honeypot) {
-          var honeypotInput = form.querySelector("input[name^=freeform_form_handle_]");
-          honeypotInput.setAttribute("name", response.honeypot.name);
-          honeypotInput.setAttribute("id", response.honeypot.name);
-          honeypotInput.value = response.honeypot.hash;
+          var honeypotInput = form.querySelector("input[name^=freeform_form_handle_]") || form.querySelector("input[name=freeform_form_handle]");
+          if (honeypotInput) {
+            honeypotInput.setAttribute("name", response.honeypot.name);
+            honeypotInput.setAttribute("id", response.honeypot.name);
+            honeypotInput.value = response.honeypot.hash;
+          }
         }
 
         unlockSubmit(form);

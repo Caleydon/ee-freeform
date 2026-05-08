@@ -328,6 +328,8 @@ class Freeform_Next extends Plugin
                 );
             }
         } else {
+            $isActSubmission = (int) ee()->input->get('ACT') > 0;
+
             if ($isAjaxRequest) {
                 $fieldErrors = [];
 
@@ -350,6 +352,38 @@ class Freeform_Next extends Plugin
                     ]
                 );
             }
+
+            // Only redirect for ACT submissions
+            if ($isActSubmission) {
+                $payload = [
+                    'formErrors'  => $form->getErrors(),
+                    'fieldErrors' => [],
+                    'values'      => [],
+                ];
+
+                foreach ($form->getLayout()->getFields() as $field) {
+                    $handle = $field->getHandle();
+                    if (!$handle) {
+                        continue;
+                    }
+
+                    if ($field->hasErrors()) {
+                        $payload['fieldErrors'][$handle] = $field->getErrors();
+                    }
+
+                    $payload['values'][$handle] = $field->getValue();
+                }
+
+                // Store as flashdata (1 request)
+                $flashKey = 'freeform_next_errors_' . $form->getId();
+                ee()->session->set_flashdata($flashKey, $payload);
+
+                // Redirect back to the form page (NOT return_url)
+                $this->redirect(ee()->input->server('HTTP_REFERER') ?: '/');
+            }
+
+            // Standard same-page postback
+            return;
         }
     }
 
@@ -390,8 +424,62 @@ class Freeform_Next extends Plugin
         }
 
         $form = $formModel->getForm();
+
+        // Normal postback flow (no use_action_url)
         if (null !== $hash && (int) $postedId === (int) $formModel->getId()) {
             $this->submitForm($form);
+        }
+
+        // ACT flow (use_action_url="yes") to rehydrate flashed errors once.
+        // Only read flash data on a clean GET request.
+        // Skip on POST or AJAX, (prevents stale values from a failed submission being reapplied when the corrected form is submitted).
+        $isPostRequest = strtoupper((string) ee()->input->server('REQUEST_METHOD')) === 'POST';
+        $flashKey = 'freeform_next_errors_' . $form->getId();
+        $payload = (!$isPostRequest && !AJAX_REQUEST)
+            ? ee()->session->flashdata($flashKey)
+            : null;
+
+        if (is_array($payload)) {
+            $values = $payload['values'] ?? [];
+            foreach ($values as $handle => $value) {
+                $field = $form->get($handle);
+                if (!$field) {
+                    continue;
+                }
+
+                if (method_exists($field, 'getType') && $field->getType() === 'file') {
+                    continue;
+                }
+
+                if (method_exists($field, 'setValue')) {
+                    $field->setValue($value);
+                }
+            }
+
+            $formErrors = $payload['formErrors'] ?? [];
+            if (!empty($formErrors)) {
+                $form->addErrors($formErrors);
+            }
+
+            $fieldErrors = $payload['fieldErrors'] ?? [];
+            foreach ($fieldErrors as $handle => $messages) {
+                $field = $form->get($handle);
+                if (!$field || !is_array($messages)) {
+                    continue;
+                }
+
+                if (method_exists($field, 'addErrors')) {
+                    $field->addErrors($messages);
+                } else if (method_exists($field, 'addError')) {
+                    foreach ($messages as $msg) {
+                        $field->addError($msg);
+                    }
+                } else {
+                    foreach ($messages as $msg) {
+                        $form->addError($msg);
+                    }
+                }
+            }
         }
 
         FormTagParamUtilities::setFormCustomAttributes($form);
