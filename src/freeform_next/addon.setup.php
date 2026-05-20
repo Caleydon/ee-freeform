@@ -11,7 +11,6 @@
 
 use Solspace\Addons\FreeformNext\Library\Helpers\FreeformHelper;
 
-require_once __DIR__ . '/helper_functions.php';
 require_once __DIR__ . '/Library/Helpers/FreeformHelper.php';
 
 
