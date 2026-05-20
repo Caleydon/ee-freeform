@@ -523,7 +523,7 @@ class Freeform_next_mcp extends ControlPanelView
 
         if ($canManageForms) {
             $forms = new NavigationLink('Forms', 'forms');
-            FreeformHelper::get('navigation', $forms);
+            FreeformHelper::getNavigation($forms);
         }
 
         $submissions = null;
@@ -551,7 +551,7 @@ class Freeform_next_mcp extends ControlPanelView
         $fields = null;
         if ($canAccessFields) {
             $fields = new NavigationLink('Fields', 'fields');
-            FreeformHelper::get('navigation', $fields);
+            FreeformHelper::getNavigation($fields);
         }
 
         $integrations = new NavigationLink('Integrations');

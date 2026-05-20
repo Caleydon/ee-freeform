@@ -61,7 +61,7 @@ class ApiController extends Controller
         if (!empty($_POST)) {
             try {
                 $model = $this->getFieldController()->save();
-                FreeformHelper::get('validate', $model);
+                FreeformHelper::validate($model);
 
                 $view->addVariable('success', true);
             } catch (Exception $e) {

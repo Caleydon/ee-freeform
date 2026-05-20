@@ -155,7 +155,7 @@ class FormController extends Controller
         ];
 
         if ($canManageForms) {
-            $template['form_right_links'] = FreeformHelper::get('right_links', $this);
+            $template['form_right_links'] = FreeformHelper::getRightLinks($this);
         }
 
 		$template['footer'] = ['submit_lang' => lang('submit'), 'type'        => 'bulk_action_form'];

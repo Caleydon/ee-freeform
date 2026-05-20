@@ -71,8 +71,8 @@ class StatusController extends Controller
             ];
         }
 
-        $tableData = FreeformHelper::get('column_count', $tableData);
-        $columns   = FreeformHelper::get('columns', $columns);
+        $tableData = FreeformHelper::getColumnCount($tableData);
+        $columns   = FreeformHelper::getColumns($columns);
 
         $table->setColumns($columns);
         $table->setData($tableData);
@@ -84,7 +84,7 @@ class StatusController extends Controller
         $template = [
 			'table'            => $table->viewData(),
 			'cp_page_title'    => lang('Statuses'),
-			'form_right_links' => FreeformHelper::get('right_links', $this),
+			'form_right_links' => FreeformHelper::getRightLinks($this),
 			'footer' => [
 				'submit_lang' => lang('submit'),
 				'type'        => 'bulk_action_form',

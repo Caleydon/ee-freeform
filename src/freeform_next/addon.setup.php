@@ -22,7 +22,7 @@ if (!defined('FREEFORM_EXPRESS')) {
 }
 
 $cacheDir = PATH_CACHE . '/freeform_next';
-if (FreeformHelper::get('version') !== FREEFORM_EXPRESS && !file_exists($cacheDir . '/ft_check')) {
+if (FreeformHelper::getVersion() !== FREEFORM_EXPRESS && !file_exists($cacheDir . '/ft_check')) {
     $ftExists = ee()->db->where(['name' => 'freeform_next'])->get('exp_fieldtypes')->num_rows();
     if (!$ftExists) {
         ee()->db->insert('exp_fieldtypes', [

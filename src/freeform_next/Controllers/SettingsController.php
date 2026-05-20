@@ -362,7 +362,7 @@ class SettingsController extends Controller
      */
     private function permissionsAction(): CpView
     {
-        $version = FreeformHelper::get('version');
+        $version = FreeformHelper::getVersion();
 
         $permissionsModel = $this->getPermissionsModel();
 
