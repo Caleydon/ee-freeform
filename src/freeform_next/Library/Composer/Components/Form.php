@@ -731,7 +731,7 @@ class Form implements JsonSerializable, Iterator, ArrayAccess, Stringable
      */
     public function populateFromSubmission(SubmissionModel|int|string|null $token = null)
     {
-        if (null === $token || FreeformHelper::get('version') !== FREEFORM_PRO) {
+        if (null === $token || FreeformHelper::getVersion() !== FREEFORM_PRO) {
             return $this;
         }
 

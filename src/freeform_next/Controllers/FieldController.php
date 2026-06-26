@@ -89,7 +89,7 @@ class FieldController extends Controller
         $template = [
 			'table'            => $table->viewData(),
 			'cp_page_title'    => lang('Fields'),
-			'form_right_links' => FreeformHelper::get('right_links', $this),
+			'form_right_links' => FreeformHelper::getRightLinks($this),
 			'footer' => [
 				'submit_lang' => lang('submit'),
 				'type'        => 'bulk_action_form',

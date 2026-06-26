@@ -63,12 +63,11 @@ class ExtensionHelper
      *
      * @return bool
      */
-    public static function call($hookName, mixed $arg1 = null): bool
+    public static function call(string $hookName, mixed ...$args): bool
     {
-        $args     = func_get_args();
         $extClass = ee()->extensions;
 
-        call_user_func_array([$extClass, 'call'], $args);
+        $extClass->call($hookName, ...$args);
 
         return !$extClass->end_script;
     }

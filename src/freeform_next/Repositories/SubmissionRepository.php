@@ -340,13 +340,7 @@ class SubmissionRepository extends Repository
                     $joiner = $and;
                 }
 
-                $where .= $start . implode(
-                        $joiner,
-                        call_user_func_array(
-                            [$this, '_like'],
-                            [$name, $value]
-                        )
-                    );
+                $where .= $start . implode($joiner, $this->_like($name, $value));
             }
 
             $where .= ')';

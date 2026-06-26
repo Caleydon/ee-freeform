@@ -231,7 +231,7 @@ class FormModel extends Model implements Stringable
      */
     public function onBeforeSave(): void
     {
-        FreeformHelper::get('validate', $this);
+        FreeformHelper::validate($this);
     }
 
     /**
@@ -239,6 +239,6 @@ class FormModel extends Model implements Stringable
      */
     public function onBeforeDelete(): void
     {
-        FreeformHelper::get('validate', $this);
+        FreeformHelper::validate($this);
     }
 }

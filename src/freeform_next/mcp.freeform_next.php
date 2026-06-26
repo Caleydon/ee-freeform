@@ -94,12 +94,11 @@ class Freeform_next_mcp extends ControlPanelView
      *
      * @return array
      */
-    public function api($type): array
+    public function api(string $type, mixed ...$extraArgs): array
     {
         $apiController = new ApiController();
-        $args          = func_get_args();
 
-        return $this->renderView($apiController->handle($type, $args));
+        return $this->renderView($apiController->handle($type, [$type, ...$extraArgs]));
     }
 
     /**
@@ -523,7 +522,7 @@ class Freeform_next_mcp extends ControlPanelView
 
         if ($canManageForms) {
             $forms = new NavigationLink('Forms', 'forms');
-            FreeformHelper::get('navigation', $forms);
+            FreeformHelper::getNavigation($forms);
         }
 
         $submissions = null;
@@ -551,7 +550,7 @@ class Freeform_next_mcp extends ControlPanelView
         $fields = null;
         if ($canAccessFields) {
             $fields = new NavigationLink('Fields', 'fields');
-            FreeformHelper::get('navigation', $fields);
+            FreeformHelper::getNavigation($fields);
         }
 
         $integrations = new NavigationLink('Integrations');

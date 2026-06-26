@@ -84,7 +84,7 @@ class MigrationsService
      */
     public function isExpressCompatible(): bool
     {
-        if (FreeformHelper::get('version') !== FREEFORM_EXPRESS) {
+        if (FreeformHelper::getVersion() !== FREEFORM_EXPRESS) {
             return true;
         }
 
