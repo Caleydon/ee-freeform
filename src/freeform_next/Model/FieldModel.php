@@ -513,7 +513,7 @@ class FieldModel extends Model implements JsonSerializable
      */
     public function onBeforeSave(): void
     {
-        FreeformHelper::get('validate', $this);
+        FreeformHelper::validate($this);
     }
 
     /**

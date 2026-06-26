@@ -199,7 +199,7 @@ class Freeform_next_ext
 	{
 		$permissionsService = new PermissionsService;
 
-		$sub = $menu->addSubmenu(FreeformHelper::get('name'));
+		$sub = $menu->addSubmenu(FreeformHelper::getEditionName());
 
         $canManageForms = $permissionsService->canManageForms(ee()->session->userdata('group_id'));
         $canAccessSubmissions = $permissionsService->canAccessSubmissions(ee()->session->userdata('group_id'));
@@ -258,7 +258,7 @@ class Freeform_next_ext
           );
         }
 
-        if($canAccessExports && FreeformHelper::get('version') === 'pro')
+        if($canAccessExports && FreeformHelper::getVersion() === FREEFORM_PRO)
         {
           $sub->addItem(
             lang('Export'),

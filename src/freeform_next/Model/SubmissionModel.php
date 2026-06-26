@@ -97,7 +97,7 @@ class SubmissionModel extends Model
         $token = $form->getAssociatedSubmissionToken();
 
         $submission = null;
-        if ($token && FreeformHelper::get('version') === FREEFORM_PRO) {
+        if ($token && FreeformHelper::getVersion() === FREEFORM_PRO) {
             $submission = SubmissionRepository::getInstance()->getSubmissionByToken($form, $token);
         }
 

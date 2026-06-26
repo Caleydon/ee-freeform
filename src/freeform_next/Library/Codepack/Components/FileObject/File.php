@@ -60,7 +60,7 @@ class File extends FileObject
         }
 
         if (is_callable($callable)) {
-            call_user_func_array($callable, [$newFilePath, $prefix]);
+            $callable($newFilePath, $prefix);
         }
     }
 }
