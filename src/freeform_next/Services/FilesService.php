@@ -35,14 +35,17 @@ class FilesService implements FileUploadHandlerInterface
             return new FileUploadResponse(null, ['File upload source doesn\'t exist']);
         }
 
+        $uploadDestination = ee('Model')->get('UploadDestination', $field->getAssetSourceId())->first();
+
         ee()->load->library('upload');
         ee()->upload->initialize(
             [
-                'max_size'      => (int) $data['max_size'] * 1024,
-                'max_width'     => $data['max_width'],
-                'max_height'    => $data['max_height'],
-                'allowed_types' => '*',
-                'upload_path'   => $data['server_path'],
+                'upload_destination' => $uploadDestination,
+                'max_size'           => (int) $data['max_size'] * 1024,
+                'max_width'          => $data['max_width'],
+                'max_height'         => $data['max_height'],
+                'allowed_types'      => '*',
+                'upload_path'        => $data['server_path'],
             ]
         );
 
