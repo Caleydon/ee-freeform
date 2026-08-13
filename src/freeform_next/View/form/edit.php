@@ -58,6 +58,5 @@
     var csrfToken = "<?php echo CSRF_TOKEN ?>";
 </script>
 
-<script src="<?php echo URL_THIRD_THEMES ?>freeform_next/javascript/composer/vendors.js"></script>
 <script src="<?php echo URL_THIRD_THEMES ?>freeform_next/javascript/composer/app.js"></script>
 <link rel="stylesheet" href="<?php echo URL_THIRD_THEMES ?>freeform_next/css/builder.css" />

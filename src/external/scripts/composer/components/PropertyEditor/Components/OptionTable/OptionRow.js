@@ -29,16 +29,7 @@ const optionRowTarget = {
   },
 };
 
-@DropTarget([OPTION_ROW], optionRowTarget, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  dragItemType: monitor.getItemType(),
-}))
-@DragSource(OPTION_ROW, optionRowSource, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  connectDragPreview: connect.dragPreview(),
-  isDragging: monitor.isDragging(),
-}))
-export default class OptionRow extends Component {
+class OptionRow extends Component {
   static propTypes = {
     hash: PropTypes.string.isRequired,
     label: PropTypes.node.isRequired,
@@ -148,3 +139,12 @@ export default class OptionRow extends Component {
     removeValueSet(hash, index);
   }
 }
+
+export default DropTarget([OPTION_ROW], optionRowTarget, (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  dragItemType: monitor.getItemType(),
+}))(DragSource(OPTION_ROW, optionRowSource, (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  connectDragPreview: connect.dragPreview(),
+  isDragging: monitor.isDragging(),
+}))(OptionRow));

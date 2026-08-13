@@ -23,21 +23,7 @@ import {
 import OptionRow from "./OptionRow";
 import LightSwitchProperty from "../../PropertyItems/LightSwitchProperty";
 
-@connect(
-  (state) => ({
-    properties: state.composer.properties,
-  }),
-  (dispatch) => ({
-    updateValueSet: (hash, index, key, value) => (dispatch(updateValueSet(hash, index, key, value))),
-    updateIsChecked: (hash, index, isChecked) => (dispatch(updateIsChecked(hash, index, isChecked))),
-    addNewValueSet: (hash) => (dispatch(addValueSet(hash))),
-    cleanUp: (hash) => (dispatch(cleanUpValues(hash))),
-    customValuesHandler: (hash, isChecked) => (dispatch(toggleCustomValues(hash, isChecked))),
-    reorderValueSet: (hash, index, newIndex) => dispatch(reorderValueSet(hash, index, newIndex)),
-    removeValueSet: (hash, index) => dispatch(removeValueSet(hash, index)),
-  }),
-)
-export default class OptionTable extends Component {
+class OptionTable extends Component {
   static propTypes = {
     options: PropTypes.array,
     values: PropTypes.array,
@@ -185,3 +171,18 @@ export default class OptionTable extends Component {
     return children;
   }
 }
+
+export default connect(
+  (state) => ({
+    properties: state.composer.properties,
+  }),
+  (dispatch) => ({
+    updateValueSet: (hash, index, key, value) => (dispatch(updateValueSet(hash, index, key, value))),
+    updateIsChecked: (hash, index, isChecked) => (dispatch(updateIsChecked(hash, index, isChecked))),
+    addNewValueSet: (hash) => (dispatch(addValueSet(hash))),
+    cleanUp: (hash) => (dispatch(cleanUpValues(hash))),
+    customValuesHandler: (hash, isChecked) => (dispatch(toggleCustomValues(hash, isChecked))),
+    reorderValueSet: (hash, index, newIndex) => dispatch(reorderValueSet(hash, index, newIndex)),
+    removeValueSet: (hash, index) => dispatch(removeValueSet(hash, index)),
+  }),
+)(OptionTable);

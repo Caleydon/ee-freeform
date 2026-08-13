@@ -18,15 +18,7 @@ import SelectProperty from "./PropertyItems/SelectProperty";
 import TextareaProperty from "./PropertyItems/TextareaProperty";
 import TextProperty from "./PropertyItems/TextProperty";
 
-@connect(
-  (state) => ({
-    solspaceTemplates: state.templates.solspaceTemplates,
-    templates: state.templates.list,
-    composerProperties: state.composer.properties,
-    currentFormHandle: state.composer.properties.form.handle,
-  }),
-)
-export default class Form extends BasePropertyEditor {
+class Form extends BasePropertyEditor {
   static propTypes = {
     formStatuses: PropTypes.array.isRequired,
     solspaceTemplates: PropTypes.array.isRequired,
@@ -197,3 +189,12 @@ export default class Form extends BasePropertyEditor {
       this.update(event);
   }
 }
+
+export default connect(
+  (state) => ({
+    solspaceTemplates: state.templates.solspaceTemplates,
+    templates: state.templates.list,
+    composerProperties: state.composer.properties,
+    currentFormHandle: state.composer.properties.form.handle,
+  }),
+)(Form);

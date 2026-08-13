@@ -33,29 +33,7 @@ const columnSource = {
   },
 };
 
-@connect(
-  (state) => ({
-    pageIndex: state.context.page,
-    currentHash: state.context.hash,
-    layout: state.composer.layout,
-    duplicateHandles: state.duplicateHandles,
-  }),
-  (dispatch) => ({
-    openFieldSettings: (hash) => dispatch(switchHash(hash)),
-    removeColumn: (hash, index, rowIndex, pageIndex) => {
-      dispatch(removeColumn(hash, index, rowIndex, pageIndex));
-      dispatch(removeProperty(hash));
-    },
-    openProperties: (hash) => dispatch(switchHash(hash)),
-    clearPlaceholders: () => dispatch(clearPlaceholders()),
-  }),
-)
-@DragSource(COLUMN, columnSource, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  connectDragPreview: connect.dragPreview(),
-  isDragging: monitor.isDragging(),
-}))
-export default class Column extends Component {
+class Column extends Component {
   static propTypes = {
     hash: PropTypes.string.isRequired,
     index: PropTypes.number.isRequired,
@@ -193,3 +171,25 @@ export default class Column extends Component {
     return img;
   }
 }
+
+export default connect(
+  (state) => ({
+    pageIndex: state.context.page,
+    currentHash: state.context.hash,
+    layout: state.composer.layout,
+    duplicateHandles: state.duplicateHandles,
+  }),
+  (dispatch) => ({
+    openFieldSettings: (hash) => dispatch(switchHash(hash)),
+    removeColumn: (hash, index, rowIndex, pageIndex) => {
+      dispatch(removeColumn(hash, index, rowIndex, pageIndex));
+      dispatch(removeProperty(hash));
+    },
+    openProperties: (hash) => dispatch(switchHash(hash)),
+    clearPlaceholders: () => dispatch(clearPlaceholders()),
+  }),
+)(DragSource(COLUMN, columnSource, (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  connectDragPreview: connect.dragPreview(),
+  isDragging: monitor.isDragging(),
+}))(Column));

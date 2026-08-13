@@ -2,43 +2,19 @@
   "name": "freeform_next",
   "version": "1.0.0",
   "description": "Freeform for EE",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@11.3.0",
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  },
   "dependencies": {
-    "babel": "^6.5.2",
-    "babel-plugin-transform-decorators": "^6.8.0",
-    "babel-plugin-transform-decorators-legacy": "^1.3.5",
-    "babel-plugin-transform-object-rest-spread": "^6.8.0",
-    "babel-polyfill": "^6.16.0",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-preset-react": "^6.11.1",
-    "babel-preset-stage-0": "^6.5.0",
-    "babel-runtime": "^6.26.0",
-    "babelify": "^7.3.0",
     "brace": "^0.8.0",
-    "browserify": "^13.0.1",
-    "chalk": "^1.1.3",
-    "del": "^2.2.1",
     "es6-promise": "^3.2.1",
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^3.1.0",
-    "gulp-babel": "^6.1.2",
-    "gulp-base64-encode": "^1.0.1",
-    "gulp-composer": "^0.4.0",
-    "gulp-if": "^2.0.1",
-    "gulp-mocha": "^2.2.0",
-    "gulp-notify": "^2.2.0",
-    "gulp-ref-hash": "0.0.2",
-    "gulp-rename": "^1.3.0",
-    "gulp-replace": "^0.5.4",
-    "gulp-sass": "^3.0.0",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-uglify": "^1.5.4",
-    "gulp-useref": "^3.1.6",
-    "gulp-util": "^3.0.7",
-    "gulp-zip": "^3.2.0",
     "hashids": "^1.0.2",
     "isomorphic-fetch": "^2.2.1",
-    "natives": "^1.1.6",
-    "npm": "^6.14.8",
     "prop-types": "^15.7.2",
     "qwest": "^4.4.4",
     "react": "^15.7.0",
@@ -51,34 +27,22 @@
     "react-joyride": "1.11.4",
     "react-motion": "^0.4.4",
     "react-redux": "^4.4.10",
-    "reactify": "^1.1.1",
     "redux": "^3.5.2",
     "redux-thunk": "^2.3.0",
-    "streamify": "^0.2.6",
-    "underscore.string": "^3.3.4",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.11.1",
-    "zip-folder": "^1.0.0"
+    "underscore.string": "^3.3.4"
   },
-  "scripts": {
-    "start": "gulp watch",
-    "deploy:pro": "NODE_ENV=production gulp deploy:pro --env prod",
-    "deploy:lite": "NODE_ENV=production gulp deploy:lite --env prod",
-    "deploy:express": "NODE_ENV=production gulp deploy:express --env prod"
-  },
-  "resolutions": {
-    "graceful-fs": "^4.2.4"
+  "devDependencies": {
+    "archiver": "^7.0.1",
+    "browserslist": "^4.24.0",
+    "esbuild": "^0.24.0",
+    "lightningcss": "^1.28.0",
+    "sass": "^1.80.0",
+    "tinyglobby": "^0.2.10"
   },
   "repository": {
     "type": "git",
     "url": "git@solspace.git.beanstalkapp.com:/solspace/ee-freeform.git"
   },
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "gulp-require-tasks": "^1.3.0",
-    "merge-stream": "^2.0.0"
-  }
+  "license": "ISC"
 }

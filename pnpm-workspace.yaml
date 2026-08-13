@@ -1,0 +1,9 @@
+allowBuilds:
+  '@parcel/watcher': false
+  esbuild: false
+# pnpm 11 keeps project settings here (not in package.json).
+# esbuild ships a prebuilt platform binary; allow its install script to run.
+onlyBuiltDependencies:
+  - esbuild
+# Don't auto-run `pnpm install` before `pnpm run` scripts.
+verifyDepsBeforeRun: false

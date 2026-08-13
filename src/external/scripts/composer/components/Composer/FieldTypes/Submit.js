@@ -15,12 +15,7 @@ import * as SubmitPositions from "../../../constants/SubmitPositions";
 import FieldHelper from "../../../helpers/FieldHelper";
 import HtmlInput from "./HtmlInput";
 
-@connect(
-  state => ({
-    layout: state.composer.layout,
-  }),
-)
-export default class Submit extends HtmlInput {
+class Submit extends HtmlInput {
   static propTypes = {
     ...HtmlInput.propTypes,
     properties: PropTypes.shape({
@@ -87,3 +82,9 @@ export default class Submit extends HtmlInput {
     ];
   }
 }
+
+export default connect(
+  state => ({
+    layout: state.composer.layout,
+  }),
+)(Submit);

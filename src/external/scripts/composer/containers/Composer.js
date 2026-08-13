@@ -58,35 +58,7 @@ const composerTarget = {
 };
 
 
-@connect(
-  state => ({
-    layout: state.composer.layout,
-    properties: state.composer.properties,
-    pageIndex: state.context.page,
-    placeholders: state.placeholders,
-  }),
-  dispatch => ({
-    addColumn: (rowIndex, columnIndex, hash, properties, pageIndex) => {
-      if (!properties.id) {
-        hash = hashFromTime();
-      }
-
-      dispatch(addColumnToRow(rowIndex, columnIndex, hash, properties, pageIndex));
-    },
-    moveColumn: (columnIndex, rowIndex, newColumnIndex, newRowIndex, pageIndex) => (
-      dispatch(repositionColumn(columnIndex, rowIndex, newColumnIndex, newRowIndex, pageIndex))
-    ),
-    columnToNewRow: (rowIndex, hash, properties = null, pageIndex) => dispatch(addColumnToNewRow(rowIndex, hash, properties, pageIndex)),
-    removeColumn: (columnIndex, rowIndex, pageIndex) => dispatch(removeColumn(columnIndex, rowIndex, pageIndex)),
-    addRowPlaceholder: (index, hash) => dispatch(addPlaceholderRow(index, hash)),
-    addColumnPlaceholder: (rowIndex, index, hash) => dispatch(addPlaceholderColumn(rowIndex, index, hash)),
-    addFieldToNewRow: (hash, properties, pageIndex) => dispatch(addFieldToNewRow(hash, properties, pageIndex)),
-    clearPlaceholders: () => dispatch(clearPlaceholders()),
-    checkForDuplicateHandles: () => dispatch(checkForDuplicateHandles()),
-  }),
-)
-@DropTarget([FIELD, COLUMN], composerTarget, (connect) => ({ connectDropTarget: connect.dropTarget() }))
-export default class Composer extends Component {
+class Composer extends Component {
   static propTypes = {
     layout: PropTypes.array.isRequired,
     pageIndex: PropTypes.number.isRequired,
@@ -177,3 +149,31 @@ export default class Composer extends Component {
     this.props.removeColumn(columnIndex, rowIndex, this.props.pageIndex);
   }
 }
+
+export default connect(
+  state => ({
+    layout: state.composer.layout,
+    properties: state.composer.properties,
+    pageIndex: state.context.page,
+    placeholders: state.placeholders,
+  }),
+  dispatch => ({
+    addColumn: (rowIndex, columnIndex, hash, properties, pageIndex) => {
+      if (!properties.id) {
+        hash = hashFromTime();
+      }
+
+      dispatch(addColumnToRow(rowIndex, columnIndex, hash, properties, pageIndex));
+    },
+    moveColumn: (columnIndex, rowIndex, newColumnIndex, newRowIndex, pageIndex) => (
+      dispatch(repositionColumn(columnIndex, rowIndex, newColumnIndex, newRowIndex, pageIndex))
+    ),
+    columnToNewRow: (rowIndex, hash, properties = null, pageIndex) => dispatch(addColumnToNewRow(rowIndex, hash, properties, pageIndex)),
+    removeColumn: (columnIndex, rowIndex, pageIndex) => dispatch(removeColumn(columnIndex, rowIndex, pageIndex)),
+    addRowPlaceholder: (index, hash) => dispatch(addPlaceholderRow(index, hash)),
+    addColumnPlaceholder: (rowIndex, index, hash) => dispatch(addPlaceholderColumn(rowIndex, index, hash)),
+    addFieldToNewRow: (hash, properties, pageIndex) => dispatch(addFieldToNewRow(hash, properties, pageIndex)),
+    clearPlaceholders: () => dispatch(clearPlaceholders()),
+    checkForDuplicateHandles: () => dispatch(checkForDuplicateHandles()),
+  }),
+)(DropTarget([FIELD, COLUMN], composerTarget, (connect) => ({ connectDropTarget: connect.dropTarget() }))(Composer));

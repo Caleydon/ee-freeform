@@ -18,16 +18,7 @@ const optionRowTarget = {
   },
 };
 
-@DropTarget([MATRIX_ROW], optionRowTarget, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  dragItemType: monitor.getItemType(),
-}))
-@DragSource(MATRIX_ROW, optionRowSource, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  connectDragPreview: connect.dragPreview(),
-  isDragging: monitor.isDragging(),
-}))
-export default class Row extends Component {
+class Row extends Component {
   static propTypes = {
     rowIndex: PropTypes.number.isRequired,
     columns: PropTypes.array.isRequired,
@@ -84,3 +75,12 @@ export default class Row extends Component {
     )
   }
 }
+
+export default DropTarget([MATRIX_ROW], optionRowTarget, (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  dragItemType: monitor.getItemType(),
+}))(DragSource(MATRIX_ROW, optionRowSource, (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  connectDragPreview: connect.dragPreview(),
+  isDragging: monitor.isDragging(),
+}))(Row));

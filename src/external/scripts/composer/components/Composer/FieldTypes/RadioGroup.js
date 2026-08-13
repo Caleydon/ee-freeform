@@ -16,15 +16,7 @@ import { RADIO_GROUP } from "../../../constants/FieldTypes";
 import Radio from "./Components/Radio";
 import HtmlInput from "./HtmlInput";
 
-@connect(
-  (state) => ({
-    hash: state.context.hash,
-    composerProperties: state.composer.properties,
-    isFetchingOptions: state.generatedOptionLists.isFetching,
-    generatedOptions: state.generatedOptionLists.cache,
-  }),
-)
-export default class RadioGroup extends HtmlInput {
+class RadioGroup extends HtmlInput {
   static propTypes = {
     properties: PropTypes.shape({
       hash: PropTypes.string.isRequired,
@@ -83,3 +75,12 @@ export default class RadioGroup extends HtmlInput {
     return radios;
   }
 }
+
+export default connect(
+  (state) => ({
+    hash: state.context.hash,
+    composerProperties: state.composer.properties,
+    isFetchingOptions: state.generatedOptionLists.isFetching,
+    generatedOptions: state.generatedOptionLists.cache,
+  }),
+)(RadioGroup);

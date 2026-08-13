@@ -17,14 +17,7 @@ import AddNewNotification from "./Components/AddNewNotification";
 import SelectProperty from "./PropertyItems/SelectProperty";
 import TextareaProperty from "./PropertyItems/TextareaProperty";
 
-@connect(
-  (state) => ({
-    hash: state.context.hash,
-    globalProperties: state.composer.properties,
-    notifications: state.notifications.list,
-  }),
-)
-export default class AdminNotifications extends BasePropertyEditor {
+class AdminNotifications extends BasePropertyEditor {
   static propTypes = {
     globalProperties: PropTypes.object.isRequired,
     notifications: PropTypes.oneOfType([
@@ -105,3 +98,11 @@ export default class AdminNotifications extends BasePropertyEditor {
     );
   }
 }
+
+export default connect(
+  (state) => ({
+    hash: state.context.hash,
+    globalProperties: state.composer.properties,
+    notifications: state.notifications.list,
+  }),
+)(AdminNotifications);

@@ -19,19 +19,7 @@ const initialState = {
   isSaving: false,
 };
 
-@connect(
-  (state) => ({
-    formId: state.formId,
-    composer: state.composer,
-    context: state.context,
-    currentFormHandle: state.composer.properties.form.handle,
-  }),
-  (dispatch) => ({
-    updateFormId: (formId) => dispatch(updateFormId(formId)),
-    updateFormHandle: (newHandle) => dispatch(updateProperty(FORM, { handle: newHandle })),
-  }),
-)
-export default class SaveButton extends Component {
+class SaveButton extends Component {
   static propTypes = {
     saveUrl: PropTypes.string.isRequired,
     formUrl: PropTypes.string.isRequired,
@@ -165,3 +153,16 @@ export default class SaveButton extends Component {
     return (event.ctrlKey && !event.altKey);
   }
 }
+
+export default connect(
+  (state) => ({
+    formId: state.formId,
+    composer: state.composer,
+    context: state.context,
+    currentFormHandle: state.composer.properties.form.handle,
+  }),
+  (dispatch) => ({
+    updateFormId: (formId) => dispatch(updateFormId(formId)),
+    updateFormHandle: (newHandle) => dispatch(updateProperty(FORM, { handle: newHandle })),
+  }),
+)(SaveButton);

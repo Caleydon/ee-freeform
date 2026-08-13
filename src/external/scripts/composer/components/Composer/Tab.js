@@ -82,36 +82,7 @@ const pageTarget = {
   },
 };
 
-@connect(
-  state => ({
-    layout: state.composer.layout,
-    placeholderPageIndex: state.placeholders.pageIndex,
-  }),
-  dispatch => ({
-    removePage: (pageIndex) => {
-      dispatch(removePage(pageIndex));
-      dispatch(switchHash("form"));
-      dispatch(switchPage(0));
-    },
-    clearPlaceholders: () => dispatch(clearPlaceholders()),
-    swapPage: (newIndex, oldIndex) => dispatch(swapPage(newIndex, oldIndex)),
-    placeholderPage: (pageIndex) => dispatch(placeholderPage(pageIndex)),
-    columnToNewRow: (rowIndex, hash, properties, pageIndex, prevPageIndex) => dispatch(
-      addColumnToNewRow(rowIndex, hash, properties, pageIndex, prevPageIndex)
-    ),
-  }),
-)
-@DropTarget(
-  [PAGE, COLUMN],
-  pageTarget,
-  (connect) => ({ connectDropTarget: connect.dropTarget() })
-)
-@DragSource(PAGE, pageSource, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  connectDragPreview: connect.dragPreview(),
-  isDragging: monitor.isDragging(),
-}))
-export default class Tab extends Component {
+class Tab extends Component {
   static propTypes = {
     index: PropTypes.number.isRequired,
     isSelected: PropTypes.bool.isRequired,
@@ -173,3 +144,31 @@ export default class Tab extends Component {
     return false;
   }
 }
+
+export default connect(
+  state => ({
+    layout: state.composer.layout,
+    placeholderPageIndex: state.placeholders.pageIndex,
+  }),
+  dispatch => ({
+    removePage: (pageIndex) => {
+      dispatch(removePage(pageIndex));
+      dispatch(switchHash("form"));
+      dispatch(switchPage(0));
+    },
+    clearPlaceholders: () => dispatch(clearPlaceholders()),
+    swapPage: (newIndex, oldIndex) => dispatch(swapPage(newIndex, oldIndex)),
+    placeholderPage: (pageIndex) => dispatch(placeholderPage(pageIndex)),
+    columnToNewRow: (rowIndex, hash, properties, pageIndex, prevPageIndex) => dispatch(
+      addColumnToNewRow(rowIndex, hash, properties, pageIndex, prevPageIndex)
+    ),
+  }),
+)(DropTarget(
+  [PAGE, COLUMN],
+  pageTarget,
+  (connect) => ({ connectDropTarget: connect.dropTarget() })
+)(DragSource(PAGE, pageSource, (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  connectDragPreview: connect.dragPreview(),
+  isDragging: monitor.isDragging(),
+}))(Tab)));

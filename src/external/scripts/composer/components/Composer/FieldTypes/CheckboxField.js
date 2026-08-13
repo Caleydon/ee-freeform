@@ -17,14 +17,7 @@ import Checkbox from "./Components/Checkbox";
 import Instructions from "./Components/Instructions";
 import HtmlInput from "./HtmlInput";
 
-@connect(
-  (state) => ({
-    hash: state.context.hash,
-    composerProperties: state.composer.properties,
-    mailingListIntegrations: state.mailingLists.list,
-  }),
-)
-export default class CheckboxField extends HtmlInput {
+class CheckboxField extends HtmlInput {
   static propTypes = {
     mailingListIntegrations: PropTypes.array.isRequired,
     hash: PropTypes.string,
@@ -79,3 +72,11 @@ export default class CheckboxField extends HtmlInput {
     );
   }
 }
+
+export default connect(
+  (state) => ({
+    hash: state.context.hash,
+    composerProperties: state.composer.properties,
+    mailingListIntegrations: state.mailingLists.list,
+  }),
+)(CheckboxField);

@@ -21,21 +21,7 @@ import TextareaProperty from "./PropertyItems/TextareaProperty";
 import TextProperty from "./PropertyItems/TextProperty";
 import LightSwitchProperty from "./PropertyItems/LightSwitchProperty";
 
-@connect(
-  (state) => ({
-    composerProperties: state.composer.properties,
-    hash: state.context.hash,
-    mailingLists: state.mailingLists.list,
-    isFetching: state.mailingLists.isFetching,
-  }),
-  (dispatch) => ({
-    fetchMailingLists: () => {
-      dispatch(invalidateMailingLists());
-      dispatch(fetchMailingListsIfNeeded());
-    },
-  }),
-)
-export default class MailingList extends BasePropertyEditor {
+class MailingList extends BasePropertyEditor {
   static propTypes = {
     fetchMailingLists: PropTypes.func.isRequired,
     isFetching: PropTypes.bool.isRequired,
@@ -256,3 +242,18 @@ export default class MailingList extends BasePropertyEditor {
     this.update(event);
   }
 }
+
+export default connect(
+  (state) => ({
+    composerProperties: state.composer.properties,
+    hash: state.context.hash,
+    mailingLists: state.mailingLists.list,
+    isFetching: state.mailingLists.isFetching,
+  }),
+  (dispatch) => ({
+    fetchMailingLists: () => {
+      dispatch(invalidateMailingLists());
+      dispatch(fetchMailingListsIfNeeded());
+    },
+  }),
+)(MailingList);

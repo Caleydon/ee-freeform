@@ -18,21 +18,7 @@ import IntegrationMappingTable from "./Components/IntegrationMappingTable/Integr
 import CustomProperty from "./PropertyItems/CustomProperty";
 import SelectProperty from "./PropertyItems/SelectProperty";
 
-@connect(
-  (state) => ({
-    properties: state.composer.properties,
-    integrationProperties: state.composer.properties.integration,
-    integrationList: state.integrations.list,
-    isFetching: state.integrations.isFetching,
-  }),
-  (dispatch) => ({
-    fetchCrmIntegrations: () => {
-      dispatch(invalidateCrmIntegrations());
-      dispatch(fetchCrmIntegrationsIfNeeded());
-    },
-  }),
-)
-export default class Integrations extends BasePropertyEditor {
+class Integrations extends BasePropertyEditor {
   static propTypes = {
     integrationList: PropTypes.array.isRequired,
     integrationProperties: PropTypes.object.isRequired,
@@ -148,3 +134,18 @@ export default class Integrations extends BasePropertyEditor {
     });
   }
 }
+
+export default connect(
+  (state) => ({
+    properties: state.composer.properties,
+    integrationProperties: state.composer.properties.integration,
+    integrationList: state.integrations.list,
+    isFetching: state.integrations.isFetching,
+  }),
+  (dispatch) => ({
+    fetchCrmIntegrations: () => {
+      dispatch(invalidateCrmIntegrations());
+      dispatch(fetchCrmIntegrationsIfNeeded());
+    },
+  }),
+)(Integrations);

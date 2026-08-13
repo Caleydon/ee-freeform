@@ -16,15 +16,7 @@ import { CHECKBOX_GROUP } from "../../../constants/FieldTypes";
 import Checkbox from "./Components/Checkbox";
 import HtmlInput from "./HtmlInput";
 
-@connect(
-  (state) => ({
-    hash: state.context.hash,
-    composerProperties: state.composer.properties,
-    isFetchingOptions: state.generatedOptionLists.isFetching,
-    generatedOptions: state.generatedOptionLists.cache,
-  }),
-)
-export default class CheckboxGroup extends HtmlInput {
+class CheckboxGroup extends HtmlInput {
   static propTypes = {
     properties: PropTypes.shape({
       hash: PropTypes.string.isRequired,
@@ -83,3 +75,12 @@ export default class CheckboxGroup extends HtmlInput {
     return checkboxes;
   }
 }
+
+export default connect(
+  (state) => ({
+    hash: state.context.hash,
+    composerProperties: state.composer.properties,
+    isFetchingOptions: state.generatedOptionLists.isFetching,
+    generatedOptions: state.generatedOptionLists.cache,
+  }),
+)(CheckboxGroup);

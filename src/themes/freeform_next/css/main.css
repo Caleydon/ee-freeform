@@ -6,7 +6,8 @@
  * @copyright     Copyright (c) 2008-2026, Solspace, Inc.
  * @link          https://docs.solspace.com/expressionengine/freeform/v3/
  * @license       https://docs.solspace.com/license-agreement/
- *//*!
+ */
+/*!
  * Freeform for ExpressionEngine
  *
  * @package       Solspace:Freeform
@@ -14,4 +15,5 @@
  * @copyright     Copyright (c) 2008-2026, Solspace, Inc.
  * @link          https://docs.solspace.com/expressionengine/freeform/v3/
  * @license       https://docs.solspace.com/license-agreement/
- */.color-indicator{display:inline-block;width:10px;height:10px;margin-right:5px;box-shadow:inset 0 0 1px rgba(0,0,0,0.6);border-radius:5px}
+ */
+.color-indicator{border-radius:5px;width:10px;height:10px;margin-right:5px;display:inline-block;box-shadow:inset 0 0 1px #0009}

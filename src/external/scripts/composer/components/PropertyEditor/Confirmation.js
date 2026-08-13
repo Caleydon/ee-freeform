@@ -18,13 +18,7 @@ import TextareaProperty from "./PropertyItems/TextareaProperty";
 import TextProperty from "./PropertyItems/TextProperty";
 import LightSwitchProperty from "./PropertyItems/LightSwitchProperty";
 
-@connect(
-  (state) => ({
-    composerProperties: state.composer.properties,
-    hash: state.context.hash,
-  }),
-)
-export default class Confirmation extends BasePropertyEditor {
+class Confirmation extends BasePropertyEditor {
   static contextTypes = {
     ...BasePropertyEditor.contextTypes,
     properties: PropTypes.shape({
@@ -135,3 +129,10 @@ export default class Confirmation extends BasePropertyEditor {
     );
   }
 }
+
+export default connect(
+  (state) => ({
+    composerProperties: state.composer.properties,
+    hash: state.context.hash,
+  }),
+)(Confirmation);

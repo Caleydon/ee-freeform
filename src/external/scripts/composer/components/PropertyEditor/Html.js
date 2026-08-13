@@ -10,11 +10,16 @@
 
 import PropTypes from "prop-types";
 import React from "react";
-import AceEditor from "react-ace";
+import AceEditorModule from "react-ace";
 import BasePropertyEditor from "./BasePropertyEditor";
 import TextProperty from "./PropertyItems/TextProperty";
 import "brace/mode/html";
 import "brace/theme/chrome";
+
+// react-ace ships a Babel-compiled CommonJS default export with no ESM build. esbuild
+// follows Node's ESM interop and does not auto-unwrap `__esModule` default exports the
+// way the old Browserify/Babel build did, so unwrap it here.
+const AceEditor = AceEditorModule.default || AceEditorModule;
 
 export default class Html extends BasePropertyEditor {
   static contextTypes = {

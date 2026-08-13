@@ -18,14 +18,7 @@ import TextareaProperty from "./PropertyItems/TextareaProperty";
 import TextProperty from "./PropertyItems/TextProperty";
 import LightSwitchProperty from "./PropertyItems/LightSwitchProperty";
 
-@connect(
-  (state) => ({
-    hash: state.context.hash,
-    globalProperties: state.composer.properties,
-    notifications: state.notifications.list,
-  })
-)
-export default class Email extends BasePropertyEditor {
+class Email extends BasePropertyEditor {
   static propTypes = {
     globalProperties: PropTypes.object.isRequired,
     notifications: PropTypes.oneOfType([
@@ -142,3 +135,11 @@ export default class Email extends BasePropertyEditor {
     );
   }
 }
+
+export default connect(
+  (state) => ({
+    hash: state.context.hash,
+    globalProperties: state.composer.properties,
+    notifications: state.notifications.list,
+  })
+)(Email);

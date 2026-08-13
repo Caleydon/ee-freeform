@@ -42,17 +42,7 @@ const fieldSource = {
 };
 
 
-@connect(
-  null,
-  (dispatch) => ({
-    clearPlaceholders: () => dispatch(clearPlaceholders()),
-  }),
-)
-@DragSource(FIELD, fieldSource, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  isDragging: monitor.isDragging(),
-}))
-export default class Field extends Component {
+class Field extends Component {
   static propTypes = {
     hash: PropTypes.string,
     type: PropTypes.string.isRequired,
@@ -86,3 +76,13 @@ export default class Field extends Component {
     );
   }
 }
+
+export default connect(
+  null,
+  (dispatch) => ({
+    clearPlaceholders: () => dispatch(clearPlaceholders()),
+  }),
+)(DragSource(FIELD, fieldSource, (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging(),
+}))(Field));

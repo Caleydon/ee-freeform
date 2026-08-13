@@ -8,8 +8,13 @@
  * @license       https://docs.solspace.com/license-agreement/
  */
 
-import Hashids from "hashids";
+import HashidsModule from "hashids";
 import { underscored } from "underscore.string";
+
+// hashids ships a Babel-compiled CommonJS default export. esbuild follows Node's
+// ESM interop (default === module.exports) and does not auto-unwrap `__esModule`
+// default exports the way the old Browserify/Babel build did, so unwrap it here.
+const Hashids = HashidsModule.default || HashidsModule;
 
 const minHashLength = 9;
 const hashids = new Hashids("composer", minHashLength);

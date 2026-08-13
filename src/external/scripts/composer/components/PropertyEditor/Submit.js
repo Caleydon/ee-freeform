@@ -18,14 +18,7 @@ import PositionProperty from "./Components/Submit/PositionProperty";
 import TextProperty from "./PropertyItems/TextProperty";
 import LightSwitchProperty from "./PropertyItems/LightSwitchProperty";
 
-@connect(
-  state => ({
-    layout: state.composer.layout,
-    properties: state.composer.properties,
-    hash: state.context.hash,
-  }),
-)
-export default class Submit extends BasePropertyEditor {
+class Submit extends BasePropertyEditor {
   static propTypes = {
     layout: PropTypes.array.isRequired,
   };
@@ -102,3 +95,11 @@ export default class Submit extends BasePropertyEditor {
     );
   }
 }
+
+export default connect(
+  state => ({
+    layout: state.composer.layout,
+    properties: state.composer.properties,
+    hash: state.context.hash,
+  }),
+)(Submit);
