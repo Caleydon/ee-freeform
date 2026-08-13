@@ -17,18 +17,7 @@ import { fetchFieldsIfNeeded, invalidateFields } from "../../../actions/Fields";
 import * as FieldTypes from "../../../constants/FieldTypes";
 import { getHandleValue } from "../../../helpers/Utilities";
 
-@connect(
-  (state) => ({
-    fieldTypeList: state.fields.types,
-  }),
-  (dispatch) => ({
-    fetchFields: () => {
-      dispatch(invalidateFields());
-      dispatch(fetchFieldsIfNeeded());
-    },
-  }),
-)
-export default class FieldProperties extends Component {
+class FieldProperties extends Component {
   static initialState = {
     label: "",
     handle: "",
@@ -258,3 +247,15 @@ export default class FieldProperties extends Component {
     this.setState({ errors: [] });
   }
 }
+
+export default connect(
+  (state) => ({
+    fieldTypeList: state.fields.types,
+  }),
+  (dispatch) => ({
+    fetchFields: () => {
+      dispatch(invalidateFields());
+      dispatch(fetchFieldsIfNeeded());
+    },
+  }),
+)(FieldProperties);

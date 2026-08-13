@@ -16,16 +16,7 @@ import { connect } from "react-redux";
 import { fetchNotificationsIfNeeded, invalidateNotifications } from "../../../actions/Notifications";
 import { getHandleValue } from "../../../helpers/Utilities";
 
-@connect(
-  null,
-  (dispatch) => ({
-    fetchNotifications: (hash, id) => {
-      dispatch(invalidateNotifications());
-      dispatch(fetchNotificationsIfNeeded(hash, id));
-    },
-  }),
-)
-export default class NotificationProperties extends Component {
+class NotificationProperties extends Component {
   static initialState = {
     name: "",
     handle: "",
@@ -225,3 +216,13 @@ export default class NotificationProperties extends Component {
     this.setState({ errors: [] });
   }
 }
+
+export default connect(
+  null,
+  (dispatch) => ({
+    fetchNotifications: (hash, id) => {
+      dispatch(invalidateNotifications());
+      dispatch(fetchNotificationsIfNeeded(hash, id));
+    },
+  }),
+)(NotificationProperties);

@@ -1,42 +1,46 @@
-# Solspace: FreeForm
+# Solspace: Freeform (ExpressionEngine)
 
-## Setting-up dev environment
+## Requirements
 
-1. Switch to folder: `cd ~/Repos/ee-freeform`
-2. Install Yarn in environment: `yarn install`
-3. Update Yarn: `yarn update`
-4. Deploy editions individually:
-    - `yarn deploy:express`
-    - `yarn deploy:lite`
-    - `yarn deploy:pro`
-5. Everything will be deployed to the `[..]/ee-freeform/dist` folder.
+- **Node 24** (Node 22 also works). If you use `nvm`: `nvm use` (reads `.nvmrc`).
+- **pnpm** (`corepack enable` or install globally).
 
-## Building the packages for official releases
+## Building
 
-1. Make sure you're using Node ~10. If you have `nvm` installed, you can switch to node 10 by using `nvm use 10`
-2. Run the following three commands to build the files. After each command, copy the zip file in `/dist` to a different location, since each command cleans up this folder to build the zip file:
-   1. `npm run deploy:express`
-   2. `npm run deploy:lite`
-   3. `npm run deploy:pro`
+Install dependencies once, then build:
 
-**Note**: What the `npm` commands does is run `gulp deploy` commands. Probably better to not try to run `gulp` directly.
+```sh
+pnpm install
+pnpm run build
+```
 
-## Composer
+`pnpm run build` does everything in one pass:
 
-With PHP 8 out, some libraries used through composer are not compatible between PHP 7 and 8 (in particular 8.1 as of this writing). Running composer with PHP 7 would complain that some library versions were too high, and bringing those versions down would make PHP 8 complain when using composer.
+- Bundles the React form builder with **esbuild** → `src/themes/freeform_next/javascript/composer/app.js`
+- Copies the standalone control-panel scripts verbatim (kept readable, not minified) → `src/freeform_next/javascript/`
+- Compiles SCSS with **dart-sass** and prefixes/minifies with **Lightning CSS** → `src/themes/freeform_next/css/`
+- Copies fonts, themes and the datepicker assets, and base64-encodes the "crypt" helpers
+- Installs the PHP Composer dependencies (if `composer` is available; otherwise the
+  committed `vendor/` is packaged as-is)
+- Packages the full addon into **`dist/EE-Freeform_<version>.zip`** — the file you drop into EE
 
-This was remedied by adding a `/php7` folder containing a PHP 7-friendly version of composer. `addon.setup.php` is where we load up composer dependencies, so a conditional controls if the PHP 7 or 8 version of dependencies are loaded.
+The version in the zip name is read from `src/freeform_next/addon.setup.php`.
 
-When preparing a release, make sure to run `composer` at both levels.
+## Build toolchain
 
-### For PHP 7:
+The build is a single Node script, `scripts/build.mjs` — no Gulp, Babel or Browserify. Everything
+runs on current tooling: esbuild (JS), dart-sass + Lightning CSS (styles), and Node's own
+`fs`/`child_process` for copying, encoding and zipping.
 
-1. Go into the `php7` folder.
-2. Run composer with PHP 7. If you're using something like Homebrew, this is how this would work: `/opt/homebrew/opt/php@7.1/bin/php /usr/local/bin/composer update`
+> Note: the React builder UI still targets React 15; the build compiles it as-is. esbuild's
+> minimum output target is ES2015, so IE11 is not supported.
 
-### For PHP 8:
+## Composer / PHP
 
-1. Go to the root folder of the repo.
-2. Run composer with PHP 8. If you're using something like Homebrew, this is how this would work: `/opt/homebrew/opt/php@8.1/bin/php /usr/local/bin/composer update`
+`pnpm run build` runs `composer install` for you when possible. Some Composer libraries differ
+between PHP 7 and PHP 8, so if you need to refresh `vendor/` manually run Composer against the
+appropriate PHP version, e.g.:
 
-**NOTE**: Make sure you add the full path of `composer` (eg. `/usr/local/bin/composer`) if you're using a custom php version on your computer to run `composer` instead of the global `php` command you might have set up on your computer.
+```sh
+/opt/homebrew/opt/php@8.3/bin/php $(which composer) update --working-dir=src/freeform_next
+```

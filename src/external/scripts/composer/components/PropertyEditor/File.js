@@ -18,15 +18,7 @@ import TextareaProperty from "./PropertyItems/TextareaProperty";
 import TextProperty from "./PropertyItems/TextProperty";
 import LightSwitchProperty from "./PropertyItems/LightSwitchProperty";
 
-@connect(
-  (state) => ({
-    hash: state.context.hash,
-    properties: state.composer.properties,
-    assetSources: state.assetSources,
-    allFileKinds: state.fileKinds,
-  }),
-)
-export default class File extends BasePropertyEditor {
+class File extends BasePropertyEditor {
   static propTypes = {
     assetSources: PropTypes.arrayOf(
       PropTypes.shape({
@@ -172,3 +164,12 @@ export default class File extends BasePropertyEditor {
     return fileKindList;
   }
 }
+
+export default connect(
+  (state) => ({
+    hash: state.context.hash,
+    properties: state.composer.properties,
+    assetSources: state.assetSources,
+    allFileKinds: state.fileKinds,
+  }),
+)(File);

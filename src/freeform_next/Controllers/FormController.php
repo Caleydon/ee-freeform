@@ -186,7 +186,6 @@ class FormController extends Controller
         $view
             ->setHeading($form->name ?: 'New Form')
             ->setSidebarDisabled(true)
-            ->addJavascript('composer/vendors.js')
             ->addJavascript('composer/app.js')
             ->addBreadcrumb(new NavigationLink('Forms', 'forms'))
             ->setTemplateVariables(

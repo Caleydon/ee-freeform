@@ -13,14 +13,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { insertValue, removeValue } from "../../../../actions/Actions";
 
-@connect(
-  null,
-  (dispatch) => ({
-    insertValue: (hash, value) => dispatch(insertValue(hash, value)),
-    removeValue: (hash, value) => dispatch(removeValue(hash, value)),
-  })
-)
-export default class PredefinedOptionRow extends Component {
+class PredefinedOptionRow extends Component {
   static propTypes = {
     hash: PropTypes.string.isRequired,
     label: PropTypes.node.isRequired,
@@ -78,3 +71,11 @@ export default class PredefinedOptionRow extends Component {
     }
   }
 }
+
+export default connect(
+  null,
+  (dispatch) => ({
+    insertValue: (hash, value) => dispatch(insertValue(hash, value)),
+    removeValue: (hash, value) => dispatch(removeValue(hash, value)),
+  })
+)(PredefinedOptionRow);

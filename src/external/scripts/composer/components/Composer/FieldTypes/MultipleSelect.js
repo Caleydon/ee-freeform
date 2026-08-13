@@ -16,14 +16,7 @@ import { MULTIPLE_SELECT } from "../../../constants/FieldTypes";
 import Option from "./Components/Option";
 import HtmlInput from "./HtmlInput";
 
-@connect(
-  (state) => ({
-    globalProps: state.composer.properties,
-    isFetchingOptions: state.generatedOptionLists.isFetching,
-    generatedOptions: state.generatedOptionLists.cache,
-  }),
-)
-export default class MultipleSelect extends HtmlInput {
+class MultipleSelect extends HtmlInput {
   static propTypes = {
     properties: PropTypes.shape({
       hash: PropTypes.string.isRequired,
@@ -108,3 +101,11 @@ export default class MultipleSelect extends HtmlInput {
     return field;
   }
 }
+
+export default connect(
+  (state) => ({
+    globalProps: state.composer.properties,
+    isFetchingOptions: state.generatedOptionLists.isFetching,
+    generatedOptions: state.generatedOptionLists.cache,
+  }),
+)(MultipleSelect);

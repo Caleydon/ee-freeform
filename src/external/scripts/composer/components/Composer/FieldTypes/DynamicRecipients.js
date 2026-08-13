@@ -18,13 +18,7 @@ import Option          from "./Components/Option";
 import Radio           from "./Components/Radio";
 import HtmlInput       from "./HtmlInput";
 
-@connect(
-  (state) => ({
-    hash: state.context.hash,
-    composerProperties: state.composer.properties,
-  }),
-)
-export default class DynamicRecipients extends HtmlInput {
+class DynamicRecipients extends HtmlInput {
   static propTypes = {
     ...HtmlInput.propTypes,
     notificationId: PropTypes.number,
@@ -158,3 +152,10 @@ export default class DynamicRecipients extends HtmlInput {
     );
   }
 }
+
+export default connect(
+  (state) => ({
+    hash: state.context.hash,
+    composerProperties: state.composer.properties,
+  }),
+)(DynamicRecipients);

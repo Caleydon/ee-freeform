@@ -16,16 +16,7 @@ import { connect } from "react-redux";
 import { underscored } from "underscore.string";
 import { fetchFormTemplatesIfNeeded, invalidateFormTemplates } from "../../../actions/FormTemplates";
 
-@connect(
-  null,
-  (dispatch) => ({
-    fetchTemplates: (hash, templateName) => {
-      dispatch(invalidateFormTemplates());
-      dispatch(fetchFormTemplatesIfNeeded(hash, templateName));
-    },
-  }),
-)
-export default class NotificationProperties extends Component {
+class NotificationProperties extends Component {
   static initialState = {
     name: "",
     fileName: "",
@@ -209,3 +200,13 @@ export default class NotificationProperties extends Component {
     this.setState({ errors: [] });
   }
 }
+
+export default connect(
+  null,
+  (dispatch) => ({
+    fetchTemplates: (hash, templateName) => {
+      dispatch(invalidateFormTemplates());
+      dispatch(fetchFormTemplatesIfNeeded(hash, templateName));
+    },
+  }),
+)(NotificationProperties);

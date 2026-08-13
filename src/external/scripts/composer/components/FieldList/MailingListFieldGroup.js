@@ -14,10 +14,7 @@ import { connect } from "react-redux";
 import FieldHelper from "../../helpers/FieldHelper";
 import Field from "./Field";
 
-@connect(state => ({
-  currentPage: state.context.page,
-}))
-export default class MailingListFieldGroup extends Component {
+class MailingListFieldGroup extends Component {
   static propTypes = {
     fields: PropTypes.arrayOf(
       PropTypes.shape({
@@ -59,3 +56,7 @@ export default class MailingListFieldGroup extends Component {
     );
   }
 }
+
+export default connect(state => ({
+  currentPage: state.context.page,
+}))(MailingListFieldGroup);

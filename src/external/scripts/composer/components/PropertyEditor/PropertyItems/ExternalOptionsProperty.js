@@ -14,24 +14,7 @@ const initialState = {
   emptyOption: "",
 };
 
-@connect(
-  (state) => ({
-    sourceTargets: state.sourceTargets,
-    customFields: state.customFields,
-    isFetchingOptions: state.generatedOptionLists.isFetching,
-    generatedOptions: state.generatedOptionLists.cache,
-    channelFields: state.channelFields,
-    categoryFields: state.categoryFields,
-    memberFields: state.memberFields,
-  }),
-  (dispatch) => ({
-    fetchGeneratedOptions: (hash, source, target, configuration) => {
-      dispatch(invalidateGeneratedOptions(hash));
-      dispatch(fetchGeneratedOptionsIfNeeded(hash, source, target, configuration));
-    },
-  })
-)
-export default class ExternalOptionsProperty extends BasePropertyItem {
+class ExternalOptionsProperty extends BasePropertyItem {
   static propTypes = {
     ...BasePropertyItem.propTypes,
     label: PropTypes.string,
@@ -733,3 +716,21 @@ export default class ExternalOptionsProperty extends BasePropertyItem {
     fetchGeneratedOptions(hash, source, target, updatedConfiguration);
   }
 }
+
+export default connect(
+  (state) => ({
+    sourceTargets: state.sourceTargets,
+    customFields: state.customFields,
+    isFetchingOptions: state.generatedOptionLists.isFetching,
+    generatedOptions: state.generatedOptionLists.cache,
+    channelFields: state.channelFields,
+    categoryFields: state.categoryFields,
+    memberFields: state.memberFields,
+  }),
+  (dispatch) => ({
+    fetchGeneratedOptions: (hash, source, target, configuration) => {
+      dispatch(invalidateGeneratedOptions(hash));
+      dispatch(fetchGeneratedOptionsIfNeeded(hash, source, target, configuration));
+    },
+  })
+)(ExternalOptionsProperty);

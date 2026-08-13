@@ -18,20 +18,7 @@ import MailingListFieldGroup from "../components/FieldList/MailingListFieldGroup
 import SpecialFieldGroup from "../components/FieldList/SpecialFieldGroup";
 import FieldHelper from "../helpers/FieldHelper";
 
-@connect(
-  (state) => ({
-    fields: state.fields.fields,
-    specialFields: state.specialFields,
-    mailingListFields: state.mailingLists.list,
-    layout: state.composer.layout,
-  }),
-  (dispatch) => ({
-    onFieldClick: (hash, properties, pageIndex) => {
-      dispatch(addFieldToNewRow(hash, properties, pageIndex));
-    },
-  }),
-)
-export default class FieldList extends Component {
+class FieldList extends Component {
   static propTypes = {
     fields: PropTypes.array.isRequired,
     specialFields: PropTypes.array.isRequired,
@@ -89,3 +76,17 @@ export default class FieldList extends Component {
     return usedFields;
   }
 }
+
+export default connect(
+  (state) => ({
+    fields: state.fields.fields,
+    specialFields: state.specialFields,
+    mailingListFields: state.mailingLists.list,
+    layout: state.composer.layout,
+  }),
+  (dispatch) => ({
+    onFieldClick: (hash, properties, pageIndex) => {
+      dispatch(addFieldToNewRow(hash, properties, pageIndex));
+    },
+  }),
+)(FieldList);

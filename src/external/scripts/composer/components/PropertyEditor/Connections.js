@@ -15,18 +15,7 @@ import { addConnection, removeConnection, updateConnection } from "./../../actio
 import BasePropertyEditor from "./BasePropertyEditor";
 import ConnectionWrapper from "./Components/Connections/ConnectionWrapper";
 
-@connect(
-  (state) => ({
-    properties: state.composer.properties,
-    connections: state.composer.properties.connections,
-  }),
-  (dispatch) => ({
-    addConnection: () => dispatch(addConnection()),
-    removeConnection: (index) => dispatch(removeConnection(index)),
-    updateConnection: (index, properties) => dispatch(updateConnection(index, properties)),
-  })
-)
-export default class Connections extends BasePropertyEditor {
+class Connections extends BasePropertyEditor {
   static propTypes = {
     connections: PropTypes.object.isRequired,
     addConnection: PropTypes.func.isRequired,
@@ -72,3 +61,15 @@ export default class Connections extends BasePropertyEditor {
     );
   }
 }
+
+export default connect(
+  (state) => ({
+    properties: state.composer.properties,
+    connections: state.composer.properties.connections,
+  }),
+  (dispatch) => ({
+    addConnection: () => dispatch(addConnection()),
+    removeConnection: (index) => dispatch(removeConnection(index)),
+    updateConnection: (index, properties) => dispatch(updateConnection(index, properties)),
+  })
+)(Connections);

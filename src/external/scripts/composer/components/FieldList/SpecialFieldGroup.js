@@ -15,11 +15,7 @@ import FieldHelper from "../../helpers/FieldHelper";
 import AddNewField from "./Components/AddNewField";
 import Field from "./Field";
 
-@connect(state => ({
-  currentPage: state.context.page,
-  fieldCount: state.fields.fields.length,
-}))
-export default class SpecialFieldGroup extends Component {
+class SpecialFieldGroup extends Component {
   static propTypes = {
     fieldCount: PropTypes.number.isRequired,
     fields: PropTypes.arrayOf(
@@ -66,3 +62,8 @@ export default class SpecialFieldGroup extends Component {
     );
   }
 }
+
+export default connect(state => ({
+  currentPage: state.context.page,
+  fieldCount: state.fields.fields.length,
+}))(SpecialFieldGroup);

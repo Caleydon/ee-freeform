@@ -16,14 +16,7 @@ import Badge from "./Components/Badge";
 import Checkbox from "./Components/Checkbox";
 import HtmlInput from "./HtmlInput";
 
-@connect(
-  (state) => ({
-    hash: state.context.hash,
-    composerProperties: state.composer.properties,
-    mailingListIntegrations: state.mailingLists.list,
-  }),
-)
-export default class MailingList extends HtmlInput {
+class MailingList extends HtmlInput {
   static propTypes = {
     mailingListIntegrations: PropTypes.array.isRequired,
     hash: PropTypes.string,
@@ -113,3 +106,11 @@ export default class MailingList extends HtmlInput {
     );
   }
 }
+
+export default connect(
+  (state) => ({
+    hash: state.context.hash,
+    composerProperties: state.composer.properties,
+    mailingListIntegrations: state.mailingLists.list,
+  }),
+)(MailingList);

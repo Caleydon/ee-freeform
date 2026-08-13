@@ -4,16 +4,7 @@ import { connect } from "react-redux";
 import { addRow, removeRow, swapRow, updateColumn } from "../../../actions/MatrixEditor";
 import Row from "./Table/Row";
 
-@connect(
-  null,
-  (dispatch) => ({
-    addRow: (hash, attribute) => dispatch(addRow(hash, attribute)),
-    removeRow: (hash, attribute, rowIndex) => dispatch(removeRow(hash, attribute, rowIndex)),
-    swapRow: (hash, attribute, oldRowIndex, newRowIndex) => dispatch(swapRow(hash, attribute, oldRowIndex, newRowIndex)),
-    updateColumn: (hash, attribute, rowIndex, name, value) => dispatch(updateColumn(hash, attribute, rowIndex, name, value)),
-  }),
-)
-export default class MatrixEditorProperty extends Component {
+class MatrixEditorProperty extends Component {
   static propTypes = {
     hash: PropTypes.string.isRequired,
     attribute: PropTypes.string.isRequired,
@@ -116,3 +107,13 @@ export default class MatrixEditorProperty extends Component {
     )
   };
 }
+
+export default connect(
+  null,
+  (dispatch) => ({
+    addRow: (hash, attribute) => dispatch(addRow(hash, attribute)),
+    removeRow: (hash, attribute, rowIndex) => dispatch(removeRow(hash, attribute, rowIndex)),
+    swapRow: (hash, attribute, oldRowIndex, newRowIndex) => dispatch(swapRow(hash, attribute, oldRowIndex, newRowIndex)),
+    updateColumn: (hash, attribute, rowIndex, name, value) => dispatch(updateColumn(hash, attribute, rowIndex, name, value)),
+  }),
+)(MatrixEditorProperty);

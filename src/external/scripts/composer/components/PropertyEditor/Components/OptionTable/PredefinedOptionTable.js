@@ -13,14 +13,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PredefinedOptionRow from "./PredefinedOptionRow";
 
-@connect(
-  (state) => ({
-    generatedOptions: state.generatedOptionLists.cache,
-    properties: state.composer.properties,
-  }),
-  (dispatch) => ({}),
-)
-export default class PredefinedOptionTable extends Component {
+class PredefinedOptionTable extends Component {
   static propTypes = {
     values: PropTypes.array,
     value: PropTypes.node,
@@ -94,3 +87,11 @@ export default class PredefinedOptionTable extends Component {
     return children;
   }
 }
+
+export default connect(
+  (state) => ({
+    generatedOptions: state.generatedOptionLists.cache,
+    properties: state.composer.properties,
+  }),
+  (dispatch) => ({}),
+)(PredefinedOptionTable);

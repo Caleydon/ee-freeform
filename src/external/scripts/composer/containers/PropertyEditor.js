@@ -73,23 +73,7 @@ const propertyTypes = {
   table: Table,
 };
 
-@connect(
-  (state) => ({
-    properties: state.composer.properties,
-    formStatuses: state.formStatuses,
-    hash: state.context.hash,
-    integrationCount: state.integrations.list.length,
-    fields: state.fields.fields,
-  }),
-  (dispatch) => ({
-    updateProperties: (hash, keyValueObject) => dispatch(updateProperty(hash, keyValueObject)),
-    resetProperties: (hash, defaultProperties) => dispatch(resetProperties(hash, defaultProperties)),
-    editForm: () => dispatch(switchHash(FieldTypes.FORM)),
-    editAdminNotifications: () => dispatch(switchHash(FieldTypes.ADMIN_NOTIFICATIONS)),
-    editIntegrations: () => dispatch(switchHash(FieldTypes.INTEGRATION)),
-  }),
-)
-export default class PropertyEditor extends Component {
+class PropertyEditor extends Component {
   static propTypes = {
     properties: PropTypes.object.isRequired,
     hash: PropTypes.string.isRequired,
@@ -218,3 +202,20 @@ export default class PropertyEditor extends Component {
     }
   };
 }
+
+export default connect(
+  (state) => ({
+    properties: state.composer.properties,
+    formStatuses: state.formStatuses,
+    hash: state.context.hash,
+    integrationCount: state.integrations.list.length,
+    fields: state.fields.fields,
+  }),
+  (dispatch) => ({
+    updateProperties: (hash, keyValueObject) => dispatch(updateProperty(hash, keyValueObject)),
+    resetProperties: (hash, defaultProperties) => dispatch(resetProperties(hash, defaultProperties)),
+    editForm: () => dispatch(switchHash(FieldTypes.FORM)),
+    editAdminNotifications: () => dispatch(switchHash(FieldTypes.ADMIN_NOTIFICATIONS)),
+    editIntegrations: () => dispatch(switchHash(FieldTypes.INTEGRATION)),
+  }),
+)(PropertyEditor);

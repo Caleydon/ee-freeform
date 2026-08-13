@@ -44,17 +44,7 @@ const rowRowTarget = {
   },
 };
 
-@connect(
-  (state) => ({
-    placeholders: state.placeholders,
-  }),
-)
-@DropTarget([COLUMN, FIELD, ROW], rowRowTarget, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  dragItemType: monitor.getItemType(),
-}))
-export default class Row extends Component {
+class Row extends Component {
   static propTypes = {
     index: PropTypes.number.isRequired,
     columns: PropTypes.array.isRequired,
@@ -135,3 +125,13 @@ export default class Row extends Component {
     );
   }
 }
+
+export default connect(
+  (state) => ({
+    placeholders: state.placeholders,
+  }),
+)(DropTarget([COLUMN, FIELD, ROW], rowRowTarget, (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  dragItemType: monitor.getItemType(),
+}))(Row));

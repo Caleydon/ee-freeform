@@ -9,7 +9,6 @@
  */
 
 import React, { Component } from "react";
-import { fetchFields } from "../../../actions/Actions";
 import FieldProperties from "./FieldProperties";
 
 export default class AddNewField extends Component {

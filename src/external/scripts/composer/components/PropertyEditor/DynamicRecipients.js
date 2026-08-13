@@ -21,14 +21,7 @@ import TextareaProperty from "./PropertyItems/TextareaProperty";
 import TextProperty from "./PropertyItems/TextProperty";
 import LightSwitchProperty from "./PropertyItems/LightSwitchProperty";
 
-@connect(
-  (state) => ({
-    hash: state.context.hash,
-    properties: state.composer.properties,
-    notifications: state.notifications.list,
-  }),
-)
-export default class DynamicRecipients extends BasePropertyEditor {
+class DynamicRecipients extends BasePropertyEditor {
   static propTypes = {
     notifications: PropTypes.oneOfType([
       PropTypes.array,
@@ -194,3 +187,11 @@ export default class DynamicRecipients extends BasePropertyEditor {
     });
   };
 }
+
+export default connect(
+  (state) => ({
+    hash: state.context.hash,
+    properties: state.composer.properties,
+    notifications: state.notifications.list,
+  }),
+)(DynamicRecipients);
