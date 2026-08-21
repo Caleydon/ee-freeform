@@ -1,0 +1,183 @@
+name: Release Caleydon
+
+# Two ways to cut a release:
+#   1. Push a tag:  git tag 3.4.0 && git push origin 3.4.0
+#   2. Actions tab: "Release" -> "Run workflow", type the version by hand
+#
+# Either way the workflow runs `pnpm build`, which produces
+# dist/EE-Freeform_<version>.zip, and attaches that ZIP to the release.
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release, e.g. 3.4.0 (must already be committed to addon.setup.php)'
+        required: true
+        type: string
+      draft:
+        description: 'Create as a draft so you can review it before publishing'
+        required: false
+        default: true
+        type: boolean
+      prerelease:
+        description: 'Mark as a pre-release'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out full history
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Resolve the version
+        id: ver
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            VERSION="${GITHUB_REF#refs/tags/}"
+          else
+            VERSION="${{ inputs.version }}"
+          fi
+          # Tags in this repo carry no "v" prefix - strip one if it slips in.
+          VERSION="${VERSION#v}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Releasing $VERSION"
+
+      - name: Check the version is consistent everywhere
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          SETUP=src/freeform_next/addon.setup.php
+          COMPOSER_JSON=src/freeform_next/composer.json
+
+          # addon.setup.php holds the version twice: the exp_fieldtypes row and
+          # the add-on manifest. build.mjs reads whichever comes first, so both
+          # have to agree or the ZIP gets named after the wrong one.
+          php_version() {
+            sed -n "s/.*'version'[[:space:]]*=>[[:space:]]*'\([^']*\)'.*/\1/p" "$1" | sed -n "${2}p"
+          }
+          json_version() {
+            sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$1" | head -1
+          }
+
+          FAILED=0
+          check() {
+            if [ "$2" != "$VERSION" ]; then
+              echo "::error::$1 declares version '$2' but the release is '$VERSION'"
+              FAILED=1
+            else
+              echo "ok  $1 -> $2"
+            fi
+          }
+
+          check "$SETUP (fieldtype row)"  "$(php_version "$SETUP" 1)"
+          check "$SETUP (manifest)"       "$(php_version "$SETUP" 2)"
+          check "$COMPOSER_JSON"          "$(json_version "$COMPOSER_JSON")"
+
+          if [ "$FAILED" = "1" ]; then
+            echo "::error::Bump the version in every file listed above, commit, then re-run."
+            exit 1
+          fi
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build the add-on
+        run: pnpm run build
+
+      - name: Locate the built ZIP
+        id: zip
+        run: |
+          ZIP="dist/EE-Freeform_${{ steps.ver.outputs.version }}.zip"
+          if [ ! -f "$ZIP" ]; then
+            echo "::error::Expected $ZIP but the build did not produce it. Contents of dist/:"
+            ls -la dist/ || true
+            exit 1
+          fi
+          echo "file=$ZIP" >> "$GITHUB_OUTPUT"
+          echo "Built $ZIP ($(du -h "$ZIP" | cut -f1))"
+
+      - name: Generate release notes
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          # Nearest tag reachable from HEAD; if HEAD already carries this
+          # release's tag, step back one commit to find the previous release.
+          PREV=$(git describe --tags --abbrev=0 HEAD 2>/dev/null || true)
+          if [ "$PREV" = "$VERSION" ]; then
+            PREV=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || true)
+          fi
+
+          {
+            if [ -n "$PREV" ]; then
+              echo "### Changes since $PREV"
+              echo
+              git log --no-merges --pretty='- %s (%h)' "$PREV..HEAD"
+            else
+              echo "### Changes"
+              echo
+              git log --no-merges --pretty='- %s (%h)' -n 30
+            fi
+            echo
+            echo "### Installation"
+            echo
+            echo "1. Download \`EE-Freeform_${VERSION}.zip\` below and unpack it."
+            echo "2. Copy \`freeform_next/\` into \`system/user/addons/\`."
+            echo "3. Copy \`themes/freeform_next/\` into your EE themes directory."
+            echo "4. Install Freeform from the ExpressionEngine control panel."
+            echo
+            if [ -n "$PREV" ]; then
+              echo "**Full diff:** https://github.com/${GITHUB_REPOSITORY}/compare/${PREV}...${VERSION}"
+            fi
+          } > NOTES.md
+
+          echo "--- release notes ---"
+          cat NOTES.md
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          FLAGS=""
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            if [ "${{ inputs.draft }}" = "true" ]; then
+              FLAGS="$FLAGS --draft"
+            fi
+            if [ "${{ inputs.prerelease }}" = "true" ]; then
+              FLAGS="$FLAGS --prerelease"
+            fi
+          fi
+
+          # On workflow_dispatch the tag does not exist yet; gh creates it at --target.
+          gh release create "$VERSION" \
+            "${{ steps.zip.outputs.file }}" \
+            --title "Freeform $VERSION" \
+            --notes-file NOTES.md \
+            --target "$GITHUB_SHA" \
+            $FLAGS
+
+      - name: Upload the ZIP as a build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: EE-Freeform_${{ steps.ver.outputs.version }}
+          path: ${{ steps.zip.outputs.file }}
+          retention-days: 14
